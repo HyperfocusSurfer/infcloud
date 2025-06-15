@@ -195,11 +195,6 @@ var globalParallelAjaxCallCardDAVEnabled=true;
 var globalParallelAjaxCallCalDAVEnabled=true;
 var globalCacheUpdateInterval=null;
 var isIntegrated=false;
-var SVG_select='<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="19px" height="19px" viewBox="0 0 19 19" overflow="visible" enable-background="new 0 0 19 19" xml:space="preserve"><defs></defs><rect x="2" fill="#585858" width="17" height="19"/><polygon fill="#FFFFFF" points="14,7 10.5,13 7,7 "/><rect fill="#FFFFFF" width="2" height="19"/></svg>';
-var SVG_select_inv='<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="19px" height="19px" viewBox="0 0 19 19" overflow="visible" enable-background="new 0 0 19 19" xml:space="preserve"><defs></defs><rect x="2" fill="#585858" width="17" height="19"/><polygon fill="#FFFFFF" points="14,13 10.5,7 7,13"/><rect fill="#FFFFFF" width="2" height="19"/></svg>';
-var SVG_select_b='<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="19px" height="19px" viewBox="0 0 19 19" overflow="visible" enable-background="new 0 0 19 19" xml:space="preserve"><defs></defs><rect x="2" fill="#585858" width="17" height="19"/><polygon fill="#FFFFFF" points="14,7 10.5,13 7,7 "/><rect fill="#F0F0F0" width="2" height="19"/></svg>';
-var SVG_select_login='<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="19px" height="28px" viewBox="0 0 19 28" overflow="visible" enable-background="new 0 0 19 28" xml:space="preserve"><defs></defs><rect fill="#FFFFFF" width="19" height="28"/></svg>';
-var SVG_select_dis='<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="22px" height="19px" viewBox="0 0 22 19" overflow="visible" enable-background="new 0 0 22 19" xml:space="preserve"><defs></defs><rect fill="#FFFFFF" width="22" height="19"/></svg>';
 var globalDefinedSettings = new Array();
 var globalLoadedPrincipals = new Array();
 var globalEnableAllResourceSync = true;
@@ -701,9 +696,6 @@ function logout(forceLogout)
 function init()
 {
 	// browser check
-	if(($.browser.msie && parseInt($.browser.version, 10)<9) || $.browser.opera)
-		$('#login_message').css('display','').text(localization[globalInterfaceLanguage].unsupportedBrowser);
-
 	if(typeof globalDemoMode!='undefined')
 	{
 		if(typeof globalDemoMode.userName!=undefined)
@@ -953,44 +945,6 @@ function globalMain()
 		if(typeof(globalContactsExtInitMain)=='function')
 			globalContactsExtInitMain($('#vCardTemplate'));
 	}
-
-	/*************************** BAD HACKS SECTION ***************************/
-	// here we fix the cross OS/cross broser problems (unfixable in pure CSS)
-	if($.browser.webkit && !!window.chrome)	/* Chrome */
-	{
-		if(navigator.platform.toLowerCase().indexOf('win')==0)	/* Windows version */
-		{
-			$('#LoginPage, #vCardTemplate, #event_details_template, #todo_details_template, #EditorBoxSettings').find('input').css('text-indent', '2px');
-			$('#LoginPage, #vCardTemplate, #event_details_template, #todo_details_template, #EditorBoxSettings').find('select').css({'padding-left': '0px', 'padding-right': '13px'});
-		}
-		else	/* non-Windows version */
-			$('#LoginPage, #vCardTemplate, #event_details_template, #todo_details_template, #EditorBoxSettings').find('input').css('text-indent', '1px');
-	}
-	else if($.browser.safari)
-	{
-		$('#LoginPage, #vCardTemplate, #event_details_template, #todo_details_template, #EditorBoxSettings').find('textarea').addClass('safari_hack');
-		$('#LoginPage, #vCardTemplate, #event_details_template, #todo_details_template, #EditorBoxSettings').find('input').addClass('safari_hack');
-	}
-	else if($.browser.msie)	/* IE */
-	{
-		if(parseInt($.browser.version, 10)==10)	/* IE 10 (because there are no more conditional comments) */
-		{
-			$('select').css({'padding-top': '1px', 'padding-left': '0px', 'padding-right': '0px'});
-			$('textarea').css('padding-top', '3px');
-			$('input[type=button]').css('padding-top', '2px');
-		}
-
-		// ADD SVG to login screen
-		var newSVG=$(SVG_select_login).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#Login').find('select[data-type="language"]').after($($('<div>').append($(newSVG).clone()).html()));
-	}
-	else if($.browser.mozilla)
-	{
-		// ADD SVG to login screen
-		var newSVG=$(SVG_select_login).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#Login').find('select[data-type="language"]').after($($('<div>').append($(newSVG).clone()).html()));
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
 
 	/* language selector */
 	var lang_num=0;
@@ -1890,17 +1844,6 @@ function globalMainCalDAV()
 		$('#timezonePickerTODO').val($(this).val());
 		applyTimezone(previousTimezone);
 	});
-
-	/*************************** BAD HACKS SECTION ***************************/
-	if($.browser.msie || $.browser.mozilla)
-	{
-		var newSVG=$(SVG_select_b).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#timezoneWrapper, #timezoneWrapperTODO').find('select').after($($('<div>').append($(newSVG).clone()).html()));
-	}
-	// INFO LABEL ALIGN WITH UNDELYING SELECT FIX
-	if($.browser.webkit && !!$.browser.safari)
-		$('.infoSpan[data-type="txt_interval"]').css('padding-left', '3px');
-	/*************************** END OF BAD HACKS SECTION ***************************/
 
 	globalCalWidth = $('#main').width();
 	origResourceCalDAVListTemplate = $('#ResourceCalDAVListTemplate').clone().wrap('<div>').parent().html();

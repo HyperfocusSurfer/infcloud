@@ -971,40 +971,6 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 		$('#todoDetailsTable textarea').prop('readonly', true);
 
 		$('#percentageSlider').slider({disabled: true});
-
-		/*************************** BAD HACKS SECTION ***************************/
-		// here we fix the cross OS/cross broser problems (unfixable in pure CSS)
-		if($.browser.webkit && !!window.chrome)	/* Chrome */
-		{
-			if(navigator.platform.toLowerCase().indexOf('win')==0)	/* Windows version */
-			{
-				$('#todo_details_template').find('input').css('text-indent', '2px');
-				$('#todo_details_template').find('select').css({'padding-left': '0px', 'padding-right': '13px'});
-			}
-			else	/* non-Windows version */
-				$('#todo_details_template').find('input').css('text-indent', '1px');
-		}
-		else if($.browser.safari)
-		{
-			$('#todo_details_template').find('textarea').addClass('safari_hack');
-			$('#todo_details_template').find('input').addClass('safari_hack');
-		}
-		else if($.browser.msie)	/* IE */
-		{
-			if(parseInt($.browser.version, 10)==10)	/* IE 10 (because there are no more conditional comments) */
-			{
-				$('#todo_details_template').find('select').css({'padding-top': '1px', 'padding-left': '0px', 'padding-right': '0px'});
-				$('#todo_details_template').find('textarea').css('padding-top', '3px');
-				$('#todo_details_template').find('input[type=button]').css('padding-top', '2px');
-			}
-		}
-
-		if($.browser.msie || $.browser.mozilla)
-		{
-			var newSVG=$(SVG_select_dis).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-22px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-			$('#todo_details_template').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-		}
-		/*************************** END OF BAD HACKS SECTION ***************************/
 	}
 	if(repeatOne=='editOnly' || $('#recurrenceIDTODO').val()!='')
 	{
@@ -2329,39 +2295,6 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		$('#eventDetailsTable .customTable td').addClass('disabled');
 		$('#eventDetailsTable textarea').prop('readonly', true);
 
-		/*************************** BAD HACKS SECTION ***************************/
-		// here we fix the cross OS/cross broser problems (unfixable in pure CSS)
-		if($.browser.webkit && !!window.chrome)	/* Chrome */
-		{
-			if(navigator.platform.toLowerCase().indexOf('win')==0)	/* Windows version */
-			{
-				$('#event_details_template').find('input').css('text-indent', '2px');
-				$('#event_details_template').find('select').css({'padding-left': '0px', 'padding-right': '13px'});
-			}
-			else	/* non-Windows version */
-				$('#event_details_template').find('input').css('text-indent', '1px');
-		}
-		else if($.browser.safari)
-		{
-			$('#event_details_template').find('textarea').addClass('safari_hack');
-			$('#event_details_template').find('input').addClass('safari_hack');
-		}
-		else if($.browser.msie)	/* IE */
-		{
-			if(parseInt($.browser.version, 10)==10)	/* IE 10 (because there are no more conditional comments) */
-			{
-				$('#event_details_template').find('select').css({'padding-top': '1px', 'padding-left': '0px', 'padding-right': '0px'});
-				$('#event_details_template').find('textarea').css('padding-top', '3px');
-				$('#event_details_template').find('input[type=button]').css('padding-top', '2px');
-			}
-		}
-
-		if($.browser.msie || $.browser.mozilla)
-		{
-			var newSVG=$(SVG_select_dis).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-22px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-			$('#event_details_template').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-		}
-		/*************************** END OF BAD HACKS SECTION ***************************/
 		if(calEvent.etag!='')
 			$('#event_calendar').val(calEvent.res_id);
 	}
@@ -2833,13 +2766,6 @@ function startEditModeEvent()
 	$('#eventDetailsTable :input[type="text"]').prop('readonly', false);
 	$('#eventDetailsTable .customTable td').removeClass('disabled');
 	$('#eventDetailsTable textarea').prop('readonly', false);
-	/*************************** BAD HACKS SECTION ***************************/
-	if($.browser.msie || $.browser.mozilla)
-	{
-		var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#event_details_template').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
 
 	$('#name').focus();
 }
@@ -2863,13 +2789,6 @@ function startEditModeTodo()
 	$('#todoDetailsTable :input[disabled]').prop('disabled', false);
 	$('#todoDetailsTable :input[type="text"]').prop('readonly', false);
 	$('#todoDetailsTable textarea').prop('readonly', false);
-	/*************************** BAD HACKS SECTION ***************************/
-	if($.browser.msie || $.browser.mozilla)
-	{
-		var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#todo_details_template').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
 
 	$('#percentageSlider').slider({
 		disabled: false
@@ -3016,46 +2935,6 @@ function todo_alert_add(data_id)
 	});
 	initCalDavDatepicker($('#todo_details_template .alert_message_dateTODO[data-id="'+data_id+'"]'));
 	initCalDavTimepicker($('#todo_details_template .alert_message_dateTODO[data-id="'+data_id+'"]'));
-	/*************************** BAD HACKS SECTION ***************************/
-	// here we fix the cross OS/cross broser problems (unfixable in pure CSS)
-	if($.browser.webkit && !!window.chrome)	/* Chrome */
-	{
-		if(navigator.platform.toLowerCase().indexOf('win')==0)	/* Windows version */
-		{
-			$('#todo_details_template').find('input').css('text-indent', '2px');
-			$('#todo_details_template').find('select').css({'padding-left': '0px', 'padding-right': '13px'});
-		}
-		else	/* non-Windows version */
-			$('#todo_details_template').find('input').css('text-indent', '1px');
-	}
-	else if($.browser.safari)
-	{
-		$('#todo_details_template').find('textarea').addClass('safari_hack');
-		$('#todo_details_template').find('input').addClass('safari_hack');
-	}
-	else if($.browser.msie)	/* IE */
-	{
-		if(parseInt($.browser.version, 10)==10)	/* IE 10 (because there are no more conditional comments) */
-		{
-			$('#todo_details_template').find('select').css({'padding-top': '1px', 'padding-left': '0px', 'padding-right': '0px'});
-			$('#todo_details_template').find('textarea').css('padding-top', '3px');
-			$('#todo_details_template').find('input[type=button]').css('padding-top', '2px');
-		}
-	}
-
-	/* IE or FF */
-	if($.browser.msie || $.browser.mozilla)
-	{
-		// ADD empty SVG to interface (we will replace it later)
-		$('<svg data-type="select_icon"></svg>').css('display', 'none').insertAfter($('#todo_details_template tr[data-id="'+data_id+'"]').find('select'));
-	}
-
-	if($.browser.msie || $.browser.mozilla)
-	{
-		var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#todo_details_template tr[data-id="'+data_id+'"]').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
 }
 
 function event_alert_add(data_id)
@@ -3198,46 +3077,6 @@ function event_alert_add(data_id)
 	});
 	initCalDavDatepicker($('#event_details_template .alert_message_date[data-id="'+data_id+'"]'));
 	initCalDavTimepicker($('#event_details_template .alert_message_date[data-id="'+data_id+'"]'));
-	/*************************** BAD HACKS SECTION ***************************/
-	// here we fix the cross OS/cross broser problems (unfixable in pure CSS)
-	if($.browser.webkit && !!window.chrome)	/* Chrome */
-	{
-		if(navigator.platform.toLowerCase().indexOf('win')==0)	/* Windows version */
-		{
-			$('#event_details_template').find('input').css('text-indent', '2px');
-			$('#event_details_template').find('select').css({'padding-left': '0px', 'padding-right': '13px'});
-		}
-		else	/* non-Windows version */
-			$('#event_details_template').find('input').css('text-indent', '1px');
-	}
-	else if($.browser.safari)
-	{
-		$('#event_details_template').find('textarea').addClass('safari_hack');
-		$('#event_details_template').find('input').addClass('safari_hack');
-	}
-	else if($.browser.msie)	/* IE */
-	{
-		if(parseInt($.browser.version, 10)==10)	/* IE 10 (because there are no more conditional comments) */
-		{
-			$('#event_details_template').find('select').css({'padding-top': '1px', 'padding-left': '0px', 'padding-right': '0px'});
-			$('#event_details_template').find('textarea').css('padding-top', '3px');
-			$('#event_details_template').find('input[type=button]').css('padding-top', '2px');
-		}
-	}
-
-	/* IE or FF */
-	if($.browser.msie || $.browser.mozilla)
-	{
-		// ADD empty SVG to interface (we will replace it later)
-		$('<svg data-type="select_icon"></svg>').css('display', 'none').insertAfter($('#event_details_template tr[data-id="'+data_id+'"]').find('select'));
-	}
-
-	if($.browser.msie || $.browser.mozilla)
-	{
-		var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-		$('#event_details_template tr[data-id="'+data_id+'"]').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
 }
 
 function stripEventAlerts()

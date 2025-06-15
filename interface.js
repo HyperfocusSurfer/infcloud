@@ -36,22 +36,7 @@ function CalDAVeditor_cleanup(repeatHash)
 
 	if(typeof repeatHash==='undefined' || repeatHash==='form')
 	{
-		/*************************** BAD HACKS SECTION ***************************/
-		/* IE or FF */
-		if($.browser.msie || $.browser.mozilla)
-		{
-			// ADD empty SVG to interface (we will replace it later)
-			$('<svg data-type="select_icon"></svg>').css('display', 'none').insertAfter($('#event_details_template, #todo_details_template').find('select'));
-		}
-		/*************************** END OF BAD HACKS SECTION ***************************/
-
-		/*************************** BAD HACKS SECTION ***************************/
-		if($.browser.msie || $.browser.mozilla)
-		{
-			var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-			$('#event_details_template, #todo_details_template').find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-		}
-		/*************************** END OF BAD HACKS SECTION ***************************/
+	
 	}
 }
 
@@ -5559,15 +5544,6 @@ function processEditorElements(inputEditorRef, processingType, inputIsReadonly, 
 	}
 
 	tmp_ref.find('select').prop('disabled', disabled);
-	/*************************** BAD HACKS SECTION ***************************/
-	if($.browser.msie || $.browser.mozilla)
-	{
-		var newSVG=$((disabled ? SVG_select_dis : SVG_select)).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': (disabled ? '-22px' : '-19px'), 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-
-		//XXXX check this - was $('#ABContact')
-		tmp_ref.find('select').parent().find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
 
 	for(var i=0; i<tmp_tags_prefix.length; i++)
 	{
@@ -5615,15 +5591,6 @@ function processEditorElements(inputEditorRef, processingType, inputIsReadonly, 
 						$(element).find('[data-type="\\%del"]').find('input[type="image"]').addClass(cssElementNoDisplay);
 						$(element).find('select').prop('disabled', disabled);
 						$(element).find('textarea').prop('disabled', disabled);
-						/*************************** BAD HACKS SECTION ***************************/
-						if($.browser.msie || $.browser.mozilla)
-						{
-							var newSVG=$((disabled ? SVG_select_dis : SVG_select)).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': (disabled ? '-22px' : '-19px'), 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-
-							//XXXX check this - was $('#ABContact')
-							$(element).find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-						}
-						/*************************** END OF BAD HACKS SECTION ***************************/
 						tmp.prop('readonly', readonly);
 						found_non_empty=1;
 					}
@@ -5639,14 +5606,6 @@ function processEditorElements(inputEditorRef, processingType, inputIsReadonly, 
 					$(element).find('[data-type="\\%del"]').find('input[type="image"]').removeClass(cssElementNoDisplay);
 					$(element).find('select').prop('disabled', disabled);
 					$(element).find('textarea').prop('disabled', disabled);
-					/*************************** BAD HACKS SECTION ***************************/
-					if($.browser.msie || $.browser.mozilla)
-					{
-						var newSVG=$((disabled ? SVG_select_dis : SVG_select)).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': (disabled ? '-22px' : '-19px'), 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-						//XXXX check this - was $('#ABContact')
-						$(element).find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-					}
-					/*************************** END OF BAD HACKS SECTION ***************************/
 					tmp.prop('readonly', readonly);
 				}
 			}
@@ -5770,18 +5729,6 @@ function CardDAVeditor_cleanup(inputLoadEmpty, inputIsCompany)
 	if(typeof(globalContactsExtEditorProcess)=='function')
 		globalContactsExtEditorProcess(globalRefVcardEditor, 'pre', null, inputIsCompany);
 
-	/*************************** BAD HACKS SECTION ***************************/
-	/* IE or FF */
-	if($.browser.msie || $.browser.mozilla)
-	{
-		// ADD empty SVG to interface (we will replace it later)
-		$('<svg data-type="select_icon"></svg>').css('display', 'none').insertAfter(globalRefVcardEditor.find('select[data-type$="_type"]'));
-
-		if($.browser.msie && parseInt($.browser.version, 10)==10) /* IE 10 (because there are no more conditional comments) */
-			globalRefVcardEditor.find('[data-type="\\%note"]').find('textarea[data-type="value"]').text('').attr('placeholder',$('[data-type="\\%note"]').find('textarea[data-type="value"]').attr('placeholder'));
-	}
-	/*************************** END OF BAD HACKS SECTION ***************************/
-
 	// bind events (see also add_elements())
 	// hide the "-" button (we maybe change this in future)
 	globalRefVcardEditor.find('[data-type="\\%del"]').css('visibility', 'hidden');
@@ -5898,10 +5845,6 @@ function CardDAVeditor_cleanup(inputLoadEmpty, inputIsCompany)
 	// initialize datepicker
 	globalRefVcardEditor.find('input[data-type^="date_"]').focus(function(){initDatePicker($(this));});
 
-	/*************************** BAD HACKS SECTION ***************************/
-	if($.browser.msie && parseInt($.browser.version, 10)==10)	/* IE 10 (because there are no more conditional comments) */
-		globalRefVcardEditor.find('#tags_tag').css({'padding-top': '1px', 'padding-left': '1px'});
-	/*************************** END OF BAD HACKS SECTION ***************************/
 
 	globalRefVcardEditor.find('[data-type="org"]').autocomplete({'source': function(request, response){var matcher=RegExp($.ui.autocomplete.escapeRegex(request.term), 'i'); response($.grep(globalAddressbookList.getABCompanies(true), function(value){value=value.label || value.value || value; return matcher.test(value) || matcher.test(value.multiReplace(globalSearchTransformAlphabet));}));}, 'minLength': 0, 'change': function(){$('[data-type="department"]').autocomplete({'source': function(request, response){var matcher=RegExp($.ui.autocomplete.escapeRegex(request.term), 'i'); response($.grep(globalAddressbookList.getABCompanyDepartments($('#vCardEditor').find('[data-type="org"]').val()), function(value){value=value.label || value.value || value; return matcher.test(value) || matcher.test(value.multiReplace(globalSearchTransformAlphabet));}));}, 'minLength': 0})}});
 
@@ -6487,28 +6430,7 @@ function initDatePicker(inputObject)
 			changeMonth: true,
 			changeYear: true,
 			showAnim: '',
-			afterUpdate: function(inst)
-			{
-				/*************************** BAD HACKS SECTION ***************************/
-				// IE and FF datepicker selectbox problem fix
-				if($.browser.msie || $.browser.mozilla)
-				{
-					var calendar=inst.dpDiv;
-					setTimeout(function(){
-						if($.browser.msie && parseInt($.browser.version, 10)==10)	/* IE 10 */
-							calendar.find('select').css({'padding-top': '1px', 'padding-left': '0px', 'padding-right': '0px'});
-
-						var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-						calendar.find('select').after($($('<div>').append($(newSVG).clone()).html()));
-					},1);
-				}
-				else if(navigator.platform.toLowerCase().indexOf('win')==0 && $.browser.webkit && !!window.chrome)	/* Chrome on Windows */
-				{
-					var calendar=inst.dpDiv;
-					setTimeout(function(){ calendar.find('select').css({'padding-left': '0px', 'padding-right': '13px'}); },1);
-				}
-				/*************************** END OF BAD HACKS SECTION ***************************/
-			},
+			afterUpdate: function(inst) { },
 			beforeShow: function(input, inst)	// set the datepicker value if the date is out of range (min/max)
 			{
 				inst.dpDiv.removeClass('ui-datepicker-simple');
@@ -6772,38 +6694,17 @@ function extendDestSelect(selGroup)
 
 		if(extendedDest.height()>0) {
 			dest.removeClass('inverse_select');
-			/*************************** BAD HACKS SECTION ***************************/
-			if($.browser.msie || $.browser.mozilla)
-			{
-				var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-				dest.parent().find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-			}
-			/*************************** END OF BAD HACKS SECTION ***************************/
 			extendedDest.animate({'height':0},200);
 			$('html').unbind('mousedown');
 		}
 		else {
 			dest.addClass('inverse_select');
-			/*************************** BAD HACKS SECTION ***************************/
-			if($.browser.msie || $.browser.mozilla)
-			{
-				var newSVG=$(SVG_select_inv).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-				dest.parent().find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-			}
-			/*************************** END OF BAD HACKS SECTION ***************************/
 			extendedDest.animate({'height':164},200);
 			$('html').mousedown(function(e){
 				if(e.target.id=='ExtendedDest' || $.contains(document.getElementById('ExtendedDest'),e.target))
 					return true;
 
 				dest.removeClass('inverse_select');
-				/*************************** BAD HACKS SECTION ***************************/
-				if($.browser.msie || $.browser.mozilla)
-				{
-					var newSVG=$(SVG_select).attr('data-type', 'select_icon').css({'pointer-events': 'none', 'z-index': '1', 'display': 'inline', 'margin-left': '-19px', 'vertical-align': 'top', 'background-color': '#ffffff'});	// background-color = stupid IE9 bug
-					dest.parent().find('svg[data-type="select_icon"]').replaceWith($('<div>').append($(newSVG).clone()).html());
-				}
-				/*************************** END OF BAD HACKS SECTION ***************************/
 				extendedDest.animate({'height':0},200);
 				$('html').unbind('mousedown');
 			});

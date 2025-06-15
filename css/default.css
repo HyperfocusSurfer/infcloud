@@ -112,7 +112,8 @@ body, input, select, textarea
 {
 	font-family: 'Roboto';
 	font-size: 14px;
-	color: #404040;
+	color: var(--foreground);
+  background: var(--background);
 }
 
 .System
@@ -144,7 +145,7 @@ body, input, select, textarea
 	right: 0px;
 	width: 24px;
 	background: #f0f0f0;
-	border-left: 1px solid #c0c0c0;
+	border-left: 1px solid var(--background-dark);
 	z-index: 30;
 }
 
@@ -172,10 +173,10 @@ body, input, select, textarea
 	left: 225px;
 	right: 582px;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	height: 24px;
 	background: #f0f0f0;
-	color: #404040;
+	color: var(--foreground);
 	cursor: default;
 
 	user-select: none;
@@ -210,7 +211,7 @@ body, input, select, textarea
 	width: 582px;
 	height: 24px;
 	background: #f0f0f0;
-	color: #404040;
+	color: var(--foreground);
 	cursor: default;
 
 	user-select: none;
@@ -243,14 +244,14 @@ body, input, select, textarea
 	left: 225px;
 	right: 582px;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	overflow: hidden;
-	background: #ffffff;
+	background: var(--background);
 	z-index: 2;	/* for floating headers */
 
 	height: 24px;
-	border-top: 1px solid #c0c0c0;
-	border-bottom: 1px solid #c0c0c0;
+	border-top: 1px solid var(--background-dark);
+	border-bottom: 1px solid var(--background-dark);
 	cursor: default;
 
 	user-select: none;
@@ -268,7 +269,7 @@ body, input, select, textarea
 #SearchBox *> input[data-type=search]
 {
 	width: 100%;
-	background-color: #ffffff;
+	background-color: var(--background);
 }
 
 #ABList
@@ -280,9 +281,9 @@ body, input, select, textarea
 	right: 582px;
 	bottom: 0;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	overflow: hidden;
-	background: #ffffff;
+	background: var(--background);
 	cursor: default;
 
 	user-select: none;
@@ -298,7 +299,7 @@ body, input, select, textarea
 	right: 583px;
 	bottom: 0;
 	overflow: hidden;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	z-index: 10;
 	cursor: default;
@@ -358,7 +359,7 @@ body, input, select, textarea
 	bottom: 0;
 	width: 582px;
 	overflow: hidden;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	z-index: 10;
 	cursor: default;
@@ -423,7 +424,7 @@ select
 	padding: 0px 0px 0px 0px;
 	border: none;
 
-	background: #ffffff url(../images/select.svg) no-repeat center right;
+	background: var(--background);
 
 	padding-left: 3px;	/* minor problem with chrome on windows */
 	padding-right: 19px;	/* original: 18 - minor problem with chrome on windows */
@@ -438,7 +439,7 @@ select
 	outline: none;
 	-moz-outline: none;
 
-	color: #404040;
+	color: var(--foreground);
 
 	left: 0px;
 	vertical-align: top;
@@ -454,17 +455,13 @@ select
 		padding-right: 0px !important;
 
 		padding-bottom: 1px;
-		background: transparent url(../images/select_bg.svg) repeat-x;
-
-		/* FF outline hack */
-		color: rgba(64, 64, 64, 0);
-		text-shadow: 0 0 0 #404040;
+		background: var(--background-dark);
 	}
 
 	select option
 	{
-		color: #404040;
-		background-color: #ffffff !important;
+		color: var(--foreground);
+		background-color: var(--background) !important;
 	}
 }
 
@@ -492,7 +489,7 @@ select[disabled]
 
 		/* FF for windows fix */
 		padding-right: 0px !important;
-		background: transparent url(../images/select_bg_dis.svg) repeat-x;
+		background: var(--background-dark)
 	}
 }
 
@@ -564,7 +561,7 @@ td[data-size="login"] > select[data-type="language"]
 input
 {
 	font-size: 1em !important;
-	color: #404040;
+	color: var(--foreground);
 	margin: 0px 0px 0px 0px;
 	padding: 0px 0px 0px 0px;
 }
@@ -619,13 +616,13 @@ input[type=button], input[type=submit], .ui-datepicker-buttonpane button
 {
 	cursor: pointer;
 	border: 1px solid;
-	border-color: #c0c0c0;
+	border-color: var(--background-dark);
 	font-size : 0.9em !important;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 
-	background: #ffffff;
-	color: #404040;
+	background: var(--background);
+	color: var(--foreground);
 	position : relative;
 
 	border-radius: 3px;
@@ -641,7 +638,7 @@ input[data-type=cancel]
 
 input[disabled]
 {
-	color: #404040;	/* webkit bug - the black color not works */
+	color: var(--foreground);	/* webkit bug - the black color not works */
 	border-style: none;
 	background: #fff;
 	opacity: 1 !important;
@@ -654,99 +651,99 @@ input[disabled].safari_hack
 input[readonly]
 {
 	border-style: none;
-	background: #fff !important;
+	background: var(--background-dark);
 }
 
 input::-webkit-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 	text-shadow: none !important;
 	-webkit-font-smoothing: antialiased;
 }
 input[readonly]::-webkit-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 	text-shadow: none !important;
 	-webkit-font-smoothing: antialiased;
 }
 input[disabled]::-webkit-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 	text-shadow: none !important;
 	-webkit-font-smoothing: antialiased;
 }
 textarea::-webkit-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 	text-shadow: none !important;
 	-webkit-font-smoothing: antialiased;
 }
 textarea[readonly]::-webkit-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 	text-shadow: none !important;
 	-webkit-font-smoothing: antialiased;
 }
 
 input:-moz-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 input[readonly]:-moz-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 input[disabled]:-moz-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 textarea:-moz-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 textarea[readonly]:-moz-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 input::-moz-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 input[readonly]::-moz-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 input[disabled]::-moz-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 textarea::-moz-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 textarea[readonly]::-moz-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 input:-ms-input-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 input[readonly]:-ms-input-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 input[disabled]:-ms-input-placeholder
 {
-	color: #e0e0e0 !important;
+	color: var(--background-light2) !important;
 }
 textarea:-ms-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 textarea[readonly]:-ms-input-placeholder
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 
 input[type=text]::-ms-clear {
@@ -809,7 +806,7 @@ input[type=checkbox], x:-moz-any-link, x:default /* FF checkbox hack */
 }
 input[disabled][type=checkbox]	/* Opera checkbox hack */
 {
-	background: #e0e0e0;
+	background: var(--background-light2);
 }
 label	/* checkbox + text */
 {
@@ -843,8 +840,8 @@ textarea
 }
 textarea[readonly]
 {
-	color: #404040;
-	background: #fff;
+	color: var(--foreground);
+	background: var(--background-dark);
 }
 textarea[readonly].safari_hack
 {
@@ -853,7 +850,7 @@ textarea[readonly].safari_hack
 @-moz-document url-prefix() {
 	textarea[readonly]
 	{
-		color: #404040;
+		color: var(--foreground);
 	}
 }
 
@@ -866,7 +863,6 @@ textarea[readonly].safari_hack
 	height: 100%;
 	overflow: hidden;
 	z-index: 101;
-	background: #f8f8f8;
 	display: none;	/* by default the login window is hidden */
 	cursor:default;
 
@@ -887,7 +883,6 @@ textarea[readonly].safari_hack
 	margin-top: -155px;
 	margin-left: -252px;
 
-	background-image: url(../images/cloud.svg);
 	color: #000000;
 	text-align: center;
 }
@@ -914,7 +909,6 @@ textarea[readonly].safari_hack
 	right: 0px;
 	bottom: 0px;
 	overflow: visible;
-	background-image: url(../images/cloud.svg);
 	display: none;
 	z-index: 1;
 }
@@ -925,7 +919,6 @@ textarea[readonly].safari_hack
 	left: 25px;
 	bottom: 25px;
 	font-size: 16px;
-	color: #2d2d2d;
 }
 
 #cacheDialog
@@ -936,7 +929,7 @@ textarea[readonly].safari_hack
 	right: 0px;
 	bottom: 0px;
 	overflow: visible;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	opacity: 0.95;
 	text-align: center;
@@ -968,7 +961,7 @@ textarea[readonly].safari_hack
 #cacheDialogButton
 {
 	font-size: 2em !important;
-	border: 2px solid #c0c0c0;
+	border: 2px solid var(--background-dark);
 }
 
 #MainLoader
@@ -979,7 +972,7 @@ textarea[readonly].safari_hack
 	right: 0px;
 	bottom: 0px;
 	overflow: visible;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	opacity: 0.9;
 	z-index: 101;
@@ -1022,9 +1015,9 @@ textarea[readonly].safari_hack
 	height: 0;
 	z-index: 20;
 
-	background: #ffffff;
+	background: var(--background);
 	border-bottom: 1px solid;
-	border-bottom-color: #c0c0c0;
+	border-bottom-color: var(--background-dark);
 	border-top: 0px;
 	overflow: hidden;
 	cursor: default;
@@ -1039,9 +1032,9 @@ textarea[readonly].safari_hack
 	position: relative;
 	top: -1px;
 
-	background: #ffffff;
+	background: var(--background);
 	border-bottom: 1px solid;
-	border-bottom-color: #404040;
+	border-bottom-color: var(--foreground);
 	border-top: 0px;
 	display: block;
 	height: 0px;
@@ -1056,7 +1049,7 @@ textarea[readonly].safari_hack
 	vertical-align: bottom;
 	width: 100%;
 	font-weight: 500;
-	background: #ffffff;
+	background: var(--background);
 	bottom: 0px;
 }
 
@@ -1066,9 +1059,9 @@ textarea[readonly].safari_hack
 	top: -1px;
 	display:none;
 
-	background: #ffffff;
+	background: var(--background);
 	border-bottom: 1px solid;
-	border-bottom-color: #404040;
+	border-bottom-color: var(--foreground);
 	border-top: 0px;
 	height: 0px;
 	overflow: hidden;
@@ -1082,7 +1075,7 @@ textarea[readonly].safari_hack
 	vertical-align: bottom;
 	width: 100%;
 	font-weight: 500;
-	background: #ffffff;
+	background: var(--background);
 	bottom: 0px;
 }
 
@@ -1098,7 +1091,7 @@ textarea[readonly].safari_hack
 
 .element_grayed
 {
-	color: #e0e0e0;
+	color: var(--background-light2);
 }
 
 .element_default_hidden
@@ -1139,11 +1132,11 @@ input.non_editable
 	top: 0px;
 	left: 0px;
 	right: 0px;
-	border-right: 1px solid #c0c0c0;
+	border-right: 1px solid var(--background-dark);
 	width: 224px;
 	height: 49px;
 	background: #f0f0f0;
-	color: #404040;
+	color: var(--foreground);
 	cursor: default;
 
 	user-select: none;
@@ -1180,12 +1173,12 @@ input.non_editable
 	bottom: 0px;
 	left: 0px;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	width: 224px;
 	overflow: auto;
 	overflow-x: hidden;
-	background: #ffffff;
-	border-top: 1px solid #c0c0c0;
+	background: var(--background);
+	border-top: 1px solid var(--background-dark);
 	cursor: default;
 
 	user-select: none;
@@ -1200,9 +1193,9 @@ input.non_editable
 	left: 0px;
 	bottom: 0px;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	width: 224px;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	z-index: 10;
 	cursor: default;
@@ -1220,7 +1213,7 @@ input.non_editable
 	right: 0px;
 	bottom: 0px;
 	overflow: hidden;
-	background: #ffffff;
+	background: var(--background);
 	opacity: 0.8;
 	display: none;
 	z-index: 22;
@@ -1268,8 +1261,8 @@ input.non_editable
 	bottom: auto;
 	height: 20px;
 	line-height: 17px;
-	background-color: #ffffff;
-	color: #404040;
+	background-color: var(--background);
+	color: var(--foreground);
 	cursor: default;
 	padding-left: 6px;
 	padding-right: 6px;
@@ -1277,9 +1270,9 @@ input.non_editable
 	font-weight: 500;
 
 	border-top: 1px solid;
-	border-top-color: #ffffff;
+	border-top-color: var(--background);
 	border-bottom: 1px solid;
-	border-bottom-color: #ffffff;
+	border-bottom-color: var(--background);
 }
 
 .resourceCardDAV_item, .contact_group
@@ -1323,8 +1316,8 @@ input.non_editable
 	width: 100%;
 	height: 25px;
 	line-height: 23px;
-	border-top: 1px solid #ffffff;
-	color: #404040;
+	border-top: 1px solid var(--background);
+	color: var(--foreground);
 	cursor: default;
 	font-size: 1em;
 	font-weight: 400;
@@ -1336,7 +1329,7 @@ input.non_editable
 .resourceCardDAV:hover
 {
 	cursor: pointer;
-	color: #404040 !important;
+	color: var(--foreground) !important;
 	background-color: #e7e7e7 !important;
 	border-top: 1px solid !important;
 /*
@@ -1344,12 +1337,12 @@ input.non_editable
 	border-bottom: 1px solid !important;
 	border-bottom-color: #b9b9b9 !important;
 */
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 .resourceCardDAV.resourceCardDAV_selected
 {
-	color: #ffffff !important;
+	color: var(--background) !important;
 	background: #585858 !important;
 	border-top: 1px solid !important;
 /*
@@ -1357,13 +1350,13 @@ input.non_editable
 	border-bottom: 1px solid !important;
 	border-bottom-color: #585858 !important;
 */
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 .resourceCardDAV.resourceCardDAV_dropped_to
 {
 	background-color: #b9b9b9;
-	border: 1px dashed #ffffff !important;
+	border: 1px dashed var(--background) !important;
 	padding-right: 7px;
 }
 
@@ -1398,7 +1391,7 @@ input.non_editable
 
 .ablist_table_header
 {
-	border-bottom: 1px solid #c0c0c0;
+	border-bottom: 1px solid var(--background-dark);
 }
 
 .ablist_table_header th
@@ -1429,7 +1422,7 @@ input.non_editable
 
 .ablist_header
 {
-	color: #404040;
+	color: var(--foreground);
 	background-color: #f0f0f0;
 	font-size: 0.9025em;
 }
@@ -1446,10 +1439,10 @@ input.non_editable
 
 .ablist_item
 {
-	color: #404040;
+	color: var(--foreground);
 	background-color: #fff;
 	font-size: 1.02885em;
-	border-top: 1px solid #ffffff !important;
+	border-top: 1px solid var(--background) !important;
 }
 
 .ablist_item td
@@ -1490,7 +1483,7 @@ input.non_editable
 	border-bottom-color: #585858 !important;
 */
 	border-top: 1px solid !important;
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 .ablist_item:hover
@@ -1502,7 +1495,7 @@ input.non_editable
 	border-top-color: #b9b9b9;
 	border-bottom-color: #b9b9b9;
 */
-	border-top-color: #ffffff;
+	border-top-color: var(--background);
 }
 
 @media only screen and (device-width: 1024px)
@@ -1511,11 +1504,11 @@ input.non_editable
 	.ablist_item:hover
 	{
 		cursor: default;
-		color: #404040;
-		background-color: #ffffff;
-		border-top-color: #ffffff;
+		color: var(--foreground);
+		background-color: var(--background);
+		border-top-color: var(--background);
 /*
-		border-bottom-color: #ffffff;
+		border-bottom-color: var(--background);
 */
 	}
 }
@@ -1526,11 +1519,11 @@ input.non_editable
 	.ablist_item:hover
 	{
 		cursor: default;
-		color: #404040;
-		background-color: #ffffff;
-		border-top-color: #ffffff;
+		color: var(--foreground);
+		background-color: var(--background);
+		border-top-color: var(--background);
 /*
-		border-bottom-color: #ffffff;
+		border-bottom-color: var(--background);
 */
 	}
 }
@@ -1557,9 +1550,9 @@ input.non_editable
 
 .ablist_item_dragged
 {
-	border: 1px dashed #ffffff !important;
+	border: 1px dashed var(--background) !important;
 	background-color: #585858 !important;
-	color: #ffffff !important;
+	color: var(--background) !important;
 }
 
 .group
@@ -1577,8 +1570,8 @@ input.non_editable
 	width: 100%;
 	height: 20px;
 	line-height: 17px;
-	border-top: 1px solid #ffffff;
-	color: #404040;
+	border-top: 1px solid var(--background);
+	color: var(--foreground);
 	cursor: default;
 	padding-left: 0px;
 	padding-right: 6px;
@@ -1603,7 +1596,7 @@ input.non_editable
 .group:hover
 {
 	cursor: pointer;
-	color: #404040 !important;
+	color: var(--foreground) !important;
 	background-color: #e7e7e7 !important;
 	border-top: 1px solid !important;
 /*
@@ -1611,12 +1604,12 @@ input.non_editable
 	border-bottom: 1px solid !important;
 	border-bottom-color: #b9b9b9 !important;
 */
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 .group.resourceCardDAV_selected
 {
-	color: #ffffff !important;
+	color: var(--background) !important;
 	background: #585858 !important;
 	border-top: 1px solid !important;
 /*
@@ -1624,13 +1617,13 @@ input.non_editable
 	border-bottom: 1px solid !important;
 	border-bottom-color: #585858 !important;
 */
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 .group_dropped_to
 {
 	background-color: #b9b9b9;
-	border: 1px dashed #ffffff !important;
+	border: 1px dashed var(--background) !important;
 	padding-right: 7px;
 }
 
@@ -1835,7 +1828,7 @@ img[data-type="invalidCardDavTagsinput"]
 
 select.inverse_select
 {
-	background: #ffffff url(../images/select_inv.svg) no-repeat center right;
+	background: var(--background) url(../images/select_inv.svg) no-repeat center right;
 }
 
 #ExtendedDest
@@ -1865,16 +1858,16 @@ select.inverse_select
 	width: 100%;
 	height: 20px;
 	line-height: 17px;
-	color: #404040;
+	color: var(--foreground);
 	padding-left: 6px;
 	padding-right: 6px;
 	font-size: 0.9em;
 	font-weight: 500;
 
 	border-top: 1px solid;
-	border-top-color: #ffffff;
+	border-top-color: var(--background);
 	border-bottom: 1px solid;
-	border-bottom-color: #ffffff;
+	border-bottom-color: var(--background);
 }
 
 .extended_dest_item, .extended_dest_group_container
@@ -1910,8 +1903,8 @@ select.inverse_select
 	width: 100%;
 	height: 25px;
 	line-height: 23px;
-	border-top: 1px solid #ffffff;
-	color: #404040;
+	border-top: 1px solid var(--background);
+	color: var(--foreground);
 	font-size: 1em;
 	font-weight: 400;
 
@@ -1930,8 +1923,8 @@ select.inverse_select
 	width: 100%;
 	height: 20px;
 	line-height: 17px;
-	border-top: 1px solid #ffffff;
-	color: #404040;
+	border-top: 1px solid var(--background);
+	color: var(--foreground);
 	padding-left: 0px;
 	padding-right: 6px;
 	font-size: 0.9em;
@@ -1995,8 +1988,8 @@ select.inverse_select
 	display: none;
 	width: 300px;
 	background-color: #f0f0f0;
-	color: #404040;
-	border: 1px solid #c0c0c0;
+	color: var(--foreground);
+	border: 1px solid var(--background-dark);
 	z-index: 102;
 	cursor:default;
 
@@ -2074,7 +2067,7 @@ select.inverse_select
 	left: 0px;
 	right: 0px;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	width: 224px;
 	height: 24px;
 	background: #2d2d2d;
@@ -2095,8 +2088,8 @@ select.inverse_select
 	width: 224px;
 	overflow: auto;
 	overflow-x: hidden;
-	background: #ffffff;
-	border-top: 1px solid #c0c0c0;
+	background: var(--background);
+	border-top: 1px solid var(--background-);
 	cursor:default;
 
 	user-select: none;
@@ -2111,9 +2104,9 @@ select.inverse_select
 	left: 0px;
 	bottom: 0px;
 	border-right: 1px solid;
-	border-right-color: #c0c0c0;
+	border-right-color: var(--background-dark);
 	width: 224px;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	z-index: 10;
 }
@@ -2131,8 +2124,8 @@ select.inverse_select
 	bottom: auto;
 	height: 20px;
 	line-height: 17px;
-	background-color: #ffffff;
-	color: #404040;
+	background-color: var(--background);
+	color: var(--foreground);
 	cursor: default;
 	padding-left: 6px;
 	padding-right: 6px;
@@ -2141,9 +2134,9 @@ select.inverse_select
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	border-top: 1px solid;
-	border-top-color: #ffffff;
+	border-top-color: var(--background);
 	border-bottom: 1px solid;
-	border-bottom-color: #ffffff;
+	border-bottom-color: var(--background);
 }
 
 .resourceCalDAV_item, .resourceCalDAVTODO_item
@@ -2173,24 +2166,23 @@ body
 
 #timezoneWrapper select, #timezoneWrapperTODO select
 {
-	background: #f0f0f0 url(../images/select_black.svg) no-repeat center right;
-	color: #404040;
+	background: var(--background-dark);
+	color: var(--foreground);
 }
 
 @-moz-document url-prefix() {
 	#timezoneWrapper select, #timezoneWrapperTODO select
 	{
-		background: transparent url(../images/select_bg_black.svg) repeat-x;
 
 		/* FF outline hack */
 		color: rgba(64, 64, 64, 0);
-		text-shadow: 0 0 0 #404040;
+		text-shadow: 0 0 0 var(--foreground);
 	}
 
 	#timezoneWrapper select option
 	{
-		color: #404040;
-		background-color: #f0f0f0 !important;
+		color: var(--foreground);
+		background-color: var(--background-dark) !important;
 	}
 
 }
@@ -2203,7 +2195,7 @@ body
 	right: 0px;
 	bottom: 0px;
 	overflow: visible;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	opacity: 0.8;
 	z-index: 99;
@@ -2221,7 +2213,7 @@ body
 	position: absolute;
 	height: 100%;
 	width: 100%;
-	background: #ffffff;
+	background: var(--background);
 	display: none;
 	opacity: 0.95;
 	z-index: 101;
@@ -2232,7 +2224,7 @@ body
 	position: absolute;
 	width: 100%;
 	height: 50%;
-	background: #ffffff;
+	background: var(--background);
 	display: block;
 	opacity: 0.95;
 	z-index: 101;
@@ -2259,12 +2251,12 @@ h1
 {
 	font-weight: 400;
 	background-color: #f0f0f0;
-	color: #404040;
+	color: var(--foreground);
 	font-size: 1.1em;
 	padding: 3px 0px 0px 6px;
 	height: 21px;
 	line-height: 19px;
-	border-bottom: 1px solid #c0c0c0;
+	border-bottom: 1px solid var(--background-dark);
 }
 
 h3
@@ -2279,12 +2271,12 @@ h3
 	top: 0px;
 	position: absolute;
 	font-weight: 400;
-	background-color: #f0f0f0;
-	color: #404040;
+	background-color: var(--background-dark);
+	color: var(--foreground);
 	font-size: 1em;
 	height: 24px;
 	z-index: 25;
-	border-bottom: 1px solid #c0c0c0;
+	border-bottom: 1px solid var(--background-dark);
 	cursor:default;
 
 	user-select: none;
@@ -2368,7 +2360,6 @@ h3
 	width: 410px;
 	overflow: auto;
 	overflow-x: hidden;
-	background-color: #f0f0f0;
 }
 
 #todoLoader
@@ -2387,16 +2378,16 @@ h3
 {
 	left: 224px;
 	right: 0px;
-	border-left: 1px solid #c0c0c0;
+	border-left: 1px solid var(--background-dark);
 }
 
 #main_h_TODO
 {
 	left: 224px;
 	right: 413px;
-	border-left: 1px solid #c0c0c0;
-	border-right: 1px solid #c0c0c0;
-/*	border-bottom: 1px solid #FFFFFF;*/
+	border-left: 1px solid var(--background-dark);
+	border-right: 1px solid var(--background-dark);
+/*	border-bottom: 1px solid var(--background);*/
 }
 
 #main_h_placeholder, #mainTODO_h_placeholder
@@ -2422,9 +2413,9 @@ h3
 	bottom: 0px;
 	height: 19px;
 	width: 218px;
-	background: #f0f0f0;
-	border-top: 1px solid #c0c0c0;
-	color: #404040;
+  background-color: var(--background-dark) !important;
+	border-top: 1px solid var(--background-dark);
+	color: var(--foreground);
 	cursor:default;
 
 	user-select: none;
@@ -2447,7 +2438,7 @@ h3
 {
 	width: 155px;
 	background-color: #2d2d2d;
-	color: #FFFFFF;
+	color: var(--background);
 }
 
 #ResourceCalDAVList, #ResourceCalDAVTODOList
@@ -2462,18 +2453,18 @@ h3
 	left: 224px;
 	right: 0px;
 	height:100px;
-	background: #ffffff;
+	background: var(--background);
 	border-left: 1px solid;
 	border-right: 1px solid;
-	border-color: #c0c0c0;
+	border-color: var(--background-dark);
 	overflow: hidden;
 
 	z-index: 25;
 	height: 24px;
 	border-top: 1px solid;
-	border-top-color: #c0c0c0;
+	border-top-color: var(--background-dark);
 	border-bottom: 1px solid;
-	border-bottom-color: #c0c0c0;
+	border-bottom-color: var(--background-dark);
 	cursor:default;
 
 	user-select: none;
@@ -2488,17 +2479,17 @@ h3
 	left: 224px;
 	right: 413px;
 	height: 24px;
-	background: #ffffff;
+	background: var(--background);
 	border-left: 1px solid;
 	border-right: 1px solid;
-	border-color: #c0c0c0;
+	border-color: var(--background-dark);
 	overflow: hidden;
 
 	z-index: 25;
 	border-top: 1px solid;
-	border-top-color: #c0c0c0;
+	border-top-color: var(--background-dark);
 	border-bottom: 1px solid;
-	border-bottom-color: #c0c0c0;
+	border-bottom-color: var(--background-dark);
 	cursor:default;
 
 	user-select: none;
@@ -2517,7 +2508,7 @@ h3
 .searchContainer input
 {
 	width: 100%;
-	background-color: #FFFFFF;
+	background-color: var(--background);
 	padding-left: 4px;
 }
 
@@ -2528,10 +2519,10 @@ h3
 	left: 224px;
 	bottom: 0;
 	padding: 0px 7px;
-	background: #ffffff;
+	background: var(--background);
 	border-left: 1px solid;
 	border-right: 1px solid;
-	border-color: #c0c0c0;
+	border-color: var(--background-dark);
 	overflow-x: hidden;
 	overflow-y: auto;
 	z-index: 26;
@@ -2578,7 +2569,7 @@ h3
 	visibility: hidden;
 	width: 450px;
 	background: white;
-	border: 1px solid #c0c0c0;
+	border: 1px solid var(--background-dark);
 	z-index: 102;
 	cursor:default;
 
@@ -2594,7 +2585,7 @@ h3
 	text-align: center;
 	visibility: hidden;
 	background: white;
-	border: 1px solid #c0c0c0;
+	border: 1px solid var(--background-dark);
 	z-index: 100;
 }
 
@@ -2613,7 +2604,7 @@ h3
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background-color: #f9f9f9;
+	background-color: var(--background-dark);
 	opacity: 0.7;
 	filter: alpha(opacity=70);
 	z-index: 99;
@@ -2630,7 +2621,7 @@ h3
 #TodoDisabler
 {
 	position: fixed;
-	background-color: #f9f9f9;
+	background-color: var(--background-dark);
 	opacity: 0.7;
 	filter: alpha(opacity=70);
 	z-index: 99;
@@ -2703,12 +2694,12 @@ h3
 	height: 25px;
 	line-height: 23px;
 	border-top: 1px solid;
-	border-top-color: #ffffff;
+	border-top-color: var(--background);
 /*
 	border-bottom: 1px solid;
 	border-bottom-color: #f0f0f0;
 */
-	color: #404040;
+	color: var(--foreground);
 	cursor: default;
 	font-size: 1em;
 	font-weight: 400;
@@ -2720,28 +2711,28 @@ h3
 #ResourceCalDAVList .resourceCalDAV_item:hover, #ResourceCalDAVTODOList .resourceCalDAVTODO_item:hover
 {
 	cursor: pointer;
-	color: #404040 !important;
-	background-color: #e7e7e7 !important;
+	color: var(--background) !important;
+	background-color: var(--accent-hover) !important;
 	border-top: 1px solid !important;
 /*
-	border-top-color: #c0c0c0 !important;
+	border-top-color: var(--background-dark) !important;
 	border-bottom: 1px solid !important;
-	border-bottom-color: #c0c0c0 !important;
+	border-bottom-color: var(--background-dark) !important;
 */
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 #ResourceCalDAVList .resourceCalDAV_item.resourceCalDAV_item_selected, #ResourceCalDAVTODOList .resourceCalDAVTODO_item.resourceCalDAV_item_selected
 {
-	color: #ffffff !important;
-	background: #585858 !important;
+	color: var(--background) !important;
+	background: var(--accent-active) !important;
 	border-top: 1px solid !important;
 /*
 	border-top-color: #585858 !important;
 	border-bottom: 1px solid !important;
 	border-bottom-color: #585858 !important;
 */
-	border-top-color: #ffffff !important;
+	border-top-color: var(--background) !important;
 }
 
 #ResourceCalDAVList .resourceCalDAV_item_ro.resourceCalDAV_item, #ResourceCalDAVTODOList .resourceCalDAV_item_ro.resourceCalDAVTODO_item
@@ -2858,10 +2849,10 @@ h3
 	width: 413px;
 	position: absolute;
 	display: none;
-	background-color: #f0f0f0;
+	background-color: var(--background);
 	overflow-x: hidden;
 	overflow-y: auto;
-	border: 1px solid #c0c0c0;
+	border: 1px solid var(--background-dark);
 	z-index: 100;
 }
 
@@ -2932,7 +2923,7 @@ h3
 	z-index: 102;
 	background: #f0f0f0;
 	border-bottom: 1px solid;
-	border-bottom-color: #c0c0c0;
+	border-bottom-color: var(--background-dark);
 }
 
 #TodoInMessageText, #EventInMessageText
@@ -3008,10 +2999,10 @@ h3
 	position: absolute;
 	height: 42px;
 	width: 18px;
-	border: 1px solid #c0c0c0;
+	border: 1px solid var(--background-dark);
 	font-size: 1.1em;
 	font-weight: 400;
-	background-color: #ffffff;
+	background-color: var(--background);
 	cursor: pointer;
 }
 
@@ -3205,7 +3196,7 @@ input.verySmall[type="text"]
 .customTable td
 {
 	position: static;
-	background-color: #FFFFFF;
+	background-color: var(--background);
 	border-right: 2px solid #F0F0F0;
 	border-bottom: 2px solid #F0F0F0;
 	vertical-align: middle;
@@ -3237,12 +3228,12 @@ input.verySmall[type="text"]
 .customTable td.disabled
 {
 	cursor: default;
-	background-color: #ffffff;
+	background-color: var(--background);
 }
 
 .customTable td.selected
 {
-	color: #FFFFFF;
+	color: var(--background);
 	background-color: #585858;
 }
 
@@ -3338,7 +3329,7 @@ img[data-type="invalidVerySmall"]
 	position: relative;
 	display: block;
 	padding: 2px 2px 0px 2px;
-	border-bottom: 1px solid #c0c0c0;
+	border-bottom: 1px solid var(--background-dark);
 	font-weight: 400;
 	font-size: 1em;
 }
@@ -3368,7 +3359,7 @@ img[data-type="invalidVerySmall"]
 .fc-today.fc-widget-header, .fc-today.fc-list-header td
 {
 	background-color: #585858 !important;
-	color: #ffffff !important;
+	color: var(--background) !important;
 }
 
 .fc-day-text, .fc-week-number
@@ -3386,8 +3377,8 @@ img[data-type="invalidVerySmall"]
 	width: 16px;
 	line-height: 17px;
 	padding: 0px 3px 0px 2px;
-	color: #ffffff;
-	background-color: #c0c0c0;
+	color: var(--background);
+	background-color: var(--accent-weeknum);
 	font-size: 1em;
 	/*-moz-border-radius-bottomright: 3px;
 	border-bottom-right-radius: 3px; */
@@ -3396,7 +3387,7 @@ img[data-type="invalidVerySmall"]
 /*
 .fc-agenda-axis.fc-widget-header
 {
-	border-top: 1px solid #c0c0c0;
+	border-top: 1px solid var(--background-dark);
 }
 */
 
@@ -3428,15 +3419,15 @@ img[data-type="invalidVerySmall"]
 	height: 17px;
 	line-height: 17px;
 
-	background-color: #585858;
+	background-color: var(--accent-active);
 	font-weight: 400;
-	color: #ffffff;
+	color: var(--background);
 }
 
 .fc-today .fc-day-header .fc-week-number
 {
-	background-color: #c0c0c0;
-	color: #ffffff;
+	background-color: var(--background-dark);
+	color: var(--background);
 }
 
 .fc-today .fc-day-header div
@@ -3494,7 +3485,7 @@ img[data-type="invalidVerySmall"]
 
 .fc-event-skin
 {
-	border-color: #FFFFFF;
+	border-color: var(--background);
 	background-color: #2d2d2d;
 	color: white;
 }
@@ -3522,22 +3513,24 @@ img[data-type="invalidVerySmall"]
 
 .fc-state-default, .fc-state-default .fc-button-inner
 {
-	border-color: #c0c0c0 !important;
+	border-color: var(--background-dark) !important;
 }
 
 .fc-state-default, .fc-state-default .fc-button-inner
 {
-	background: none repeat scroll 0 0 #ffffff !important;
+	background: var(--background) !important;
 }
 
 .fc-state-hover, .fc-state-hover .fc-button-inner
 {
-	background: none repeat scroll 0 0 #e7e7e7 !important;
+	background: var(--accent-hover) !important;
+  color: var(--background) !important;
 }
 
 .fc-state-active, .fc-state-active .fc-button-inner
 {
-	background: none repeat scroll 0 0 #585858 !important;
+	background: var(--accent-active) !important;
+	color: var(--background) !important;
 }
 
 .ui-datepicker-simple
@@ -3578,7 +3571,7 @@ img[data-type="invalidVerySmall"]
 	display: none;
 	position: absolute;
 	max-width: 413px;
-	border: 1px solid #c0c0c0;
+	border: 1px solid var(--background-dark);
 	background: #f0f0f0;
 	z-index: 30;
 

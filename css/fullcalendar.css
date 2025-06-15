@@ -129,11 +129,11 @@ html .fc,
 ------------------------------------------------------------------------*/
 
 .fc-widget-header {  /* <td>, usually */
-	border-bottom: 1px solid #c0c0c0;
+	border-bottom: 1px solid var(--accent-weeknum);
 /*	border-right: 1px solid transparent;*/
 	}
 .fc-widget-content {  /* <td>, usually */
-	border-top: 1px solid #c0c0c0;
+	border-top: 1px solid var(--accent-weeknum);
 	border-right: 1px solid transparent;
 	}
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
@@ -143,13 +143,13 @@ html .fc,
 	background-color: #fff4f4;
 }
 .fc-widget-content.fc-weekend-day, .fc-widget-content tr.fc-weekend-day {
-	background: #f7f7f7;
+	background: var(--background-light0);
 }
 .fc-source-bg.fc-state-highlight {
 	background: #fdf7e9;
 }
 .fc-widget-content.fc-state-highlight.fc-weekend-day, .fc-widget-content tr.fc-state-highlight.fc-weekend-day {
-	background: #f9f9ea;
+	background: var(--background-light1);
 }
 .fc-widget-content.fc-source-bg.fc-weekend-day, .fc-widget-content tr.fc-source-bg.fc-weekend-day {
 	background: #fbf6f6;
@@ -237,8 +237,8 @@ html .fc,
 .fc-state-default .fc-button-inner {
 	border-style: solid;
 	border-color: #ccc #bbb #aaa;
-	background: #F3F3F3;
-	color: #404040;
+	background: var(--background-light);
+	color: var(--foreground);
 	}
 
 .fc-state-hover,
@@ -255,8 +255,8 @@ html .fc,
 .fc-state-active,
 .fc-state-active .fc-button-inner {
 	border-color: #555;
-	background: #777;
-	color: #fff;
+	background: var(--accent-active);
+	color: var(--foreground);
 	}
 
 .fc-state-disabled,
@@ -663,7 +663,7 @@ table.fc-border-separate {
 
 .fc-agenda-slots .fc-widget-header
 {
-	border-top: 1px solid #c0c0c0;
+	border-top: 1px solid var(--accent-weeknum);
 	padding-top: 1px;
 }
 
@@ -1034,17 +1034,17 @@ table.fc-border-separate {
 
 .fc-view-table .fc-table-datepicker-no-default .ui-state-active,
 .fc-view-todo .fc-table-datepicker-no-default .ui-state-active {
-	border: 1px solid #c0c0c0;
-	background: #ffffff;
+	/*border: 1px solid var(--accent-weeknum);*/
+	background: var(--background-light1);
 	font-weight: 400;
-	color: #404040;
+	color: var(--foreground);
 }
 
 .fc-view-table .fc-table-dateinfo-number,
 .fc-view-todo .fc-table-dateinfo-number {
 	position: relative;
 	display: inline-block;
-	color: #c0c0c0;
+	color: var(--accent-weeknum);
 	font-weight: 300;
 	margin-top: -5px;
 }
@@ -1058,7 +1058,7 @@ table.fc-border-separate {
 
 .fc-view-table .fc-table-dateinfo-text,
 .fc-view-todo .fc-table-dateinfo-text {
-	color: #c0c0c0;
+	color: var(--accent-weeknum);
 	line-height: 0.9em;
 	font-size: 1.5em;
 	font-weight: 300;
@@ -1071,7 +1071,7 @@ table.fc-border-separate {
 .fc-filter-table-header {
 	font-weight: 500 !important;
 	height: 20px !important;
-	border: 1px dashed #c0c0c0 !important;
+	border: 1px dashed var(--accent-weeknum) !important;
 	vertical-align: middle !important;
 	text-align: center;
 	cursor: default;
@@ -1083,7 +1083,7 @@ table.fc-border-separate {
 .fc-filter-table-footer {
 	font-size: 0.9em;
 	height: 20px !important;
-	border-top: 1px solid #c0c0c0 !important;
+	border-top: 1px solid var(--accent-weeknum) !important;
 	vertical-align: middle !important;
 	text-align: center;
 	cursor: default;
@@ -1094,15 +1094,15 @@ table.fc-border-separate {
 
 .fc-filter-option {
 	height: 20px !important;
-	background-color: #ffffff;
-	border: 1px solid #c0c0c0 !important;
+	border: 1px solid var(--accent-weeknum) !important;
 	vertical-align: middle !important;
 	text-align: center;
 	cursor: pointer;
 }
 
 .fc-filter-option:hover {
-	background-color: #e7e7e7;
+	background-color: var(--accent-hover);
+  color: var(--background);
 }
 
 /*
@@ -1112,8 +1112,7 @@ table.fc-border-separate {
 */
 
 .fc-filter-option.fc-filter-option-selected {
-	color: #ffffff;
-	background-color: #585858;
+	background-color: var(--background-light1);
 }
 
 .fc-filter-hide {
@@ -1131,12 +1130,12 @@ table.fc-border-separate {
 /*
 .fc-view-table .fc-month-nav.fc-month-prev,
 .fc-view-todo .fc-month-nav.fc-month-prev {
-	border-bottom: 1px solid #c0c0c0 !important;
+	border-bottom: 1px solid var(--accent-weeknum) !important;
 }
 
 .fc-view-table .fc-month-nav.fc-month-next,
 .fc-view-todo .fc-month-nav.fc-month-next {
-	border-top: 1px solid #c0c0c0 !important;
+	border-top: 1px solid var(--accent-weeknum) !important;
 }
 
 .fc-view-table .fc-month-nav:hover,
@@ -1164,14 +1163,14 @@ table.fc-border-separate {
 }
 
 .fc-view-todo .fc-table-datepicker .ui-datepicker-header {
-	color: #404040;
+	/*color: #404040;*/
 	background: none;
 	font-size: 0.95em;
 }
 
 .fc-view-todo .fc-table-datepicker-current .ui-datepicker-title {
-	color: #ffffff;
-	background-color: #585858;
+	color: var(--background);
+	background-color: var(--accent-active);
 }
 
 .fc-view-todo .fc-table-datepicker .ui-datepicker-prev,
@@ -1206,8 +1205,8 @@ table.fc-border-separate {
 .fc-table-datepicker .ui-datepicker-today a {
 	font-weight: 400;
 	color: #404040;
-	background: #c0c0c0;
-	border: 1px solid #c0c0c0;
+	background: var(--accent-weeknum);
+	border: 1px solid var(--accent-weeknum);
 }
 
 .fc-table-datepicker .ui-datepicker-today .ui-state-active {
@@ -1229,13 +1228,13 @@ table.fc-border-separate {
 }
 
 .fc-event-pastdue {
-	color: #E30613;
+	color: var(--red);
 }
 
 .fc-event.fc-event-row:hover
 {
 	color: #404040;
-	background-color: #e7e7e7;
+	background-color: var(--accent-hover);
 	cursor: pointer;
 }
 
@@ -1248,15 +1247,15 @@ table.fc-border-separate {
 
 .fc-event.fc-event-row.fc-event-pastdue:hover
 {
-	color: #e30613;
+	color: var(--red);
 	background-color: #fedee0;
 	cursor: pointer;
 }
 
 .fc-event.fc-event-row.fc-event-selected
 {
-	color: #eeeeee;
-	background-color: #585858 !important;
+	color: var(--background);
+	background-color: var(--accent-active) !important;
 }
 
 .fc-event.fc-event-row.fc-event-selected.fc-event-urgent
@@ -1268,7 +1267,7 @@ table.fc-border-separate {
 .fc-event.fc-event-row.fc-event-selected.fc-event-pastdue
 {
 	color: #ffffff;
-	background-color: #e30613 !important;
+	background-color: var(--red) !important;
 }
 
 .fc-event-priority-3 {
