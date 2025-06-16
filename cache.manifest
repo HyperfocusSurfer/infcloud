@@ -148,10 +148,6 @@ images/success_w.svg
 images/todoB.svg
 images/user.svg
 lib/fullcalendar.js
-lib/ie_base64.js
-lib/jquery-2.1.4.min.js
-lib/jquery.autosize.js
-lib/jquery.placeholder-1.1.9.js
 lib/jquery.quicksearch.js
 lib/jquery.tagsinput.js
 lib/jquery-ui-1.11.4.custom.js

@@ -154,7 +154,7 @@ function EventList()
 					else
 					{
 						var beforeScroll = $('#main').width()-$('#calendar').width();
-						$('#calendar').fullCalendar('removeEvents', 'fooUID');
+						window.calendar.removeEvents('fooUID');
 						var afterScroll = $('#main').width()-$('#calendar').width();
 						rerenderCalendar(beforeScroll!=afterScroll);
 					}

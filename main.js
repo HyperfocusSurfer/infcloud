@@ -309,9 +309,10 @@ function reloadResources(dontSaveSettings, loadArray)
 				$('#vCardEditor').find('input[data-type^="date_"]').datepicker('refresh');
 			if(isAvaible('Projects'))
 				$('.project_date').datepicker('refresh');
-			$('#calendar').fullCalendar('updateToday');
-			$('#calendar').fullCalendar('gotoDate', currentToday);
-			$('#todoList').fullCalendar('gotoDate', currentToday);
+      // seems to be removed
+			//$('#calendar').fullCalendar('updateToday');
+			window.calendar.gotoDate(currentToday);
+			//$('#todoList').fullCalendar('gotoDate', currentToday);
 			if(currentToday.getTime()>globalToday.getTime())
 			{
 				getNextMonths($('#calendar').fullCalendar('getView').end);
@@ -359,7 +360,7 @@ function ifLoadCollections()
 
 function bindColorPickerClick(newElement)
 {
-	newElement.click(function(event){
+	newElement.on("click", function(event){
 		var collectionType=null;
 		var resourceSelectedClass=null;
 		var resourceItems=null;
@@ -660,8 +661,8 @@ function logout(forceLogout)
 
 		if(typeof globalDemoMode=='undefined')
 		{
-			$('[data-type="system_username"]').val('').change();
-			$('[data-type="system_password"]').val('').change();
+			$('[data-type="system_username"]').val('').trigger("change");
+			$('[data-type="system_password"]').val('').trigger("change");
 		}
 
 		$('.integration_d').hide();
@@ -699,9 +700,9 @@ function init()
 	if(typeof globalDemoMode!='undefined')
 	{
 		if(typeof globalDemoMode.userName!=undefined)
-			$('[data-type="system_username"]').val(globalDemoMode.userName).change();
+			$('[data-type="system_username"]').val(globalDemoMode.userName).trigger("change");
 		if(typeof globalDemoMode.userPassword!=undefined)
-			$('[data-type="system_password"]').val(globalDemoMode.userPassword).change();
+			$('[data-type="system_password"]').val(globalDemoMode.userPassword).trigger("change");
 	}
 
 	loadConfig();
@@ -782,7 +783,7 @@ function loadConfig()
 	{
 		if(globalLoginUsername=='' || globalLoginPassword=='')
 		{
-			$('#LoginPage').fadeTo(500, 1, function(){if(typeof globalDemoMode=='undefined') $('[data-type="system_username"]').focus()});
+			$('#LoginPage').fadeTo(500, 1, function(){if(typeof globalDemoMode=='undefined') $('[data-type="system_username"]').trigger("focus")});
 			$('#LoginLoader').fadeOut(1200);
 			return false;
 		}
@@ -818,7 +819,7 @@ function loadConfig()
 	{
 		if(globalLoginUsername=='' || globalLoginPassword=='')
 		{
-			$('#LoginPage').fadeTo(500, 1, function(){if(typeof globalDemoMode=='undefined') $('[data-type="system_username"]').focus()});
+			$('#LoginPage').fadeTo(500, 1, function(){if(typeof globalDemoMode=='undefined') $('[data-type="system_username"]').trigger("focus")});
 			$('#LoginLoader').fadeOut(1200);
 			return false;
 		}
@@ -1304,7 +1305,7 @@ function loadSettings(strobj, fromServer, syncMode)
 		return false;
 	try
 	{
-		objNew = jQuery.parseJSON(strobj);
+		objNew = JSON.parse(strobj);
 		if(typeof objNew=='object')
 		{
 			if(!syncMode && typeof globalSettingsXML!='undefined' && globalSettingsXML!=null && globalSettingsXML!='')
@@ -1381,7 +1382,8 @@ function loadSettings(strobj, fromServer, syncMode)
 		}
 		if(globalSettings.enablekbnavigation.value!==false)
 			initKbTodoNavigation();
-		initFullCalendar();
+		//initFullCalendar();
+    initNewFC();
 		initTodoList();
 
 		$('#SystemCalDavZAP .fc-header-title').css('width', $('#main_h_placeholder').width()-$('#SystemCalDavZAP .fc-header-left').outerWidth()-$('#SystemCalDavZAP .fc-header-right').outerWidth());
@@ -1670,7 +1672,7 @@ function logoutCalDAV()
 		$('#main, #mainTODO').animate({top: 25}, 0);
 		$('#searchForm, #searchFormTODO').hide();
 		$('#searchInput, #searchInputTODO').val('').trigger('keyup').trigger('blur');
-		$('#calendar').fullCalendar('destroy');
+		window.calendar.destroy();
 		$('#todoList').fullCalendar('destroy');
 		$('#timezonePicker, #timezonePickerTODO').prop('disabled', false).empty();
 		$('#eventColor, #todoColor').css('background-color','');
@@ -1696,7 +1698,6 @@ function localizeCalDAV()
 	$('#CATodo').html(origVtodoTemplate);
 	$('#todoLoader').html(origVtodoLoaderTemplate);
 	translate();
-	$('input[placeholder],textarea[placeholder]').placeholder();
 	cleanResourceCalDAVListTemplate=$('#ResourceCalDAVListTemplate').clone().wrap('<div>').parent().html();
 	cleanResourceCalDAVTODOListTemplate=$('#ResourceCalDAVTODOListTemplate').clone().wrap('<div>').parent().html();
 	cleanVcalendarTemplate=$('#CAEvent .saveLoader').clone().wrap('<div>').parent().html() + $('#repeatConfirmBox').clone().wrap('<div>').parent().html() + $('#event_details_template').clone().wrap('<div>').parent().html();
@@ -1731,35 +1732,35 @@ function runCalDAV()
 
 function globalMainCalDAV()
 {
-	$(window).resize(function(evt){
-		if(evt.target!=window)
-			return;
+//	$(window).resize(function(evt){
+//		if(evt.target!=window)
+//			return;
+//
+//		if(typeof globalCalDAVInitLoad!='undefined' && !globalCalDAVInitLoad && !globalResourceRefreshNumber && $('#main').width()!=globalCalWidth)
+//			$('#CalendarLoader').children('.loaderInfo').text(localization[globalInterfaceLanguage].resizeLoader).parent().css('display','block');
+//
+//		$('#SystemCalDavZAP .fc-header-title').css('width', $('#main_h_placeholder').width()-$('#SystemCalDavZAP .fc-header-left').outerWidth()-$('#SystemCalDavZAP .fc-header-right').outerWidth());
+//		$('#ResourceCalDAVList, #ResourceCalDAVTODOList').css('bottom',(globalSettings.timezonesupport.value ? 20 : 0));
+//		$('#alertBox').css('left', ($(window).width()/2)-($('#alertBox').width()/2));
+//		//$('#calendar').fullCalendar('option', 'contentHeight', $('#main').height() - 14);
+//		//$('#todoList').fullCalendar('allowSelectEvent',false);
+//		//$('#todoList').fullCalendar('option', 'contentHeight', $('#mainTODO').height() - 14);
+//		//$('#todoList').fullCalendar('allowSelectEvent',true);
+//		//$('#todoList').fullCalendar('selectEvent', null, true);
+//
+//		if($('#CATodo').is(':visible')) {
+//			checkTodoFormScrollBar();
+//		}
+//
+//		if(globalSettings.displayhiddenevents.value)
+//		{
+//			hideEventCalendars();
+//			hideTodoCalendars();
+//		}
+//		globalCalWidth = $('#main').width();
+//	});
 
-		if(typeof globalCalDAVInitLoad!='undefined' && !globalCalDAVInitLoad && !globalResourceRefreshNumber && $('#main').width()!=globalCalWidth)
-			$('#CalendarLoader').children('.loaderInfo').text(localization[globalInterfaceLanguage].resizeLoader).parent().css('display','block');
-
-		$('#SystemCalDavZAP .fc-header-title').css('width', $('#main_h_placeholder').width()-$('#SystemCalDavZAP .fc-header-left').outerWidth()-$('#SystemCalDavZAP .fc-header-right').outerWidth());
-		$('#ResourceCalDAVList, #ResourceCalDAVTODOList').css('bottom',(globalSettings.timezonesupport.value ? 20 : 0));
-		$('#alertBox').css('left', ($(window).width()/2)-($('#alertBox').width()/2));
-		$('#calendar').fullCalendar('option', 'contentHeight', $('#main').height() - 14);
-		$('#todoList').fullCalendar('allowSelectEvent',false);
-		$('#todoList').fullCalendar('option', 'contentHeight', $('#mainTODO').height() - 14);
-		$('#todoList').fullCalendar('allowSelectEvent',true);
-		$('#todoList').fullCalendar('selectEvent', null, true);
-
-		if($('#CATodo').is(':visible')) {
-			checkTodoFormScrollBar();
-		}
-
-		if(globalSettings.displayhiddenevents.value)
-		{
-			hideEventCalendars();
-			hideTodoCalendars();
-		}
-		globalCalWidth = $('#main').width();
-	});
-
-	$('#ResourceCalDAVToggle').click(function(){
+	$('#ResourceCalDAVToggle').on("click", function(){
 		var transSpeedResource=70;
 		var isResourceVisible=$('#ResourceCalDAVList').width()>1;
 		var col0=isResourceVisible? 0:218;
@@ -1783,11 +1784,11 @@ function globalMainCalDAV()
 		$('#CalendarLoader').animate({left: col3}, transSpeedResource);
 		$('#main_h, #searchForm, #main').animate({left: col2}, transSpeedResource).promise().done(function(){
 			$('#SystemCalDavZAP .fc-header-title').width($('#main_h_placeholder').width()-$('#SystemCalDavZAP .fc-header-left').width()-$('#SystemCalDavZAP .fc-header-right').width()-20);
-			$(window).resize();
+			//$(window).resize();
 		});
 	});
 
-	$('#ResourceCalDAVTODOToggle').click(function(){
+	$('#ResourceCalDAVTODOToggle').on("click", function(){
 		var transSpeedResource=70;
 		var isResourceVisible=$('#ResourceCalDAVTODOList').width()>1;
 		var col0=isResourceVisible? 0:218;
@@ -1809,17 +1810,17 @@ function globalMainCalDAV()
 		$('#main_h_TODO, #searchFormTODO').animate({left: col2}, transSpeedResource);
 		$('#mainTODO').animate({left: col2}, transSpeedResource, function(){
 			$('#todoList').fullCalendar('allowSelectEvent',false);
-			$(window).resize();
+			//$(window).resize();
 			$('#todoList').fullCalendar('allowSelectEvent',true);
 			$('#todoList').fullCalendar('selectEvent', null, true);
 		});
 	});
 
-	$('#eventFormShowerTODO').click(function(){
+	$('#eventFormShowerTODO').on("click", function(){
 			showNewEvent('TODO');
 	});
 
-	$('#eventFormShower').click(function(){
+	$('#eventFormShower').on("click", function(){
 		showNewEvent('');
 	});
 
@@ -1837,7 +1838,7 @@ function globalMainCalDAV()
 			$('#resetButtonTODO').css('visibility', 'hidden');
 	});
 
-	$('#timezonePicker, #timezonePickerTODO').change(function(){
+	$('#timezonePicker, #timezonePickerTODO').on("change", function(){
 		var previousTimezone=globalSessionTimeZone;
 		globalSessionTimeZone=$(this).val();
 		$('#timezonePicker').val($(this).val());
@@ -2130,32 +2131,32 @@ globalContactDataColumnLabelVars = {
 // called only once (after tha page is loaded)
 function globalMainCardDAV()
 {
-	$(window).resize(function(evt){
-		if(evt.target!=window)
-			return;
+	//$(window).resize(function(evt){
+	//	if(evt.target!=window)
+	//		return;
 
-		var columnLengths = [];
-		for(var i=0; i<getDataColumnCount(); i++) {
-			columnLengths.push([]);
-		}
+	//	var columnLengths = [];
+	//	for(var i=0; i<getDataColumnCount(); i++) {
+	//		columnLengths.push([]);
+	//	}
 
-		globalRefABListTable.children('.ablist_item:visible').each(function() {
-			$(this).children().slice(globalFixedContactDataColumnsCount).each(function(ind) {
-				columnLengths[ind].push($(this).text().length);
-			});
-		});
+	//	globalRefABListTable.children('.ablist_item:visible').each(function() {
+	//		$(this).children().slice(globalFixedContactDataColumnsCount).each(function(ind) {
+	//			columnLengths[ind].push($(this).text().length);
+	//		});
+	//	});
 
-		setDataColumnsWidth(columnLengths);
+	//	setDataColumnsWidth(columnLengths);
 
-		$('.ablist_table_wrapper').css('max-height', $('#ABList').innerHeight() - $('.ablist_table_header').outerHeight() - 1);
-		checkContactFormScrollBar();
-	});
+	//	$('.ablist_table_wrapper').css('max-height', $('#ABList').innerHeight() - $('.ablist_table_header').outerHeight() - 1);
+	//	checkContactFormScrollBar();
+	//});
 
 	// set the initial height to get vertical scrollbars working (used also in $(window).resize(...))
 	$('.ablist_table_wrapper').css('max-height', $('#ABList').innerHeight() - $('.ablist_table_header').outerHeight() - 1);
 
 	// toggle CardDAV resources
-	$('#ResourceCardDAVToggle').click(function(){
+	$('#ResourceCardDAVToggle').on("click", function(){
 		var transSpeedResource=70;
 		var isResourceVisible=$('#ResourceCardDAVList').width()>1;
 		var col1=isResourceVisible? 0:224;

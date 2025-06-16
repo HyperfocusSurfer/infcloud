@@ -3213,7 +3213,7 @@ function fullVcalendarToData(inputEvent)
 		}
 
 		//UID
-		vcalendar_element=inputEvent.vcalendar.match(RegExp('\r\n'+vCalendar.re['contentline_UID'], 'mi'));
+		vcalendar_element=inputEvent.extendedProps.vcalendar.match(RegExp('\r\n'+vCalendar.re['contentline_UID'], 'mi'));
 		if(vcalendar_element!=null)
 		{
 			parsed=vcalendar_element[0].match(vCalendar.pre['contentline_parse']);
@@ -6023,7 +6023,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 
 				if(valid==true)
 				{
-					tmpvCardEditorRef.find('[data-type="date_bday"]').val(vcardUnescapeValue($.datepicker.formatDate(globalSettings.datepickerformat.value, date))).change();
+					tmpvCardEditorRef.find('[data-type="date_bday"]').val(vcardUnescapeValue($.datepicker.formatDate(globalSettings.datepickerformat.value, date))).trigger("change");
 
 					// values not directly supported by the editor (old values are kept intact)
 					vCard.tplM['contentline_BDAY'][0]=vCard.tplC['contentline_BDAY'];
@@ -6078,7 +6078,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 					// click to "add" button if not enought data rows present
 					var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%date"]').last();
 					if(tmp_sel.find('[data-type="date_value"]').val()!='')
-						tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+						tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 					// get the "TYPE=" values array
 					var pref=0;	//by default there is no preferred date
@@ -6145,7 +6145,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 						tmpvCardEditorRef.find('[data-type="\\%date"]:eq('+element_i+') [data-type="date_type"]').find('[data-type="'+jqueryEscapeSelector(type_values_txt)+'"]').prop('selected', true);
 					}
 
-					tmpvCardEditorRef.find('[data-type="\\%date"]:eq('+element_i+') [data-type="date_value"]').val(vcardUnescapeValue($.datepicker.formatDate(globalSettings.datepickerformat.value, date))).change();
+					tmpvCardEditorRef.find('[data-type="\\%date"]:eq('+element_i+') [data-type="date_value"]').val(vcardUnescapeValue($.datepicker.formatDate(globalSettings.datepickerformat.value, date))).trigger("change");
 
 					// values not directly supported by the editor (old values are kept intact)
 					vCard.tplM['contentline_X-ABDATE'][element_i]=vCard.tplC['contentline_X-ABDATE'];
@@ -6419,7 +6419,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 					}
 				);
 				if(found)
-					tmpvCardEditorRef.find('[data-type="\\%address"]').last().find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmpvCardEditorRef.find('[data-type="\\%address"]').last().find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" values array
 				var pref=0;	//by default there is no preferred address
@@ -6516,7 +6516,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// Note:
 				//  if no country detected, the default is used (see globalDefaultAddressCountry in config.js)
 
-				tmp.find('[data-autoselect]').change();
+				tmp.find('[data-autoselect]').trigger("change");
 				var streetVals = vcardUnescapeValue(parsed_value[2]).split('\n');
 
 				for(var i=0; i<streetVals.length; i++) {
@@ -6578,7 +6578,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// click to "add" button if not enought data rows present
 				var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%phone"]').last();
 				if(tmp_sel.find('[data-type="value"]').val()!='')
-					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" values array
 				var pref=0;	//by default there is no preferred phone number
@@ -6691,7 +6691,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// click to "add" button if not enought data rows present
 				var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%email"]').last();
 				if(tmp_sel.find('[data-type="value"]').val()!='')
-					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" values array
 				var pref=0;	//by default there is no preferred email address
@@ -6803,7 +6803,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// click to "add" button if not enought data rows present
 				var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%profile"]').last();
 				if(tmp_sel.find('[data-type="value"]').val()!='')
-					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" values array
 				var pref=0;	//by default there is no preferred X-SOCIALPROFILE
@@ -6908,7 +6908,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// click to "add" button if not enought data rows present
 				var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%url"]').last();
 				if(tmp_sel.find('[data-type="value"]').val()!='')
-					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" values array
 				var pref=0;	//by default there is no preferred url address
@@ -7021,7 +7021,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// click to "add" button if not enought data rows present
 				var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%person"]').last();
 				if(tmp_sel.find('[data-type="value"]').val()!='')
-					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" values array
 				var pref=0;	//by default there is no preferred person
@@ -7134,7 +7134,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 				// click to "add" button if not enought data rows present
 				var tmp_sel=tmpvCardEditorRef.find('[data-type="\\%im"]').last();
 				if(tmp_sel.find('[data-type="value"]').val()!='')
-					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').click();
+					tmp_sel.find('[data-type="\\%add"]').find('input[type="image"]').trigger("click");
 
 				// get the "TYPE=" & "X-SERVICE-TYPE" values array
 				var pref=0;	//by default there is no preferred IM
@@ -7271,7 +7271,7 @@ function vcardToData(inputContact, inputIsReadonly, inputIsCompany, inputEditorM
 		// add the list of available collections to the interface
 		tmpvCardEditorRef.find('[data-attr-name="_DEST_"]').append(tmp_optionslist);
 		// bind the change event (color change in the editor)
-		tmpvCardEditorRef.find('[data-attr-name="_DEST_"]').change(function(){
+		tmpvCardEditorRef.find('[data-attr-name="_DEST_"]').on("change", function(){
 			var selColl=globalResourceCardDAVList.getCollectionByUID($(this).find('option:selected').attr('data-type'));
 			globalRefAddContact.attr('data-url', selColl.uid.replace(RegExp('[^/]+$'),''));
 			globalRefAddContact.attr('data-filter-url',selColl.uid);	// Set the current addressbook filter uid

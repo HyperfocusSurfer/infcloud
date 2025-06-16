@@ -468,7 +468,7 @@ function netSaveProperty(inputCollection, hrefProperty, inputProperty, inputValu
 					secondColl.ecolor = color;
 
 				if(inputCollection.listType=='vevent' || secondColl!=null)
-					$('#calendar').fullCalendar('refetchEvents');
+					window.calendar.refetchEvents()
 				if(inputCollection.listType=='vtodo' || secondColl!=null)
 					$('#todoList').fullCalendar('refetchEvents');
 			}
@@ -2267,7 +2267,7 @@ function moveVcalendarToCollection(accountUID, inputUID, inputEtag, inputVcalend
 						if(isFormHidden!=true)
 						{
 							$('#CAEvent').hide();
-							$('#calendar').fullCalendar('unselect');
+							window.calendar.unselect()
 							$('#event_details_template').remove();
 							$('#CAEvent').append(cleanVcalendarTemplate);
 							$('#EventDisabler').fadeOut(globalEditorFadeAnimation, function(){
@@ -2448,7 +2448,7 @@ function putVcalendarToCollection(accountUID, inputUID, inputEtag, inputVcalenda
 						if(isFormHidden!=true)
 						{
 							$('#CAEvent').hide();
-							$('#calendar').fullCalendar('unselect');
+							window.calendar.unselect()
 							$('#event_details_template').remove();
 							$('#CAEvent').append(cleanVcalendarTemplate);
 							$('#EventDisabler').fadeOut(globalEditorFadeAnimation, function(){

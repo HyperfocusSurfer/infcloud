@@ -102,7 +102,7 @@ function AddressbookList()
 		/* backward compatibility for stupid users (remove it in future) */
 		if(typeof inputSettings==='string')
 			tmp = inputSettings.replace(RegExp(',','g'), ', ').split(',');
-		else if($.isArray(inputSettings))	/* new configuration options (arrays) */
+		else if(Array.isArray(inputSettings))	/* new configuration options (arrays) */
 			tmp = inputSettings.slice();	// copy the configuration array
 
 		// display settings for non-group contacts need some flattening
@@ -322,7 +322,7 @@ function AddressbookList()
 		// insert the contact group to interface
 		var newElement=globalTranslCardDAVListItem.find('.contact_group').find('.group').clone();
 		// the onclick event is disabled until the last drag&drop operation is completed
-		newElement.click(function(e){
+		newElement.on("click", function(e){
 			if(globalAddressbookCollectionsLoading)
 				return true;
 			if(e.shiftKey) {
@@ -1259,7 +1259,7 @@ function AddressbookList()
 				$('<td>').text(getContactDataColumn(inputContact, columns[i])).appendTo(newElement);
 			}
 
-			newElement.click(function() {
+			newElement.on("click", function() {
 				if($(this).hasClass('ablist_item_selected') || globalObjectLoading)
 					return false;
 				else
@@ -1361,7 +1361,7 @@ function AddressbookList()
 					$('<td>').appendTo(newElement);
 				}
 
-				newElement.click(function() {
+				newElement.on("click", function() {
 					if($(this).hasClass('ablist_item_selected') || globalObjectLoading)
 						return false;
 					else

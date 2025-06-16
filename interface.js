@@ -402,7 +402,8 @@ function updateMainLoader(needRefresh,type,collUID)
 							}
 						}
 						if(collection.makeLoaded)
-							collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+							collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+							//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 					}
 					counter--;
 					if(counter == 0)
@@ -413,7 +414,7 @@ function updateMainLoader(needRefresh,type,collUID)
 						var afterScrollTodo = $('#mainTODO').width()-$('#todoList').width();
 						rerenderTodo(beforeScrollTodo!=afterScrollTodo);
 						globalCalDAVTODOQs.cache();
-						$('#calendar').fullCalendar('findToday');
+						//$('#calendar').fullCalendar('findToday');
 						globalCalDAVInitLoad=false;
 						$('#todoList').fullCalendar('allowSelectEvent',true);
 						$('#todoList').fullCalendar('selectEvent', $('.fc-view-todo .fc-list-day').find('.fc-event:visible:first'));
@@ -442,7 +443,7 @@ function updateMainLoader(needRefresh,type,collUID)
 						var afterScrollTodo = $('#mainTODO').width()-$('#todoList').width();
 						rerenderTodo(beforeScrollTodo!=afterScrollTodo);
 						globalCalDAVTODOQs.cache();
-						$('#calendar').fullCalendar('findToday');
+						//$('#calendar').fullCalendar('findToday');
 						globalCalDAVInitLoad=false;
 						$('#todoList').fullCalendar('allowSelectEvent',true);
 						$('#todoList').fullCalendar('selectEvent', $('.fc-view-todo .fc-list-day').find('.fc-event:visible:first'));
@@ -488,7 +489,9 @@ function updateMainLoader(needRefresh,type,collUID)
 								bg = true;
 						}
 					}
-					collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+
+					collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+					//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 				}
 				if(needRefresh)
 					refetchCalendarEvents();
@@ -1455,7 +1458,7 @@ function showUnloadedCollections(collectionType)
 		if($(this).css('display')=='none')
 			$(this).addClass('unloaded').css('display','');
 		var headerClickElm = $('<input type="checkbox" class="unloadCheckHeader" style="position:absolute;top:3px;right:0px;margin-right:6px;"/>');
-		headerClickElm.change(function(){
+		headerClickElm.on("change", function(){
 			loadResourceChBoxClick(this, '#ResourceCalDAV'+sel+'List', resHeader, resItem, resItem);
 		});
 		$(this).addClass('load_mode').append(headerClickElm);
@@ -1465,7 +1468,7 @@ function showUnloadedCollections(collectionType)
 		if(typeof $(this).attr('data-id') != 'undefined')
 		{
 			var newInputElm = $('<input type="checkbox" class="unloadCheck" data-id="'+$(this).attr('data-id')+'" style="position:absolute;top:8px;right:0px;margin-right:6px;"/>');
-			newInputElm.change(function(){
+			newInputElm.on("change", function(){
 				loadCollectionChBoxClick(this, '#ResourceCalDAV'+sel+'List', resHeader, resItem, resItem);
 			});
 			$(this).addClass('load_mode').append(newInputElm);
@@ -1638,8 +1641,8 @@ function disableAll()
 		globalResourceRefreshNumber++;
 		$('#CalendarLoader').children('.loaderInfo').text(localization[globalInterfaceLanguage].calendarLoader).parent().css('display','block');
 		var beforeScroll = $('#main').width()-$('#calendar').width();
-		$('#calendar').fullCalendar('removeEvents');
-		$('#calendar').fullCalendar('removeEventSources');
+		window.calendar.removeEvents();
+		window.calendar.removeEventSources();
 		var afterScroll = $('#main').width()-$('#calendar').width();
 		rerenderCalendar(beforeScroll!=afterScroll);
 	}
@@ -1739,7 +1742,8 @@ function enableAll()
 							}
 						}
 						var collection = globalResourceCalDAVList.collections[j];
-						collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+						collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+						//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 					}
 				}
 			}
@@ -1925,7 +1929,7 @@ function disableResource(header)
 			if(globalSettings.displayhiddenevents.value)
 				hideCalendarEvents(uid);
 			else
-				$('#calendar').fullCalendar('removeEventSource', globalResourceCalDAVList.getCollectionByUID(uid).fcSource);
+				window.calendar.removeEventSource(globalResourceCalDAVList.getCollectionByUID(uid).fcSource);
 		}
 	});
 
@@ -1985,7 +1989,8 @@ function enableResource(header)
 					}
 				}
 				var collection = globalResourceCalDAVList.getCollectionByUID(uid)
-				collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+				collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+				//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 			}
 		}
 	});
@@ -2110,7 +2115,7 @@ function disableCalendar(uid)
 			var beforeScroll = $('#main').width()-$('#calendar').width();
 			globalResourceRefreshNumber++;
 			$('#CalendarLoader').children('.loaderInfo').text(localization[globalInterfaceLanguage].calendarLoader).parent().css('display','block');
-			$('#calendar').fullCalendar( 'removeEventSource', globalResourceCalDAVList.getCollectionByUID(uid).fcSource);
+			window.calendar.removeEventSource(globalResourceCalDAVList.getCollectionByUID(uid).fcSource);
 			globalResourceRefreshNumber--;
 
 			if(!globalResourceRefreshNumber)
@@ -2163,7 +2168,7 @@ function enableCalendar(uid)
 				}
 			}
 			var collection = globalResourceCalDAVList.getCollectionByUID(uid);
-			collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+			collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 			globalResourceRefreshNumber--;
 
 			if(!globalResourceRefreshNumber)
@@ -2296,8 +2301,8 @@ function enableOne(uid)
 		globalResourceRefreshNumber++;
 		$('#CalendarLoader').children('.loaderInfo').text(localization[globalInterfaceLanguage].calendarLoader).parent().css('display','block');
 		var beforeScroll = $('#main').width()-$('#calendar').width();
-		$('#calendar').fullCalendar('removeEvents');
-		$('#calendar').fullCalendar('removeEventSources');
+		window.calendar.removeEvents();
+		window.calendar.removeEventSources();
 
 		var bg = false;
 		var tmpUID = uid.match(vCalendar.pre['accountUidParts']);
@@ -2326,7 +2331,7 @@ function enableOne(uid)
 			}
 		}
 		var collection = globalResourceCalDAVList.getCollectionByUID(uid);
-		collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
+		collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 
 		globalResourceRefreshNumber--;
 		if(!globalResourceRefreshNumber)
@@ -2447,260 +2452,6 @@ function setGlobalDateFunction()
 {
 	var date=new Date();
 	var offset=date.getTimezoneOffset()*(-1)*60*1000;
-}
-
-function initFullCalendar()
-{
-	$('#calendar').fullCalendar({
-		eventMode: true,
-		contentHeight: $('#main').height() - 14, // -14px for 7px padding on top and bottom
-		windowResize: function(view){
-			if(globalSettings.displayhiddenevents.value)
-				hideEventCalendars();
-			globalCalWidth = $('#main').width();
-			if(typeof globalCalDAVInitLoad!='undefined' && !globalCalDAVInitLoad && !globalResourceRefreshNumber)
-				$('#CalendarLoader').css('display','none');
-		},
-		bindingMode: globalSettings.openformmode.value,
-		startOfBusiness: globalSettings.calendarstartofbusiness.value,
-		endOfBusiness: globalSettings.calendarendofbusiness.value,
-		multiWeekSize: globalMultiWeekSize,
-		showWeekNumbers: true,
-		showDatepicker: true,
-		//ignoreTimezone: !globalSettings.timezonesupport.value,
-		titleFormat: {
-			month: globalSettings.titleformatmonth.value,
-			multiWeek: globalSettings.titleformatweek.value,
-			week: globalSettings.titleformatweek.value,
-			day: globalSettings.titleformatday.value,
-			table: globalSettings.titleformattable.value,
-		},
-		columnFormat: {
-			month: 'ddd',
-			multiWeek: 'ddd',
-			week: globalSettings.columnformatagenda.value,
-			day: globalSettings.columnformatagenda.value,
-			table: globalSettings.columnformatagenda.value,
-		},
-		timeFormat: {
-			agenda: globalSettings.timeformatagenda.value,
-			list: globalSettings.ampmformat.value ? 'hh:mm TT{ - hh:mm TT}' : 'HH:mm{ - HH:mm}',
-			listFull: dateFormatJqToFc(globalSettings.datepickerformat.value) + (globalSettings.ampmformat.value ? ' hh:mm TT{ - ' : ' HH:mm{ - ') + dateFormatJqToFc(globalSettings.datepickerformat.value) + (globalSettings.ampmformat.value ? ' hh:mm TT}' : ' HH:mm}'),
-			listFullAllDay: dateFormatJqToFc(globalSettings.datepickerformat.value) + '{ - ' + dateFormatJqToFc(globalSettings.datepickerformat.value) + '}',
-			'': globalSettings.timeformatbasic.value
-		},
-		axisFormat: globalSettings.ampmformat.value ? 'h:mm TT' : 'H:mm',
-		buttonText: {
-			month: localization[globalInterfaceLanguage].fullCalendarMonth,
-			multiWeek: localization[globalInterfaceLanguage].fullCalendarMultiWeek,
-			week: localization[globalInterfaceLanguage].fullCalendarAgendaWeek,
-			day: localization[globalInterfaceLanguage].fullCalendarAgendaDay,
-			table: localization[globalInterfaceLanguage].fullCalendarTable,
-			today: localization[globalInterfaceLanguage].fullCalendarTodayButton,
-			prevMonth: localization[globalInterfaceLanguage].loadPrevMonth,
-			nextMonth: localization[globalInterfaceLanguage].loadNextMonth,
-		},
-		allDayText: localization[globalInterfaceLanguage].fullCalendarAllDay,
-		monthNames: localization[globalInterfaceLanguage].monthNames,
-		monthNamesShort: localization[globalInterfaceLanguage].monthNamesShort,
-		dayNames: localization[globalInterfaceLanguage].dayNames,
-		dayNamesShort: localization[globalInterfaceLanguage].dayNamesShort,
-		dayEventSizeStrict: true,
-		dayClick: function(date, allDay, jsEvent, view){
-			if($('#ResourceCalDAVList .resourceCalDAV_item:visible').not('.resourceCalDAV_item_ro').length==0)
-				return false;
-			$('#show').val('');
-			$('#CAEvent').hide();
-			$('#timezonePicker').prop('disabled', true);
-			$('#EventDisabler').fadeIn(globalEditorFadeAnimation, function(){
-				showEventForm(date, allDay, null, jsEvent, 'new','');
-				$('#name').focus();
-			});
-		},
-		beforeViewDisplay: function(view){
-			// Hide scrollbar to force view rendering on full width
-			if(globalAllowFcRerender)
-				$('#main').css('overflow','hidden');
-		},
-		viewDisplay: function(view){
-			// Allow scrollbar if previosly hidden
-			if(globalAllowFcRerender)
-				$('#main').css('overflow','');
-			// If scrollbar present, force view rendering on reduced width
-			if(globalAllowFcRerender && $('#main').width() - $('#calendar').width())
-			{
-				globalAllowFcRerender=false;
-				$('#calendar').fullCalendar('render');
-				return false;
-			}
-
-			globalCalWidth=$('#main').width();
-			if(globalSettings.displayhiddenevents.value)
-				hideEventCalendars();
-			globalAllowFcRerender=true;
-		},
-		firstDay: globalSettings.datepickerfirstdayofweek.value,
-		weekendDays: globalSettings.weekenddays.value,
-		header: {
-			left: 'prev,next today',
-			center: 'title',
-			right: 'month,multiWeek,agendaWeek,agendaDay'
-		},
-		listSections: 'day',
-		headerContainer: $('#main_h_placeholder'),
-		defaultView: globalSettings.activeview.value,
-		editable: true,
-		currentTimeIndicator: true,
-		unselectAuto: false,
-		eventClick: function(calEvent, jsEvent, view){
-			globalCalEvent=calEvent;
-			globalJsEvent=jsEvent;
-			if(calEvent.type=='')
-				showEventForm(null, calEvent.allDay, calEvent, jsEvent, 'show', '');
-			else
-				showEventForm(null, calEvent.allDay, calEvent, jsEvent, 'show', 'editOnly');
-		},
-		eventDragStart: function(calEvent, jsEvent, ui, view){
-			globalPrevDragEventAllDay=calEvent.allDay;
-		},
-		eventDrop: function(calEvent, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view){
-			if(calEvent.rid!='')
-			{
-				var coll = globalResourceCalDAVList.getCollectionByUID(calEvent.res_id);
-				if(coll!=null && coll.permissions.read_only)
-				{
-					revertFunc();
-					return false;
-				}
-
-			}
-			if(calEvent.realStart && calEvent.realEnd)
-			{
-				var checkDate=new Date(calEvent.realStart.getFullYear(), calEvent.realStart.getMonth(), calEvent.realStart.getDate()+dayDelta, calEvent.realStart.getHours(), calEvent.realStart.getMinutes()+minuteDelta,0);
-				var checkDateEnd=new Date(calEvent.realEnd.getFullYear(), calEvent.realEnd.getMonth(), calEvent.realEnd.getDate()+dayDelta, calEvent.realEnd.getHours(), calEvent.realEnd.getMinutes()+minuteDelta,0);
-				if(calEvent.type!='')
-				{
-					calEvent.start=checkDate;
-					calEvent.end=checkDateEnd;
-				}
-				else
-				{
-					calEvent.realStart=checkDate;
-					calEvent.realEnd=checkDateEnd;
-				}
-			}
-			else
-			{
-				calEvent.realStart=calEvent.start;
-				calEvent.realEnd=calEvent.end;
-			}
-
-			globalRevertFunction=revertFunc;
-			if(calEvent.type!='')
-				showEventForm(null, calEvent.allDay, calEvent, jsEvent, 'drop', 'editOnly');
-			else
-				showEventForm(null, calEvent.allDay, calEvent, jsEvent, 'drop', '');
-
-			save(true);
-			globalPrevDragEvent = null;
-		},
-		eventResize: function(calEvent, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view){
-			globalPrevDragEventAllDay=calEvent.allDay;
-			if(calEvent.rid!='')
-			{
-				var coll = globalResourceCalDAVList.getCollectionByUID(calEvent.res_id);
-				if(coll!=null && coll.permissions.read_only)
-				{
-					revertFunc();
-					return false;
-				}
-			}
-
-			if(calEvent.realStart && calEvent.realEnd)
-			{
-				var checkDateEnd = new Date(calEvent.realEnd.getFullYear(),calEvent.realEnd.getMonth(), calEvent.realEnd.getDate()+dayDelta, calEvent.realEnd.getHours(),calEvent.realEnd.getMinutes()+minuteDelta,0);
-				if(calEvent.type!='')
-					calEvent.end=checkDateEnd;
-				else
-					calEvent.realEnd=checkDateEnd;
-			}
-			else
-				calEvent.realEnd=calEvent.end;
-			globalRevertFunction=revertFunc;
-
-			if(calEvent.type!='')
-				showEventForm(null, calEvent.allDay, calEvent, jsEvent, 'drop', 'editOnly');
-			else
-				showEventForm(null, calEvent.allDay, calEvent, jsEvent, 'drop', '');
-
-			save(true);
-		},
-		eventResizeHelperCreated: function(calEvent, jsEvent, element, helper, view){
-			if(element.hasClass('searchCalDAV_hide'))
-				helper.addClass('searchCalDAV_hide');
-			if(element.hasClass('checkCalDAV_hide'))
-				helper.addClass('checkCalDAV_hide');
-		},
-		selectable: true,
-		selectHelper: false,
-		select: function(startDate, endDate, allDay, jsEvent, view){
-			$('#show').val('');
-			$('#CAEvent').hide();
-			$('#timezonePicker').prop('disabled', true);
-			$('#EventDisabler').fadeIn(globalEditorFadeAnimation, function(){
-				var calEvent=new Object();
-				calEvent.start=startDate;
-				calEvent.end=endDate;
-				showEventForm(null, allDay, calEvent, jsEvent, 'new', '');
-				$('#name').focus();
-			});
-		},
-		eventAfterRender: function(event, element, view){
-			element.attr('data-res-id',event.res_id);
-			element.attr('data-id',event.id);
-			element.addClass('event_item');
-
-			if(event.status == 'CANCELLED')
-				$(element).find('.fc-event-title').css('text-decoration', 'line-through');
-
-			if(typeof event.hidden!='undefined' && event.hidden) {
-				element.addClass('searchCalDAV_hide');
-				if(view.name=='table' && !$(element).siblings().addBack().not('.searchCalDAV_hide').length)
-					$(element).parent().prev().find('tr').addClass('searchCalDAV_hide');
-			}
-
-			element.mouseenter(function(e){
-				clearTimeout(globalEventTimeoutID);
-				globalEventTimeoutID = setTimeout(function(){
-					showEventPopup(e, event);
-				}, 500);
-			});
-			element.mousemove(function(e){
-				if($('#CalDavZAPPopup').is(':visible'))
-					moveEventPopup(e);
-			});
-			element.mouseout(function(e){
-				if(!$.contains(element.get(0),e.relatedTarget)) {
-					clearTimeout(globalEventTimeoutID);
-					hideEventPopup();
-				}
-			});
-		},
-		viewChanged: function(view) {
-			$('#CAEvent').hide();
-		},
-		todayClick: function() {
-			$('#CAEvent').hide();
-		},
-		prevClick: function() {
-			$('#CAEvent').hide();
-			getPrevMonths($('#calendar').fullCalendar('getView').start);
-		},
-		nextClick: function() {
-			$('#CAEvent').hide();
-			getNextMonths($('#calendar').fullCalendar('getView').end);
-		}
-	});
 }
 
 function todoCheckClick(status, percent, calTodo)
@@ -3438,7 +3189,7 @@ function checkTodoFormScrollBar()
 	$('#todoForm_h, #todoLoader').width(newWidth);
 	$('#todoColor').css('right', newWidth-3);
 	$('#todoForm').width(newWidth-3);
-	$(window).resize();
+	//$(window).resize();
 }
 
 function initTimepicker(ampm)
@@ -3464,7 +3215,7 @@ function initTimepicker(ampm)
 
 function showEventPrevNav()
 {
-	$('#CAEvent .formNav.prev').click(function(){
+	$('#CAEvent .formNav.prev').on("click", function(){
 		eventPrevNavClick();
 	});
 
@@ -3474,7 +3225,7 @@ function showEventPrevNav()
 
 function showEventNextNav()
 {
-	$('#CAEvent .formNav.next').click(function(){
+	$('#CAEvent .formNav.next').on("click", function(){
 		eventNextNavClick();
 	});
 	$('#CAEvent .header').addClass('rightspace');
@@ -3487,7 +3238,7 @@ function showTodoPrevNav(uncompletedOnly)
 	if(uncompletedOnly)
 		type='bottom';
 
-	$('#CATodo .formNav.prev.'+type).click(function(){
+	$('#CATodo .formNav.prev.'+type).on("click", function(){
 		todoPrevNavClick(uncompletedOnly);
 	});
 
@@ -3501,7 +3252,7 @@ function showTodoNextNav(uncompletedOnly)
 	if(uncompletedOnly)
 		type='bottom';
 
-	$('#CATodo .formNav.next.'+type).click(function(){
+	$('#CATodo .formNav.next.'+type).on("click", function(){
 		todoNextNavClick(uncompletedOnly);
 	});
 
@@ -3594,7 +3345,7 @@ function todoStatusChanged(status)
 			$('#completedOnDate').val($.datepicker.formatDate(globalSettings.datepickerformat.value, today));
 		if($('#completedOnTime').val()=='')
 			$('#completedOnTime').val($.fullCalendar.formatDate(today, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
-		$('#completedOnDate, #completedOnTime').change();
+		$('#completedOnDate, #completedOnTime').trigger("change");
 	}
 	else {
 		$('#completedOnDate, #completedOnTime').parent().find('img').css('display','none');
@@ -3605,7 +3356,7 @@ function todoStatusChanged(status)
 
 function initKbTodoNavigation()
 {
-	$(document.documentElement).keyup(function(event)
+	$(document.documentElement).on("keyup", function(event)
 	{
 		if(typeof globalActiveApp=='undefined' || globalActiveApp!='CalDavTODO' || typeof globalObjectLoading=='undefined' || globalObjectLoading==true)
 			return true;
@@ -3621,7 +3372,7 @@ function initKbTodoNavigation()
 		}
 	});
 
-	$(document.documentElement).keydown(function(event)
+	$(document.documentElement).on("keydown", function(event)
 	{
 		if(typeof globalActiveApp=='undefined' || globalActiveApp!='CalDavTODO' || typeof globalObjectLoading=='undefined' || globalObjectLoading==true)
 			return true;
@@ -4129,8 +3880,8 @@ function hideTodoCalendars()
 
 function rerenderCalendar(scrollChanged)
 {
-	if(scrollChanged)
-		$('#calendar').fullCalendar('render');
+	//if(scrollChanged)
+	//	$('#calendar').fullCalendar('render');
 	if(globalSettings.displayhiddenevents.value)
 		hideEventCalendars();
 }
@@ -4146,7 +3897,7 @@ function rerenderTodo(scrollChanged)
 function refetchCalendarEvents()
 {
 	var beforeScroll = $('#main').width()-$('#calendar').width();
-	$('#calendar').fullCalendar('refetchEvents');
+	window.calendar.refetchEvents();
 	var afterScroll = $('#main').width()-$('#calendar').width();
 	rerenderCalendar(beforeScroll!=afterScroll);
 	globalCalDAVQs.cache();
@@ -4164,7 +3915,7 @@ function refetchTodoEvents()
 function initCalDavDatepicker(element)
 {
 	var datepickers = element.find('.date');
-	datepickers.focus(function(){
+	datepickers.on("focus", function(){
 		if(!$(this).hasClass('hasDatepicker'))
 		{
 			$(this).datepicker({
@@ -4229,11 +3980,11 @@ function initCalDavDatepicker(element)
 					var index=$(this).attr("data-type");
 					var d=new Date();
 					globalTmpTimePickerHackTime[index]=d.getTime();
-					$(this).focus();
+					$(this).trigger("focus");
 				}
 			});
 
-			$(this).mousedown(function(){
+			$(this).on("mousedown", function(){
 				if($(this).datepicker('widget').css('display')=='none')
 					$(this).datepicker('show');
 				else
@@ -4252,7 +4003,7 @@ function initCalDavDatepicker(element)
 					}
 			});
 
-			$(this).blur(function(event){
+			$(this).on("blur", function(event){
 				// handle onblur event because datepicker can be already closed
 				// note: because onblur is called more than once we can handle it only if there is a value change!
 				var valid=true;
@@ -4409,9 +4160,9 @@ function initCalDavDatepicker(element)
 					{
 						$(this).parent().find('img').css('display','none');
 						if($(this).attr('id')=='date_from' && $('#repeat_end_date').is(':visible'))
-							$('#repeat_end_date').keyup();
+							$('#repeat_end_date').trigger("keyup");
 						if(($(this).attr('id')=='date_fromTODO' || $(this).attr('id')=='date_toTODO') && $('#repeat_end_date_TODO').is(':visible'))
-							$('#repeat_end_date_TODO').keyup();
+							$('#repeat_end_date_TODO').trigger("keyup");
 					}
 					else
 						$(this).parent().find('img').css('display','inline');
@@ -4474,13 +4225,13 @@ function initCalDavTimepicker(element)
 {
 	var timepickers = element.find('.time');
 
-	timepickers.focus(function(){
+	timepickers.on("focus", function(){
 		$(this).autocomplete({
 			create: function( event, ui ){
 				$(this).data("ui-autocomplete").menu.element.addClass('ui-autocomplete-caldav');
 			},
 			close: function( event, ui ){
-				$(this).keyup();
+				$(this).trigger("keyup");
 			},
 			source: function(request, response){
 				var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), 'i');
@@ -4493,7 +4244,7 @@ function initCalDavTimepicker(element)
 		});
 	});
 
-	timepickers.blur(function(){
+	timepickers.on("blur", function(){
 		var tmptime=$.trim($(this).val());
 		if(tmptime.match(globalTimePre)!=null)
 		{
@@ -4670,7 +4421,7 @@ function initCalDavTimepicker(element)
 		}
 	});
 
-	timepickers.dblclick(function(){
+	timepickers.on("dblclick", function(){
 		if($(this).val()!='')
 			return false;
 
@@ -4717,7 +4468,7 @@ function initCalDavTimepicker(element)
 			}
 		}
 		$(this).val($.fullCalendar.formatDate(now, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
-		$(this).keyup();
+		$(this).trigger("keyup");
 	});
 }
 
@@ -4764,7 +4515,7 @@ function showNewEvent(todoSel)
 	{
 		$('#TodoDisabler').fadeIn(globalEditorFadeAnimation);
 		showTodoForm(null, 'new');
-		$('#nameTODO').focus();
+		$('#nameTODO').trigger("focus");
 	}
 	else
 	{
@@ -4773,7 +4524,7 @@ function showNewEvent(todoSel)
 
 		$('#EventDisabler').fadeIn(globalEditorFadeAnimation, function(){
 			showEventForm(new Date(), true, null, null, 'new', '');
-			$('#name').focus();
+			$('#name').trigger("focus");
 		});
 	}
 }
@@ -4967,7 +4718,7 @@ function showUnloadedCardDAVCollections()
 		if($(this).css('display')=='none')
 			$(this).addClass('unloaded').css('display','');
 		var headerClickElm = $('<input type="checkbox" class="unloadCheckHeader" style="position:absolute;top:3px;right:0px;margin-right:6px;"/>');
-		headerClickElm.change(function(){
+		headerClickElm.on("change", function(){
 			loadResourceChBoxClick(this, '#ResourceCardDAVList', resHeader, resItem, '.resourceCardDAV_item');
 		});
 		$(this).addClass('load_mode').append(headerClickElm);
@@ -4977,7 +4728,7 @@ function showUnloadedCardDAVCollections()
 		if(typeof $(this).attr('data-id') != 'undefined')
 		{
 			var newInputElm = $('<input type="checkbox" class="unloadCheck" data-id="'+$(this).attr('data-id')+'" style="position:absolute;top:8px;right:0px;margin-right:6px;"/>');
-			newInputElm.change(function(){
+			newInputElm.on("change", function(){
 				loadCollectionChBoxClick(this, '#ResourceCardDAVList', resHeader, resItem, '.resourceCardDAV_item');
 			});
 			$(this).siblings('.contact_group').addBack().addClass('load_mode');
@@ -5465,9 +5216,6 @@ function localizeCardDAV()
 	globalTranslCardDAVListItem=globalTranslCardDAVListTemplate.find('.resourceCardDAV_item').clone();
 
 	globalTranslVcardTemplate=$('#vCardTemplate').contents().clone();
-
-	// CUSTOM PLACEHOLDER (initialization for the whole page)
-	$('input[placeholder],textarea[placeholder]').placeholder();
 }
 
 function processEditorElements(inputEditorRef, processingType, inputIsReadonly, inputIsCompany)
@@ -5737,8 +5485,8 @@ function CardDAVeditor_cleanup(inputLoadEmpty, inputIsCompany)
 	for(var i=0; i<tmp_arr.length; i++)
 	{
 		globalABEditorCounter[tmp_arr[i]]=1;	// restart id counters for editor objects
-		globalRefVcardEditor.find(tmp_arr[i]+' [data-type="\\%add"] input').data('customSelector', tmp_arr[i]).click(function(){add_element($(this).parent(), $(this).data('customSelector'), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]', globalABEditorCounter[$(this).data('customSelector')]++);checkContactFormScrollBar();});
-		globalRefVcardEditor.find(tmp_arr[i]+' [data-type="\\%del"] input').data('customSelector', tmp_arr[i]).click(function(){del_element($(this).parent(), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]');checkContactFormScrollBar();});
+		globalRefVcardEditor.find(tmp_arr[i]+' [data-type="\\%add"] input').data('customSelector', tmp_arr[i]).on("click", function(){add_element($(this).parent(), $(this).data('customSelector'), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]', globalABEditorCounter[$(this).data('customSelector')]++);checkContactFormScrollBar();});
+		globalRefVcardEditor.find(tmp_arr[i]+' [data-type="\\%del"] input').data('customSelector', tmp_arr[i]).on("click", function(){del_element($(this).parent(), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]');checkContactFormScrollBar();});
 		if(typeof globalContactAutoExpand=='undefined' || globalContactAutoExpand!=false)
 		{
 			globalRefVcardEditor.find(tmp_arr[i]+' input[type="text"]').bind('keyup', function() {
@@ -5751,17 +5499,17 @@ function CardDAVeditor_cleanup(inputLoadEmpty, inputIsCompany)
 				}
 			});
 		}
-		//globalRefVcardEditor.find(tmp_arr[i]).children().filter('[data-type="\\%add"]').click();
+		//globalRefVcardEditor.find(tmp_arr[i]).children().filter('[data-type="\\%add"]').trigger("click");
 	}
 	// one special thing for address
-	globalRefVcardEditor.find('[data-type="\\%address"] [data-type="country_type"]').change(function(){set_address_country(this);checkContactFormScrollBar();});
+	globalRefVcardEditor.find('[data-type="\\%address"] [data-type="country_type"]').on("change", function(){set_address_country(this);checkContactFormScrollBar();});
 
 	var tmp=globalRefVcardEditor.find('[data-type="\\%address"]');
 	var tmp_select=tmp.find('[data-type="country_type"]').attr('data-autoselect');
 	if(tmp_select!='')
 	{
 		tmp.find('[data-type="country_type"]').children('[data-type="'+jqueryEscapeSelector(tmp_select)+'"]').prop('selected', true);
-		tmp.find('[data-autoselect]').change();
+		tmp.find('[data-autoselect]').trigger("change");
 	}
 
 	globalRefVcardEditor.find('[data-type="custom_value"]').bind('keyup change', function(){
@@ -5843,7 +5591,7 @@ function CardDAVeditor_cleanup(inputLoadEmpty, inputIsCompany)
 	});
 
 	// initialize datepicker
-	globalRefVcardEditor.find('input[data-type^="date_"]').focus(function(){initDatePicker($(this));});
+	globalRefVcardEditor.find('input[data-type^="date_"]').on("focus", function(){initDatePicker($(this));});
 
 
 	globalRefVcardEditor.find('[data-type="org"]').autocomplete({'source': function(request, response){var matcher=RegExp($.ui.autocomplete.escapeRegex(request.term), 'i'); response($.grep(globalAddressbookList.getABCompanies(true), function(value){value=value.label || value.value || value; return matcher.test(value) || matcher.test(value.multiReplace(globalSearchTransformAlphabet));}));}, 'minLength': 0, 'change': function(){$('[data-type="department"]').autocomplete({'source': function(request, response){var matcher=RegExp($.ui.autocomplete.escapeRegex(request.term), 'i'); response($.grep(globalAddressbookList.getABCompanyDepartments($('#vCardEditor').find('[data-type="org"]').val()), function(value){value=value.label || value.value || value; return matcher.test(value) || matcher.test(value.multiReplace(globalSearchTransformAlphabet));}));}, 'minLength': 0})}});
@@ -5933,10 +5681,9 @@ function CardDAVeditor_cleanup(inputLoadEmpty, inputIsCompany)
 	});
 */
 
-	// CUSTOM PLACEHOLDER (initialization for the editor)
-	globalRefVcardEditor.find('input[placeholder],textarea[placeholder]').placeholder();
+  // TODO: replace with css
 	// enable autosize for textarea elements
-	globalRefVcardEditor.find('textarea[data-type="value"]').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkContactFormScrollBar();}});
+	//globalRefVcardEditor.find('textarea[data-type="value"]').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkContactFormScrollBar();}});
 
 	if(inputLoadEmpty==true)
 		$('#EditorBox').fadeTo(0, 1);	/* 0 = no animation */
@@ -6018,7 +5765,6 @@ function set_address_country(inputSelectedAddressObj)
 				tmp.unbind('keyup.street');
 			}
 
-			tmp.attr({'data-addr-field': '', 'data-match': '', 'placeholder': ''}).unplaceholder();	// REMOVE CUSTOM PLACEHOLDER
 			tmp.val('');
 
 			// set address country "cleanup" hook
@@ -6100,9 +5846,6 @@ function set_address_country(inputSelectedAddressObj)
 				$(element).addClass('element_no_display_af');
 		}
 	);
-
-	// CUSTOM PLACEHOLDER (reinitialization due to possible placeholder value change)
-	addressElement.find('input[data-type="value"][placeholder],textarea[data-type="value"][placeholder]').placeholder();
 }
 
 function add_element(inputElementID, inputParentSelector, newElementSelector, inputAddClassSelector, inputDelClassSelector, newElementID) // note: newElementSelector is always used with .last()
@@ -6139,27 +5882,25 @@ function add_element(inputElementID, inputParentSelector, newElementSelector, in
 
 	// now we need a reference to the new element
 	var tmpRef=tmpRef.next();
-	// CUSTOM PLACEHOLDER
-	// enable custom placeholder support (it is enabled only if needed)
-	tmpRef.find('input[data-type="value"][placeholder], input[data-type="date_value"][placeholder],textarea[data-type="value"][placeholder]').placeholder();
 
+  // TODO: replace with css
 	// enable autosize for textarea elements
-	tmpRef.find('textarea[data-type="value"]').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkContactFormScrollBar();}});
+	//tmpRef.find('textarea[data-type="value"]').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkContactFormScrollBar();}});
 
 	//bind datepicker
 	if(tmpRef.find('input[data-type="date_value"]').hasClass('hasDatepicker'))
 		tmpRef.find('input[data-type="date_value"]').removeClass('hasDatepicker');
 	if(tmpRef.find('input[data-type="date_value"]').parent().find('img').css('display')!='none')
 		tmpRef.find('input[data-type="date_value"]').parent().find('img').css('display','none')
-	tmpRef.find('input[data-type="date_value"]').focus(function(){initDatePicker($(this));});
+	tmpRef.find('input[data-type="date_value"]').on("focus", function(){initDatePicker($(this));});
 
 	// bind events
 	var tmp_arr=['[data-type="\\%phone"]', '[data-type="\\%email"]', '[data-type="\\%url"]', '[data-type="\\%date"]', '[data-type="\\%person"]', '[data-type="\\%im"]', '[data-type="\\%profile"]', '[data-type="\\%address"]'];
 	if(tmp_arr.indexOf(inputParentSelector)!=-1)
 	{
 
-		tmpRef.find('[data-type="\\%add"] input').data('customSelector', inputParentSelector).click(function(){add_element($(this).parent(), $(this).data('customSelector'), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]', globalABEditorCounter[$(this).data('customSelector')]++);checkContactFormScrollBar();});
-		tmpRef.find('[data-type="\\%del"] input').data('customSelector', inputParentSelector).click(function(){del_element($(this).parent(), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]');checkContactFormScrollBar();});
+		tmpRef.find('[data-type="\\%add"] input').data('customSelector', inputParentSelector).on("click", function(){add_element($(this).parent(), $(this).data('customSelector'), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]', globalABEditorCounter[$(this).data('customSelector')]++);checkContactFormScrollBar();});
+		tmpRef.find('[data-type="\\%del"] input').data('customSelector', inputParentSelector).on("click", function(){del_element($(this).parent(), $(this).data('customSelector'), '[data-type="\\%add"]','[data-type="\\%del"]');checkContactFormScrollBar();});
 		if(typeof globalContactAutoExpand=='undefined' || globalContactAutoExpand!=false)
 		{
 			tmpRef.find('input[type="text"]').bind('keyup', function() {
@@ -6174,7 +5915,7 @@ function add_element(inputElementID, inputParentSelector, newElementSelector, in
 		}
 		// one special thing for address
 		if(inputParentSelector=='[data-type="\\%address"]' && tmpRef.attr('data-type')=='%address')
-			tmpRef.find('[data-type="country_type"]').change(function(){set_address_country(this);checkContactFormScrollBar();});
+			tmpRef.find('[data-type="country_type"]').on("change", function(){set_address_country(this);checkContactFormScrollBar();});
 	}
 
 	if(inputParentSelector=='[data-type="\\%address"]')
@@ -6185,7 +5926,7 @@ function add_element(inputElementID, inputParentSelector, newElementSelector, in
 		if(tmp_select!=null)
 		{
 			tmp.find('[data-type="country_type"]').children('[data-type="'+jqueryEscapeSelector(tmp_select)+'"]').prop('selected', true);
-			tmp.find('[data-autoselect]').change();
+			tmp.find('[data-autoselect]').trigger("change");
 		}
 	}
 
@@ -6279,7 +6020,7 @@ function initSearchCardDav()
 {
 	if(globalQs==null)
 	{
-		$('#SearchBox').find('input[data-type="search"]').keyup(function(){
+		$('#SearchBox').find('input[data-type="search"]').on("keyup", function(){
 			globalAddressbookList.contactToReload=null
 		});
 		globalQs=$('#SearchBox').find('input[data-type="search"]').quicksearch(globalAddressbookList.contacts,
@@ -6319,7 +6060,7 @@ function initSearchCardDav()
 
 function initKbAddrNavigation()
 {
-	$(document.documentElement).keyup(function(event)
+	$(document.documentElement).on("keyup", function(event)
 	{
 		if(typeof globalActiveApp=='undefined' || globalActiveApp!='CardDavMATE')
 			return true;
@@ -6344,7 +6085,7 @@ function initKbAddrNavigation()
 		}
 	});
 
-	$(document.documentElement).keydown(function(event)
+	$(document.documentElement).on("keydown", function(event)
 	{
 		if(typeof globalActiveApp=='undefined' || globalActiveApp!='CardDavMATE')
 			return true;
@@ -6486,7 +6227,7 @@ function initDatePicker(inputObject)
 				var d = new Date();
 				globalTmpTimePickerHackTime[index]=d.getTime();
 
-				inputObject.focus();
+				inputObject.trigger("focus");
 
 				if(inputObject.closest('tr').attr('data-attr-name')==='X-ABDATE') {
 					inputObject.trigger('keyup');
@@ -6494,7 +6235,7 @@ function initDatePicker(inputObject)
 			}
 		});
 
-		inputObject.mousedown(function(){
+		inputObject.on("mousedown", function(){
 			if(inputObject.datepicker('widget').css('display')=='none')
 				inputObject.datepicker('show');
 			else
@@ -6513,7 +6254,7 @@ function initDatePicker(inputObject)
 				}
 		});
 
-		inputObject.blur(function(event){
+		inputObject.on("blur", function(event){
 			// handle onblur event because datepicker can be already closed
 			// note: because onblur is called more than once we can handle it only if there is a value change!
 			var valid=true;
@@ -6638,7 +6379,7 @@ function extendDestSelect(selGroup)
 
 			$('<input>').attr({'type':'checkbox','data-id':resource.uid})
 				.prop('checked',resource.uid==destSelected.attr('data-type'))
-				.change(function(){
+				.on("change", function(){
 					if($(this).prop('checked')) {
 						var newCollection = globalResourceCardDAVList.getCollectionByUID($(this).attr('data-id'));
 						$(this).parent().parent().siblings().find('input[type="checkbox"]').prop('checked',false);
@@ -6657,7 +6398,7 @@ function extendDestSelect(selGroup)
 
 				$('<input>').attr({'type':'checkbox','data-id':group.uid})
 					.prop('checked',currentGroups.indexOf(group.uid)!=-1 || typeof selGroup!= 'undefined' && selGroup==group.uid)
-					.change(function(){
+					.on("change", function(){
 						var groupCount = $(this).parent().parent().find('input[type="checkbox"]:checked').length;
 						var newCollectionUID = $(this).parent().parent().prev().children('input[type="checkbox"]').attr('data-id');
 						var newCollection = globalResourceCardDAVList.getCollectionByUID(newCollectionUID);
@@ -6687,10 +6428,10 @@ function extendDestSelect(selGroup)
 		}
 	}
 
-	dest.mousedown(function(e){
+	dest.on("mousedown", function(e){
 		e.stopPropagation();
 		e.preventDefault();
-		this.blur();
+		this.trigger("blur");
 
 		if(extendedDest.height()>0) {
 			dest.removeClass('inverse_select');
@@ -6700,7 +6441,7 @@ function extendDestSelect(selGroup)
 		else {
 			dest.addClass('inverse_select');
 			extendedDest.animate({'height':164},200);
-			$('html').mousedown(function(e){
+			$('html').on("mousedown", function(e){
 				if(e.target.id=='ExtendedDest' || $.contains(document.getElementById('ExtendedDest'),e.target))
 					return true;
 
@@ -6922,7 +6663,7 @@ function setContactDataColumn(contact, column, value, filterData) {
 			data[filterProperty] = filterData[name];
 		}
 
-		if($.isArray(value)) {
+		if(Array.isArray(value)) {
 			value = value.join(', ');
 		}
 		data.value = value;
@@ -7066,7 +6807,7 @@ function showPhotoBox(e) {
 		e.stopPropagation();
 
 		$('#photoArrow, #photoBox').css('display', 'block');
-		$('#photoURL').focus();
+		$('#photoURL').trigger("focus");
 
 		$('html').bind('click.photo', function(e) {
 			if(!$.contains(document.getElementById('photoBox'), e.target)) {

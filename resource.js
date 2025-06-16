@@ -495,7 +495,7 @@ function ResourceCalDAVList()
 		else
 			newElement.find('input[type=checkbox]').attr({'data-id':inputResource.uid, 'onclick':'var evt = arguments[0];evt.stopPropagation();collectionChBoxClick(this, \'#\'+$(this).parent().parent().attr(\'id\'), \''+resHeader+'\', \''+resItem+'\', null, false);if(isCalDAVLoaded && $(this).parent().parent().attr(\'id\')== \'ResourceCalDAV'+todoString+'List\'){$(this).prop(\'checked\')?enableCalendarTodo(\''+inputResource.uid+'\'):disableCalendarTodo(\''+inputResource.uid+'\');}'});
 
-		newElement.click(function(e){
+		newElement.on("click", function(e){
 			if(($(this).hasClass('resourceCalDAV_item')&&globalEventCollectionsLoading) || ($(this).hasClass('resourceCalDAVTODO_item')&&globalTodoCollectionsLoading))
 				return true;
 			if(e.shiftKey) {
@@ -1114,7 +1114,7 @@ function ResourceCardDAVList()
 			// insert header to the interface
 			var newElement=globalTranslCardDAVListHeader.clone();
 			newElement.append(headerObject.displayvalue);
-			newElement.find('input[type=checkbox]').click(function(){globalAddressbookList.applyABFilter(resourceChBoxClick(this, '#ResourceCardDAVList', '.resourceCardDAV_header', true), false);});
+			newElement.find('input[type=checkbox]').on("click", function(){globalAddressbookList.applyABFilter(resourceChBoxClick(this, '#ResourceCardDAVList', '.resourceCardDAV_header', true), false);});
 			$('#ResourceCardDAVList').children().eq(insertIndex).after(newElement);
 		}
 
@@ -1126,7 +1126,7 @@ function ResourceCardDAVList()
 		// insert the resource to the interface
 		var newElement=globalTranslCardDAVListItem.clone();
 		// the onclick event is disabled until the last drag&drop operation is completed
-		newElement.find('.resourceCardDAV').click(function(e){
+		newElement.find('.resourceCardDAV').on("click", function(e){
 			if(globalAddressbookCollectionsLoading)
 				return true;
 			if(e.shiftKey) {

@@ -201,7 +201,8 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 	setFirstDayTodo();
 	bindTodoForm();
 
-	$('#noteTODO').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkTodoFormScrollBar();}});
+  // TODO: replace with css
+	//$('#noteTODO').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkTodoFormScrollBar();}});
 	$("#showTODO").val('');
 	$("#uidTODO").val('');
 	$("#etagTODO").val('');
@@ -238,7 +239,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				$('#editFutureTODO').after('<br/>')
 		}
 
-		$('#editAllTODO, #editOnlyOneTODO, #editFutureTODO').click(function(){
+		$('#editAllTODO, #editOnlyOneTODO, #editFutureTODO').on("click", function(){
 			if(globalCalTodo)
 			{
 				if($(this).attr('id')=='editOnlyOneTODO')
@@ -631,7 +632,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				}
 				else if(todo.type=="MONTHLY")
 				{
-					$("#repeat_TODO option[value='CUSTOM_MONTHLY']").prop('selected', true).change();
+					$("#repeat_TODO option[value='CUSTOM_MONTHLY']").prop('selected', true).trigger("change");
 					$('#repeat_interval_TODO [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatMonths);
 
 
@@ -677,14 +678,14 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 						}
 						else if(pars[ri].indexOf("BYMONTHDAY=")!=-1)
 						{
-							$('#repeat_month_custom_select_TODO').val('custom').change();
+							$('#repeat_month_custom_select_TODO').val('custom').trigger("change");
 							var byMonthDay=pars[ri].split('=')[1];
 							byMonthDay=byMonthDay.split(',');
 							for(var rj=0; rj<byMonthDay.length;rj++)
 							{
 								if(parseInt(byMonthDay[rj],10)==-1)
 								{
-									$('#repeat_month_custom_select_TODO').val('last').change();
+									$('#repeat_month_custom_select_TODO').val('last').trigger("change");
 									$('#repeat_month_custom_select2_TODO').val("DAY");
 
 								}
@@ -696,7 +697,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				}
 				else if(todo.type=="YEARLY")
 				{
-					$("#repeat_TODO option[value='CUSTOM_YEARLY']").prop('selected', true).change();
+					$("#repeat_TODO option[value='CUSTOM_YEARLY']").prop('selected', true).trigger("change");
 					$('#repeat_interval_TODO [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatYears);
 					var isMonthDay=false;
 					for(var ri=0;ri<pars.length;ri++)
@@ -741,14 +742,14 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 						}
 						else if(pars[ri].indexOf("BYMONTHDAY=")!=-1)
 						{
-							$('#repeat_year_custom_select1_TODO').val('custom').change()
+							$('#repeat_year_custom_select1_TODO').val('custom').trigger("change")
 							var byMonthDay=pars[ri].split('=')[1];
 							byMonthDay=byMonthDay.split(',');
 							for(var rj=0; rj<byMonthDay.length;rj++)
 							{
 								if(parseInt(byMonthDay[rj],10)==-1)
 								{
-									$('#repeat_year_custom_select1_TODO').val('last').change();
+									$('#repeat_year_custom_select1_TODO').val('last').trigger("change");
 									$('#repeat_year_custom_select2_TODO').val("DAY");
 
 								}
@@ -987,7 +988,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 		(globalSettings.appleremindersmode.value && typeof globalAppleSupport.nextDates[todo.id] == 'undefined'))
 		$('#editOptionsButtonTODO').hide();
 	else
-		$('#editOptionsButtonTODO').click(function(){
+		$('#editOptionsButtonTODO').on("click", function(){
 			showTodoForm(globalCalTodo, 'show', '', true);
 		});
 
@@ -1059,7 +1060,7 @@ function bindTodoForm()
 	initCalDavDatepicker($('#todo_details_template'));
 	initCalDavTimepicker($('#todo_details_template'));
 
-	$('#todo_details_template .alert_message_detailsTODO').change(function(){
+	$('#todo_details_template .alert_message_detailsTODO').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		$('.before_after_inputTODO[data-id="'+data_id+'"]').parent().parent().find('img').css('display','none');
 		if($('.alert_message_detailsTODO[data-id="'+data_id+'"] option:selected').attr('data-type')=="on_dateTODO")
@@ -1113,7 +1114,7 @@ function bindTodoForm()
 		}
 	});
 
-	$('#todo_details_template .alertTODO').change(function(){
+	$('#todo_details_template .alertTODO').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		if($(this).val()!='none')
 		{
@@ -1170,7 +1171,7 @@ function bindTodoForm()
 		}
 	});
 
-	$('#repeat_month_custom_select_TODO').change(function(){
+	$('#repeat_month_custom_select_TODO').on("change", function(){
 		if($(this).val()=="custom")
 		{
 			$('#month_custom2_TODO').show();
@@ -1184,7 +1185,7 @@ function bindTodoForm()
 		checkTodoFormScrollBar();
 	});
 
-	$('#repeat_year_custom_select1_TODO').change(function(){
+	$('#repeat_year_custom_select1_TODO').on("change", function(){
 		if($(this).val()=="custom")
 		{
 			$('#year_custom1_TODO').show();
@@ -1198,7 +1199,7 @@ function bindTodoForm()
 		checkTodoFormScrollBar();
 	});
 
-	$('#repeat_end_details_TODO').change(function(){
+	$('#repeat_end_details_TODO').on("change", function(){
 		$('#repeat_end_date_TODO').parent().find('img').css('display', 'none');
 
 		if($('#repeat_end_details_TODO option:selected').attr('data-type')=="repeat_details_on_date")
@@ -1236,7 +1237,7 @@ function bindTodoForm()
 		checkTodoFormScrollBar();
 	});
 
-	$('#todo_details_template .customTable td').click(function(){
+	$('#todo_details_template .customTable td').on("click", function(){
 		if($(this).hasClass('disabled'))
 			return true;
 		else if($(this).hasClass('selected'))
@@ -1245,7 +1246,7 @@ function bindTodoForm()
 			$(this).addClass('selected');
 	});
 
-	$('#closeTODO').click(function()
+	$('#closeTODO').on("click", function()
 	{
 		$('#todoInEdit').val('false');
 		if($('#uidTODO').val()!='')
@@ -1269,7 +1270,7 @@ function bindTodoForm()
 			$('#CATodo').attr('style','display:none');
 	});
 
-	$('#resetTODO').click(function(){
+	$('#resetTODO').on("click", function(){
 		$('#todo_details_template').find('img[data-type=invalidSlider],img[data-type=invalidSmall]').css('display','none');
 		if($('#uidTODO').val()!='')
 		{
@@ -1287,7 +1288,7 @@ function bindTodoForm()
 		}
 	});
 
-	$('#todo_calendar').change(function(){
+	$('#todo_calendar').on("change", function(){
 		var color = '';
 		if($(this).val()=='choose')
 			color = 'rgb(240,240,240)';
@@ -1302,7 +1303,7 @@ function bindTodoForm()
 		$('.event_item[data-id="'+uid+'"]').find('.fc-event-handle').css({'background-color': rgbToRgba(color,0.9), 'border-color': color});
 	});
 
-	$('#repeat_TODO').change(function(){
+	$('#repeat_TODO').on("change", function(){
 		if($('#repeat_TODO option:selected').attr('data-type')=='repeat_no-repeat' || $('#repeat_TODO option:selected').attr('data-type')=="custom_repeat")
 		{
 			$('#repeat_details_TODO').hide();
@@ -1391,7 +1392,7 @@ function bindTodoForm()
 		checkTodoFormScrollBar();
 	});
 
-	$('#statusTODO').change(function(){
+	$('#statusTODO').on("change", function(){
 		var status = $(this).val();
 
 		switch(status) {
@@ -1426,7 +1427,7 @@ function bindTodoForm()
 		todoStatusChanged(status);
 	});
 
-	$('#todo_type').change(function(){
+	$('#todo_type').on("change", function(){
 		if($(this).val()=='none')
 		{
 			$('#timezoneTODO').val('local');
@@ -1542,7 +1543,8 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 	setFirstDayEvent();
 	bindEventForm();
 
-	$('#note').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkEventFormScrollBar();}});
+  // TODO: replace with css
+	//$('#note').autosize({defaultStyles: {height: '64', overflow: '', 'overflow-y': '', 'word-wrap': '', resize: 'none'}, callback: function(){checkEventFormScrollBar();}});
 	$("#show").val('');
 	$("#uid").val('');
 	$("#etag").val('');
@@ -1561,7 +1563,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			color=rgbToHex(activeCollection.children('.resourceCalDAVColor').css('background-color'));
 	}
 	else
-		color=globalResourceCalDAVList.getEventCollectionByUID(calEvent.res_id).ecolor;
+		color=globalResourceCalDAVList.getEventCollectionByUID(calEvent.extendedProps.res_id).ecolor;
 
 	if(confirmRepeat)
 	{
@@ -1569,7 +1571,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		$('#repeatEvent').val(true);
 		$('#CAEvent').show();
 		$('#repeatConfirmBox').css('visibility', 'visible');
-		if(calEvent.repeatCount!='' && calEvent.repeatCount == 1)
+		if(calEvent.extendedProps.repeatCount!='' && calEvent.extendedProps.repeatCount == 1)
 		{
 			$('#editFuture').css('display','none');
 			if($('#editFuture').next('br').length>0)
@@ -1584,7 +1586,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		$('#repeatConfirmBoxContent').html('<b>'+calEvent.title+"</b> "+localization[globalInterfaceLanguage].repeatBoxContent);
 		$('#repeatConfirmBoxQuestion').html(localization[globalInterfaceLanguage].repeatBoxQuestion);
 
-		$('#editAll, #editOnlyOne, #editFuture').click(function(){
+		$('#editAll, #editOnlyOne, #editFuture').on("click", function(){
 			if(globalCalEvent)
 			{
 				if($(this).attr('id')=='editOnlyOne')
@@ -1610,16 +1612,17 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 
 	if(mod=='show' && repeatOne=='futureOnly')
 	{
-		$('#futureStart').val(calEvent.realRepeatCount+';'+calEvent.start);
+		$('#futureStart').val(calEvent.extendedProps.realRepeatCount+';'+calEvent.start);
 	}
 	if(mod!='new')
 		fullVcalendarToData(calEvent);
 	else
 		CalDAVeditor_cleanup();
 
-		if(calEvent!=null && ((repeatOne=='editOnly'&&calEvent.type) || calEvent.rec_id))
+		if(calEvent!=null && ((repeatOne=='editOnly'&&calEvent.extendedProps.type) || calEvent.extendedProps.rec_id))
 		{
-			var eventsSorted=jQuery.grep(globalEventList.displayEventsArray[calEvent.res_id],function(e){if(e.id==calEvent.id)return true}).sort(repeatStartCompare);
+      // TODO: figure out tf e.id is supposed to mean (sourceId, ev_id, etc.)
+			var eventsSorted=jQuery.grep(globalEventList.displayEventsArray[calEvent.extendedProps.res_id],function(e){if(e.id==calEvent.id)return true}).sort(repeatStartCompare);
 			if(eventsSorted.indexOf(calEvent)!=-1)
 			{
 				if(eventsSorted.indexOf(calEvent)<(eventsSorted.length-1))
@@ -1634,7 +1637,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 	var calSelected = $('.resourceCalDAV_item.resourceCalDAV_item_selected').attr('data-id');
 		for(var i=0;i<cals.length;i++)
 		{
-			if(cals[i].uid!=undefined && ((calEvent!=null && calEvent.res_id==cals[i].uid) || (cals[i].makeLoaded && !cals[i].permissions_read_only )))
+			if(cals[i].uid!=undefined && ((calEvent!=null && calEvent.extendedProps.res_id==cals[i].uid) || (cals[i].makeLoaded && !cals[i].permissions_read_only )))
 			{
 				calendarObj.append(new Option(cals[i].displayValue,cals[i].uid));
 			}
@@ -1657,8 +1660,8 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 
 	if(mod=='drop')
 	{
-		if(calEvent.etag!='')
-			$('#event_calendar').val(calEvent.res_id);
+		if(calEvent.extendedProps.etag!='')
+			$('#event_calendar').val(calEvent.extendedProps.res_id);
 	}
 
 	if(mod=='new')
@@ -1668,15 +1671,15 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 
 		if(calEvent!==null)
 		{
-			if(calEvent.realStart)
-				date=calEvent.realStart;
+			if(calEvent.extendedProps.realStart)
+				date=calEvent.extendedProps.realStart;
 			else
-				date=calEvent.start;
+				date=calEvent.start; // seems to DNE
 
-			if(calEvent.realEnd)
-				date_to=new Date(calEvent.realEnd.getTime());
+			if(calEvent.extendedProps.realEnd)
+				date_to=new Date(calEvent.extendedProps.realEnd.getTime());
 			else
-				date_to=new Date(calEvent.end.getTime());
+				date_to=new Date(calEvent.end.getTime()); // also DNE
 		}
 
 		if(!allDay && ((date_to==null) || ((date_to-date)==0))) {
@@ -1710,11 +1713,11 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 
 	if(mod=='show' || mod=='drop')
 	{
-		if(calEvent.status=='CANCELLED')
+		if(calEvent.extendedProps.status=='CANCELLED')
 			$('#name').addClass('title_cancelled');
 
 		$('#name').val(calEvent.title);
-		$('#location').val(calEvent.location);
+		$('#location').val(calEvent.extendedProps.location);
 
 		if(calEvent.allDay==true)
 		{
@@ -1724,38 +1727,39 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			$('.timezone_row').css('display', 'none');
 		}
 
-		if(calEvent.end)
-			if(calEvent.realEnd && (mod!='drop'  || repeatOne!='editOnly'))
-				date_to=new Date(calEvent.realEnd.getTime());
+		if(calEvent.end) // DNE?
+			if(calEvent.extendedProps.realEnd && (mod!='drop'  || repeatOne!='editOnly'))
+				date_to=new Date(calEvent.extendedProps.realEnd.getTime());
 			else
 				date_to=new Date(calEvent.end.getTime());
 
-		$('#note').val(calEvent.note).trigger('autosize.resize');
-		if(typeof calEvent.classType!='undefined' && calEvent.classType!=null && calEvent.classType!='')
-			$('#type').val(calEvent.classType.toLowerCase());
+		$('#note').val(calEvent.extendedProps.note).trigger('autosize.resize');
+		if(typeof calEvent.extendedProps.classType!='undefined' && calEvent.extendedProps.classType!=null && calEvent.extendedProps.classType!='')
+			$('#type').val(calEvent.extendedProps.classType.toLowerCase());
 		else
 			$('#type').val('public');
 
-		if(calEvent.status!='')
-			$('#status').val(calEvent.status);
+		if(calEvent.extendedProps.status!='')
+			$('#status').val(calEvent.extendedProps.status);
 		else
 			$('#status').val('NONE');
 
 		if(calEvent!=null && mod!='new')
 		{
+      // WHICH ONE?
 			var uidArray = calEvent.id.match(vCalendar.pre['uidParts']);
 			if(decodeURIComponent(uidArray[4]).indexOf(uidArray[2])==-1)
 				$('.row_type').css('display','none');
 		}
 
-		if(calEvent.avail == 'OPAQUE')
+		if(calEvent.extendedProps.avail == 'OPAQUE')
 			$('#avail').val('busy');
 		else
 			$('#avail').val('free');
 
 		if(calEvent!=null)
 		{
-			var prior=parseInt(calEvent.priority,10);
+			var prior=parseInt(calEvent.extendedProps.priority,10);
 			if(prior==5)
 				$('#priority').val(5);
 			else if(prior>5 && prior<10)
@@ -1772,11 +1776,12 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 				$('#priority').val(0);
 		}
 
+    // WHICH
 		$('#uid').val(calEvent.id);
-		$('#url_EVENT').val(calEvent.hrefUrl+'');
-		$('#vcalendarHash').val(hex_sha256(calEvent.vcalendar));
-		$('#etag').val(calEvent.etag);
-		var stringUIDcurrent=calEvent.vcalendar.match(vCalendar.pre['contentline_UID']);
+		$('#url_EVENT').val(calEvent.extendedProps.hrefUrl+'');
+		$('#vcalendarHash').val(hex_sha256(calEvent.extendedProps.vcalendar));
+		$('#etag').val(calEvent.extendedProps.etag);
+		var stringUIDcurrent=calEvent.extendedProps.vcalendar.match(vCalendar.pre['contentline_UID']);
 
 		if(stringUIDcurrent!=null)
 			stringUIDcurrent=stringUIDcurrent[0].match(vCalendar.pre['contentline_parse'])[4];
@@ -1785,44 +1790,44 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			$('#vcalendarUID').val(stringUIDcurrent);
 
 		var alarmDate='';
-		for(var alarmIterator=0;alarmIterator<calEvent.alertTime.length;alarmIterator++)
+		for(var alarmIterator=0;alarmIterator<calEvent.extendedProps.alertTime.length;alarmIterator++)
 		{
 			if(alarmIterator>0)
 				event_alert_add(alarmIterator);
 
 			$(".alert[data-id="+(alarmIterator+1)+"]").val("message");
-			if(calEvent.alertTime[alarmIterator].charAt(0)=='-' || calEvent.alertTime[alarmIterator].charAt(0)=='+')
+			if(calEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='-' || calEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='+')
 			{
-				var alVal=parseInt(calEvent.alertTime[alarmIterator].substring(1, calEvent.alertTime[alarmIterator].length-1));
+				var alVal=parseInt(calEvent.extendedProps.alertTime[alarmIterator].substring(1, calEvent.extendedProps.alertTime[alarmIterator].length-1));
 				var alString='';
 
-				if(calEvent.alertTime[alarmIterator].charAt(calEvent.alertTime[alarmIterator].length-1)=="W")
+				if(calEvent.extendedProps.alertTime[alarmIterator].charAt(calEvent.extendedProps.alertTime[alarmIterator].length-1)=="W")
 				{
 					alVal=alVal/1000/60/60/24/7;
 					alString='weeks';
 				}
-				else if(calEvent.alertTime[alarmIterator].charAt(calEvent.alertTime[alarmIterator].length-1)=="D")
+				else if(calEvent.extendedProps.alertTime[alarmIterator].charAt(calEvent.extendedProps.alertTime[alarmIterator].length-1)=="D")
 				{
 					alVal=alVal/1000/60/60/24;
 					alString='days';
 				}
-				else if(calEvent.alertTime[alarmIterator].charAt(calEvent.alertTime[alarmIterator].length-1)=="H")
+				else if(calEvent.extendedProps.alertTime[alarmIterator].charAt(calEvent.extendedProps.alertTime[alarmIterator].length-1)=="H")
 				{
 					alVal=alVal/1000/60/60;
 					alString='hours';
 				}
-				else if(calEvent.alertTime[alarmIterator].charAt(calEvent.alertTime[alarmIterator].length-1)=="M")
+				else if(calEvent.extendedProps.alertTime[alarmIterator].charAt(calEvent.extendedProps.alertTime[alarmIterator].length-1)=="M")
 				{
 					alVal=alVal/1000/60;
 					alString='minutes';
 				}
-				else if(calEvent.alertTime[alarmIterator].charAt(calEvent.alertTime[alarmIterator].length-1)=="S")
+				else if(calEvent.extendedProps.alertTime[alarmIterator].charAt(calEvent.extendedProps.alertTime[alarmIterator].length-1)=="S")
 				{
 					alVal=alVal/1000;
 					alString='seconds';
 				}
 
-				if(calEvent.alertTime[alarmIterator].charAt(0)=='-')
+				if(calEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='-')
 					alString+="_before";
 				else
 					alString+="_after"
@@ -1837,7 +1842,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			}
 			else
 			{
-				alarmDate=$.fullCalendar.parseDate(calEvent.alertTime[alarmIterator]);
+				alarmDate=$.fullCalendar.parseDate(calEvent.extendedProps.alertTime[alarmIterator]);
 				(alarmDate.getHours())<10 ? (hour='0'+(alarmDate.getHours())) : (hour=alarmDate.getHours());
 				(alarmDate.getMinutes())<10 ? (minute='0'+(alarmDate.getMinutes())) : (minute=alarmDate.getMinutes());
 
@@ -1855,21 +1860,21 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		if(alarmIterator>0)
 			event_alert_add(alarmIterator+2);
 
-		if(calEvent.type!='' && repeatOne!='editOnly' && calEvent.ruleString.match(vCalendar.re['recurCaldav'])!=null)
+		if(calEvent.extendedProps.type!='' && repeatOne!='editOnly' && calEvent.extendedProps.ruleString.match(vCalendar.re['recurCaldav'])!=null)
 		{
-			var ruleString=calEvent.vcalendar.match(vCalendar.pre['contentline_RRULE2'])[0].match(vCalendar.pre['contentline_parse'])[4];
+			var ruleString=calEvent.extendedProps.vcalendar.match(vCalendar.pre['contentline_RRULE2'])[0].match(vCalendar.pre['contentline_parse'])[4];
 			if(ruleString.indexOf('BYMONTH=')!=-1 || ruleString.indexOf('BYMONTHDAY=')!=-1 || ruleString.indexOf('BYDAY=')!=-1)
 			{
 				var pars=ruleString.split(';');
 
 				if(pars.indexElementOf('BYMONTH=')!=-1 && pars.indexElementOf('BYMONTHDAY=')==-1 && pars.indexElementOf('BYDAY=')==-1)
 					pars[pars.length] = "BYMONTHDAY="+calEvent.start.getDate();
-				if(calEvent.type=="DAILY")
+				if(calEvent.extendedProps.type=="DAILY")
 				{
 					$("#repeat option[value='DAILY']").prop('selected', true);
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatDays);
 				}
-				else if(calEvent.type=="WEEKLY")
+				else if(calEvent.extendedProps.type=="WEEKLY")
 				{
 					$("#repeat option[value='CUSTOM_WEEKLY']").prop('selected', true);
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatWeeks);
@@ -1889,9 +1894,9 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 					}
 					$('#week_custom').show();
 				}
-				else if(calEvent.type=="MONTHLY")
+				else if(calEvent.extendedProps.type=="MONTHLY")
 				{
-					$("#repeat option[value='CUSTOM_MONTHLY']").prop('selected', true).change();
+					$("#repeat option[value='CUSTOM_MONTHLY']").prop('selected', true).trigger("change");
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatMonths);
 
 
@@ -1937,14 +1942,14 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 						}
 						else if(pars[ri].indexOf("BYMONTHDAY=")!=-1)
 						{
-							$('#repeat_month_custom_select').val('custom').change();
+							$('#repeat_month_custom_select').val('custom').trigger("change");
 							var byMonthDay=pars[ri].split('=')[1];
 							byMonthDay=byMonthDay.split(',');
 							for(var rj=0; rj<byMonthDay.length;rj++)
 							{
 								if(parseInt(byMonthDay[rj],10)==-1)
 								{
-									$('#repeat_month_custom_select').val('last').change();
+									$('#repeat_month_custom_select').val('last').trigger("change");
 									$('#repeat_month_custom_select2').val("DAY");
 
 								}
@@ -1954,9 +1959,9 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 						}
 					}
 				}
-				else if(calEvent.type=="YEARLY")
+				else if(calEvent.extendedProps.type=="YEARLY")
 				{
-					$("#repeat option[value='CUSTOM_YEARLY']").prop('selected', true).change();
+					$("#repeat option[value='CUSTOM_YEARLY']").prop('selected', true).trigger("change");
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatYears);
 					var isMonthDay=false;
 					for(var ri=0;ri<pars.length;ri++)
@@ -2001,14 +2006,14 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 						}
 						else if(pars[ri].indexOf("BYMONTHDAY=")!=-1)
 						{
-							$('#repeat_year_custom_select1').val('custom').change()
+							$('#repeat_year_custom_select1').val('custom').trigger("change")
 							var byMonthDay=pars[ri].split('=')[1];
 							byMonthDay=byMonthDay.split(',');
 							for(var rj=0; rj<byMonthDay.length;rj++)
 							{
 								if(parseInt(byMonthDay[rj],10)==-1)
 								{
-									$('#repeat_year_custom_select1').val('last').change();
+									$('#repeat_year_custom_select1').val('last').trigger("change");
 									$('#repeat_year_custom_select2').val("DAY");
 
 								}
@@ -2027,25 +2032,25 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 					}
 				}
 
-				if(calEvent.after=='' && calEvent.untilDate=='')
+				if(calEvent.extendedProps.after=='' && calEvent.extendedProps.untilDate=='')
 					$("#repeat_end_details option[value='never']").prop('selected', true);
-				else if(calEvent.after!='')
+				else if(calEvent.extendedProps.after!='')
 				{
 					$("#repeat_end_details option[value='after']").prop('selected', true);
-					$('#repeat_end_after').val(calEvent.after);
+					$('#repeat_end_after').val(calEvent.extendedProps.after);
 				}
-				else if(calEvent.untilDate!='')
+				else if(calEvent.extendedProps.untilDate!='')
 				{
-					date=$.fullCalendar.parseDate(calEvent.untilDate);
+					date=$.fullCalendar.parseDate(calEvent.extendedProps.untilDate);
 					$("#repeat_end_details option[value='on_date']").prop('selected', true);
 					var formattedRepeatDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 					$('#repeat_end_date').val(formattedRepeatDate);
 				}
 
-				$('#repeat_interval_detail').val(calEvent.interval);
+				$('#repeat_interval_detail').val(calEvent.extendedProps.interval);
 				$('#repeat_interval').show();
 
-				if(calEvent.byDay.length>0)
+				if(calEvent.extendedProps.byDay.length>0)
 				{
 					var businessArray=new Array();
 					if(globalSettings.weekenddays.value.length>0)
@@ -2080,53 +2085,53 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			}
 			else
 			{
-				if(calEvent.type=="DAILY")
+				if(calEvent.extendedProps.type=="DAILY")
 				{
 					$("#repeat option[value='DAILY']").prop('selected', true);
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatDays);
 				}
-				else if(calEvent.type=="WEEKLY")
+				else if(calEvent.extendedProps.type=="WEEKLY")
 				{
 					$("#repeat option[value='WEEKLY']").prop('selected', true);
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatWeeks);
 				}
-				else if(calEvent.type=="MONTHLY")
+				else if(calEvent.extendedProps.type=="MONTHLY")
 				{
 					$("#repeat option[value='MONTHLY']").prop('selected', true);
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatMonths);
 				}
-				else if(calEvent.type=="YEARLY")
+				else if(calEvent.extendedProps.type=="YEARLY")
 				{
 					$("#repeat option[value='YEARLY']").prop('selected', true);
 					$('#repeat_interval [data-type="txt_interval"]').text(localization[globalInterfaceLanguage].repeatYears);
 				}
 
-				if(calEvent.after=='' && calEvent.untilDate=='')
+				if(calEvent.extendedProps.after=='' && calEvent.extendedProps.untilDate=='')
 					$("#repeat_end_details option[value='never']").prop('selected', true);
-				else if(calEvent.after!='')
+				else if(calEvent.extendedProps.after!='')
 				{
 					$("#repeat_end_details option[value='after']").prop('selected', true);
-					$('#repeat_end_after').val(calEvent.after);
+					$('#repeat_end_after').val(calEvent.extendedProps.after);
 				}
-				else if(calEvent.untilDate!='')
+				else if(calEvent.extendedProps.untilDate!='')
 				{
-					date=$.fullCalendar.parseDate(calEvent.untilDate);
+					date=$.fullCalendar.parseDate(calEvent.extendedProps.untilDate);
 					$("#repeat_end_details option[value='on_date']").prop('selected', true);
 					var formattedRepeatDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 					$('#repeat_end_date').val(formattedRepeatDate);
 				}
 
-				$('#repeat_interval_detail').val(calEvent.interval);
+				$('#repeat_interval_detail').val(calEvent.extendedProps.interval);
 				$('#repeat_interval').show();
 
-				if(calEvent.byDay.length>0)
+				if(calEvent.extendedProps.byDay.length>0)
 				{
-					if(calEvent.byDay.indexOf('1')!=-1 && calEvent.byDay.indexOf('2')!=-1 && calEvent.byDay.indexOf('3')!=-1 && calEvent.byDay.indexOf('4')!=-1 && calEvent.byDay.indexOf('5')!=-1 && calEvent.byDay.indexOf('6')==-1 && calEvent.byDay.indexOf('0')==-1)
+					if(calEvent.extendedProps.byDay.indexOf('1')!=-1 && calEvent.extendedProps.byDay.indexOf('2')!=-1 && calEvent.extendedProps.byDay.indexOf('3')!=-1 && calEvent.extendedProps.byDay.indexOf('4')!=-1 && calEvent.extendedProps.byDay.indexOf('5')!=-1 && calEvent.extendedProps.byDay.indexOf('6')==-1 && calEvent.extendedProps.byDay.indexOf('0')==-1)
 					{
 						$("#repeat option[value='BUSINESS']").prop('selected', true);
 						$('#repeat_interval').hide();
 					}
-					else if(calEvent.byDay.indexOf('1')==-1 && calEvent.byDay.indexOf('2')==-1 && calEvent.byDay.indexOf('3')==-1 && calEvent.byDay.indexOf('4')==-1 && calEvent.byDay.indexOf('5')==-1 && calEvent.byDay.indexOf('6')!=-1 && calEvent.byDay.indexOf('0')!=-1)
+					else if(calEvent.extendedProps.byDay.indexOf('1')==-1 && calEvent.extendedProps.byDay.indexOf('2')==-1 && calEvent.extendedProps.byDay.indexOf('3')==-1 && calEvent.extendedProps.byDay.indexOf('4')==-1 && calEvent.extendedProps.byDay.indexOf('5')==-1 && calEvent.extendedProps.byDay.indexOf('6')!=-1 && calEvent.extendedProps.byDay.indexOf('0')!=-1)
 					{
 						$("#repeat option[value='WEEKEND']").prop('selected', true);
 						$('#repeat_interval').hide();
@@ -2135,17 +2140,17 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			$('#repeatEvent').val(true);
 			}
 		}
-		else if(calEvent.type!='' && repeatOne!='editOnly')
+		else if(calEvent.extendedProps.type!='' && repeatOne!='editOnly')
 		{
-			var cu_opt = new Option(localization[globalInterfaceLanguage].customRepeat, calEvent.ruleString, false, true);
+			var cu_opt = new Option(localization[globalInterfaceLanguage].customRepeat, calEvent.extendedProps.ruleString, false, true);
 			$(cu_opt).attr('data-type','custom_repeat');
 			$('#repeat').append(cu_opt);
 		}
 		else
 			$('#repeatEvent').val(false);
 
-		if(calEvent.timeZone)
-			showTimezones(calEvent.timeZone,'');
+		if(calEvent.extendedProps.timeZone)
+			showTimezones(calEvent.extendedProps.timeZone,'');
 		else
 			showTimezones('local','');
 	}
@@ -2159,44 +2164,44 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		$('#show').val(calEvent.id);
 	if(mod=='show' || mod=='drop')
 	{
-		$('#repeatCount').val(calEvent.repeatCount);
-		if(calEvent.realStart && (mod!='drop' || repeatOne!='editOnly'))
-			date=calEvent.realStart;
+		$('#repeatCount').val(calEvent.extendedProps.repeatCount);
+		if(calEvent.extendedProps.realStart && (mod!='drop' || repeatOne!='editOnly'))
+			date=calEvent.extendedProps.realStart;
 		else
 			date=calEvent.start;
 
 		if($('#show').val())
 		{
-			if(calEvent.repeatStart && repeatOne=='')
-				date=new Date(calEvent.repeatStart.getTime());
-			if(calEvent.repeatEnd && repeatOne=='')
-				date_to=new Date(calEvent.repeatEnd.getTime());
+			if(calEvent.extendedProps.repeatStart && repeatOne=='')
+				date=new Date(calEvent.extendedProps.repeatStart.getTime());
+			if(calEvent.extendedProps.repeatEnd && repeatOne=='')
+				date_to=new Date(calEvent.extendedProps.repeatEnd.getTime());
 
 		}
 		if(repeatOne=='editOnly')
 		{
 			if((mod=='drop' && globalPrevDragEventAllDay) || (mod!='drop' && calEvent.allDay))
 			{
-				if(calEvent.realStart)
-					$('#recurrenceID').val($.fullCalendar.formatDate($.fullCalendar.parseDate(calEvent.realStart), "yyyyMMdd"));
+				if(calEvent.extendedProps.realStart)
+					$('#recurrenceID').val($.fullCalendar.formatDate($.fullCalendar.parseDate(calEvent.extendedProps.realStart), "yyyyMMdd"));
 				else
 					$('#recurrenceID').val($.fullCalendar.formatDate(date, "yyyyMMdd"));
 			}
 			else
 			{
-				if(calEvent.realStart)
-					$('#recurrenceID').val($.fullCalendar.formatDate(calEvent.realStart, "yyyyMMdd'T'HHmmss"));
+				if(calEvent.extendedProps.realStart)
+					$('#recurrenceID').val($.fullCalendar.formatDate(calEvent.extendedProps.realStart, "yyyyMMdd'T'HHmmss"));
 				else
 					$('#recurrenceID').val($.fullCalendar.formatDate(date, "yyyyMMdd'T'HHmmss"));
 			}
 		}
 		else
-			$('#recurrenceID').val(calEvent.rec_id);
+			$('#recurrenceID').val(calEvent.extendedProps.rec_id);
 
-		if(calEvent.rec_id || repeatOne=='editOnly' || repeatOne=='futureOnly')
+		if(calEvent.extendedProps.rec_id || repeatOne=='editOnly' || repeatOne=='futureOnly')
 		{
-			var savedEvs=jQuery.grep(globalEventList.displayEventsArray[calEvent.res_id],function(e){if(e.id==calEvent.id && (e.repeatCount<2 || !e.repeatCount))return true});
-			if(savedEvs.length>1 || (repeatOne=='futureOnly' && calEvent.repeatCount>1) || (repeatOne=='editOnly' && calEvent.type!=''))
+			var savedEvs=jQuery.grep(globalEventList.displayEventsArray[calEvent.extendedProps.res_id],function(e){if(e.id==calEvent.id && (e.repeatCount<2 || !e.repeatCount))return true});
+			if(savedEvs.length>1 || (repeatOne=='futureOnly' && calEvent.extendedProps.repeatCount>1) || (repeatOne=='editOnly' && calEvent.extendedProps.type!=''))
 				$('#deleteButton').attr('onclick',"updateEventFormDimensions(true);$('#CAEvent .saveLoader').show();save(false, true);");
 		}
 	}
@@ -2284,7 +2289,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		$('#saveButton').hide();
 		$('#resetButton').hide();
 		$('#deleteButton').hide();
-		if($('#ResourceCalDAVList').find('[data-id="'+calEvent.res_id+'"]').hasClass("resourceCalDAV_item_ro"))
+		if($('#ResourceCalDAVList').find('[data-id="'+calEvent.extendedProps.res_id+'"]').hasClass("resourceCalDAV_item_ro"))
 		{
 			$('#editButton').hide();
 			$('#duplicateButton').hide();
@@ -2295,8 +2300,8 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		$('#eventDetailsTable .customTable td').addClass('disabled');
 		$('#eventDetailsTable textarea').prop('readonly', true);
 
-		if(calEvent.etag!='')
-			$('#event_calendar').val(calEvent.res_id);
+		if(calEvent.extendedProps.etag!='')
+			$('#event_calendar').val(calEvent.extendedProps.res_id);
 	}
 
 	if(repeatOne=='editOnly' || $('#recurrenceID').val()!='')
@@ -2313,14 +2318,14 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 
 	if(repeatOne=='editOnly' || repeatOne=='futureOnly' || $('#recurrenceID').val())
 		$('#calendarLine').hide();
-	if(calEvent==null || calEvent.type=='')
+	if(calEvent==null || calEvent.extendedProps.type=='')
 		$('#editOptionsButton').hide();
 	else
-		$('#editOptionsButton').click(function(){
+		$('#editOptionsButton').on("click", function(){
 		showEventForm(null, globalCalEvent.allDay, globalCalEvent, globalJsEvent, 'show', '', true);
 	});
-	if(calEvent && calEvent.after && repeatOne=='futureOnly')
-			$('#repeat_end_after').val(calEvent.after - calEvent.realRepeatCount + 1);
+	if(calEvent && calEvent.extendedProps.after && repeatOne=='futureOnly')
+			$('#repeat_end_after').val(calEvent.extendedProps.after - calEvent.extendedProps.realRepeatCount + 1);
 
 	if(!globalSettings.timezonesupport.value)
 		$('.timezone_row').css('display', 'none');
@@ -2346,7 +2351,7 @@ function bindEventForm()
 	initCalDavDatepicker($('#event_details_template'));
 	initCalDavTimepicker($('#event_details_template'));
 
-	$('#event_details_template .alert_message_details').change(function(){
+	$('#event_details_template .alert_message_details').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		$('.before_after_input[data-id="'+data_id+'"]').parent().parent().find('img').css('display','none');
 		if($('.alert_message_details[data-id="'+data_id+'"] option:selected').attr('data-type')=="on_date")
@@ -2399,7 +2404,7 @@ function bindEventForm()
 		}
 	});
 
-	$('#event_details_template .alert').change(function(){
+	$('#event_details_template .alert').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		if($(this).val()!='none')
 		{
@@ -2453,7 +2458,7 @@ function bindEventForm()
 		}
 	});
 
-	$('#repeat_month_custom_select').change(function(){
+	$('#repeat_month_custom_select').on("change", function(){
 		if($(this).val()=="custom")
 		{
 			$('#month_custom2').show();
@@ -2467,7 +2472,7 @@ function bindEventForm()
 		checkEventFormScrollBar();
 	});
 
-	$('#repeat_year_custom_select1').change(function(){
+	$('#repeat_year_custom_select1').on("change", function(){
 		if($(this).val()=="custom")
 		{
 			$('#year_custom1').show();
@@ -2481,7 +2486,7 @@ function bindEventForm()
 		checkEventFormScrollBar();
 	});
 
-	$('#repeat_end_details').change(function(){
+	$('#repeat_end_details').on("change", function(){
 		$('#repeat_end_date').parent().find('img').css('display', 'none');
 
 		if($('#repeat_end_details option:selected').attr('data-type')=="repeat_details_on_date")
@@ -2519,7 +2524,7 @@ function bindEventForm()
 		checkEventFormScrollBar();
 	});
 
-	$('#closeButton').click(function(){
+	$('#closeButton').on("click", function(){
 		if($('#uid').val()!='')
 		{
 			var uid=$('#uid').val();
@@ -2542,8 +2547,9 @@ function bindEventForm()
 		else
 		{
 			var beforeScroll = $('#main').width()-$('#calendar').width();
-			$('#calendar').fullCalendar('unselect');
-			$('#calendar').fullCalendar('removeEvents', 'fooUID');
+			window.calendar.unselect();
+      // not sure what's that supposed to do
+			//window.calendar.removeEvents('fooUID');
 			var afterScroll = $('#main').width()-$('#calendar').width();
 			rerenderCalendar(beforeScroll!=afterScroll);
 		}
@@ -2555,7 +2561,7 @@ function bindEventForm()
 		});
 	});
 
-	$('#resetButton').click(function(){
+	$('#resetButton').on("click", function(){
 		$('#event_details_template').find('img[data-type=invalidSmall]').css('display','none');
 		var uid=$('#uid').val();
 
@@ -2586,7 +2592,7 @@ function bindEventForm()
 		}
 	});
 
-	$('#allday').click(function(){
+	$('#allday').on("click", function(){
 		if($('#allday').prop('checked'))
 		{
 			$('#timezone').val('local');
@@ -2613,7 +2619,7 @@ function bindEventForm()
 		checkEventFormScrollBar();
 	});
 
-	$('#event_details_template .customTable td').click(function(){
+	$('#event_details_template .customTable td').on("click", function(){
 		if($(this).hasClass('disabled'))
 			return true;
 		else if($(this).hasClass('selected'))
@@ -2622,7 +2628,7 @@ function bindEventForm()
 			$(this).addClass('selected');
 	});
 
-	$('#event_calendar').change(function(){
+	$('#event_calendar').on("change", function(){
 		var color = '';
 		if($(this).val()=='choose')
 			color = 'rgb(240,240,240)';
@@ -2648,7 +2654,7 @@ function bindEventForm()
 		});
 	});
 
-	$('#repeat').change(function(){
+	$('#repeat').on("change", function(){
 		if($('#repeat option:selected').attr('data-type')=='repeat_no-repeat' || $('#repeat option:selected').attr('data-type')=="custom_repeat")
 		{
 			$('#repeat_details').hide();
@@ -2737,7 +2743,7 @@ function bindEventForm()
 		checkEventFormScrollBar();
 	});
 
-	$('#status').change(function(){
+	$('#status').on("change", function(){
 		var status = $(this).val();
 
 		if(status=='CANCELLED')
@@ -2767,7 +2773,7 @@ function startEditModeEvent()
 	$('#eventDetailsTable .customTable td').removeClass('disabled');
 	$('#eventDetailsTable textarea').prop('readonly', false);
 
-	$('#name').focus();
+	$('#name').trigger("focus");
 }
 
 function startEditModeTodo()
@@ -2793,7 +2799,7 @@ function startEditModeTodo()
 	$('#percentageSlider').slider({
 		disabled: false
 	});
-	$('#nameTODO').focus();
+	$('#nameTODO').trigger("focus");
 }
 
 function todo_alert_add(data_id)
@@ -2841,9 +2847,8 @@ function todo_alert_add(data_id)
 	$('#url_trTODO').before(newTr2);
 	$('#url_trTODO').before(newTr3);
 	translateTodoAlerts();
-	$('#todo_details_template').find('input[placeholder],textarea[placeholder]').placeholder();
 
-	$('#todo_details_template .alert_message_detailsTODO[data-id="'+data_id+'"]').change(function(){
+	$('#todo_details_template .alert_message_detailsTODO[data-id="'+data_id+'"]').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		$('.before_after_inputTODO[data-id="'+data_id+'"]').parent().parent().find('img').css('display','none');
 		if($('.alert_message_detailsTODO[data-id="'+data_id+'"] option:selected').attr('data-type')=="on_dateTODO")
@@ -2895,7 +2900,7 @@ function todo_alert_add(data_id)
 				$(this).parent().find('img').css('display', 'none');
 		}
 	});
-	$('#todo_details_template .alertTODO[data-id="'+data_id+'"]').change(function(){
+	$('#todo_details_template .alertTODO[data-id="'+data_id+'"]').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		if($(this).val()!='none')
 		{
@@ -2985,7 +2990,6 @@ function event_alert_add(data_id)
 	$('#url_tr').before(newTr3);
 
 	translateEventAlerts();
-	$('#event_details_template').find('input[placeholder],textarea[placeholder]').placeholder();
 
 	$('#event_details_template .before_after_input[data-id="'+data_id+'"]').bind('keyup change', function(){
 		if($(this).val()=='')
@@ -3004,7 +3008,7 @@ function event_alert_add(data_id)
 				$(this).parent().find('img').css('display', 'none');
 		}
 	});
-	$('#event_details_template .alert[data-id="'+data_id+'"]').change(function(){
+	$('#event_details_template .alert[data-id="'+data_id+'"]').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		if($(this).val()!='none')
 		{
@@ -3041,7 +3045,7 @@ function event_alert_add(data_id)
 		}
 		checkEventFormScrollBar();
 	});
-	$('#event_details_template .alert_message_details[data-id="'+data_id+'"]').change(function(){
+	$('#event_details_template .alert_message_details[data-id="'+data_id+'"]').on("change", function(){
 		var data_id=$(this).attr("data-id");
 		$('.before_after_input[data-id="'+data_id+'"]').parent().parent().find('img').css('display','none');
 		if($('.alert_message_details[data-id="'+data_id+'"] option:selected').attr('data-type')=="on_date")

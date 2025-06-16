@@ -151,7 +151,7 @@ Number.prototype.pad=function(size){
 
 // Case insensitive search for attributes
 // Usage:	$('#selector').find(':attrCaseInsensitive(data-type,"'+typeList[i]+'")')
-jQuery.expr[':'].attrCaseInsensitive=function(elem, index, match)
+jQuery.expr.pseudos.attrCaseInsensitive=function(elem, index, match)
 {
 	var matchParams=match[3].split(','),
 		attribute=matchParams[0].replace(/^\s*|\s*$/g,''),
