@@ -153,7 +153,7 @@ function unloadCalDAVCollection(unloadArray, isEvent)
 				if(isEvent)
 				{
 					var beforeScroll = $('#main').width()-$('#calendar').width();
-					$('#calendar').fullCalendar('removeEventSource', collArray[i].fcSource);
+					window.calendar.removeEventSource(collArray[i].fcSource);
 					var afterScroll = $('#main').width()-$('#calendar').width();
 					rerenderCalendar(beforeScroll!=afterScroll);
 					globalEventList.events[collArray[i].uid]={};
@@ -162,7 +162,7 @@ function unloadCalDAVCollection(unloadArray, isEvent)
 				else
 				{
 					var beforeScroll = $('#mainTODO').width()-$('#todoList').width();
-					$('#todoList').fullCalendar('removeEventSource', collArray[i].fcSource);
+					window.todoCalendar.removeEventSource( collArray[i].fcSource);
 					var afterScroll = $('#mainTODO').width()-$('#todoList').width();
 					rerenderTodo(beforeScroll!=afterScroll);
 					globalEventList.todos[collArray[i].uid]={};
@@ -555,7 +555,7 @@ function ResourceCalDAVList()
 				//if(globalEventList.displayEventsArray[uidRemoved].length>0)
 				//{
 					var beforeScroll = $('#main').width()-$('#calendar').width();
-					$('#calendar').fullCalendar('removeEventSource', this.collections[i].fcSource);
+					window.calendar.removeEventSource(this.collections[i].fcSource);
 					var afterScroll = $('#main').width()-$('#calendar').width();
 					rerenderCalendar(beforeScroll!=afterScroll);
 				//}
@@ -618,7 +618,7 @@ function ResourceCalDAVList()
 				//if(globalEventList.displayEventsArray[uidRemoved].length>0)
 				//{
 					var beforeScroll = $('#mainTODO').width()-$('#todoList').width();
-					$('#todoList').fullCalendar('removeEventSource', this.TodoCollections[i].fcSource);
+					window.todoCalendar.removeEventSource( this.TodoCollections[i].fcSource);
 					var afterScroll = $('#mainTODO').width()-$('#todoList').width();
 					rerenderTodo(beforeScroll!=afterScroll);
 				//}

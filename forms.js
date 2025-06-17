@@ -280,7 +280,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 	{
 		var checkDataStart='';
 		if(todo.start)
-			checkDataStart=$.fullCalendar.formatDate(todo.start, "yyyyMMdd'T'HHmmss'Z'");
+			checkDataStart=luxon.DateTime.fromJSDate(todo.start).toFormat( "yyyyMMdd'T'HHmmss'Z'");
 		if($('.fc-event-selected').length>0 && $('.fc-event-selected').attr("data-start")!=checkDataStart)
 			$('.fc-view-todo').addClass('fc-view-trans');
 		else
@@ -428,9 +428,9 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 			minute;
 
 			if(todo.realStart)
-				date=$.fullCalendar.parseDate(todo.realStart);
+				date= new Date(todo.realStart);
 			else
-				date=$.fullCalendar.parseDate(todo.start);
+				date= new Date(todo.start);
 
 			if($('#showTODO').val()!='' && todo.repeatStart!='' && repeatOne=='')
 				date=todo.repeatStart;
@@ -446,15 +446,15 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				$('#date_fromTODO').val(formattedDate);
 				if($('#todo_type').val=='both')
 					globalPrevDate = new Date(date.getTime());
-				$('#time_fromTODO').val($.fullCalendar.formatDate(date, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+				$('#time_fromTODO').val(luxon.DateTime.fromJSDate(date).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			}
 		}
 		if(todo.end!='' && todo.end!=null)
 		{
 			if(todo.realEnd)
-				date=$.fullCalendar.parseDate(todo.realEnd);
+				date= new Date(todo.realEnd);
 			else
-				date=$.fullCalendar.parseDate(todo.end);
+				date= new Date(todo.end);
 
 			if($('#showTODO').val()!='' && todo.repeatEnd!='' && repeatOne=='')
 				date=todo.repeatEnd;
@@ -468,7 +468,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 
 				var formattedDate_to=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 				$('#date_toTODO').val(formattedDate_to);
-				$('#time_toTODO').val($.fullCalendar.formatDate(date, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+				$('#time_toTODO').val(luxon.DateTime.fromJSDate(date).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			}
 		}
 		if(repeatOne=='editOnly' && todo.rec_id=='')
@@ -476,16 +476,16 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 			if(todo.repeatStart!='' && todo.start)
 			{
 				if(typeof todo.realStart=='object')
-					$('#recurrenceIDTODO').val($.fullCalendar.formatDate(todo.realStart, "yyyyMMdd'T'HHmmss"));
+					$('#recurrenceIDTODO').val(luxon.DateTime.fromJSDate(todo.realStart).toFormat( "yyyyMMdd'T'HHmmss"));
 				else if(typeof todo.realStart =='string')
-					$('#recurrenceIDTODO').val($.fullCalendar.formatDate($.fullCalendar.parseDate(todo.realStart), "yyyyMMdd'T'HHmmss"));
+					$('#recurrenceIDTODO').val(luxon.DateTime.fromJSDate(Date(todo.realStart)).toFormat( "yyyyMMdd'T'HHmmss"));
 			}
 			else if(todo.repeatEnd!='' && todo.end)
 			{
 				if(typeof todo.realEnd =='object')
-					$('#recurrenceIDTODO').val($.fullCalendar.formatDate(todo.realEnd, "yyyyMMdd'T'HHmmss"));
+					$('#recurrenceIDTODO').val(luxon.DateTime.fromJSDate(todo.realEnd).toFormat( "yyyyMMdd'T'HHmmss"));
 				else if(typeof todo.realEnd =='string')
-					$('#recurrenceIDTODO').val($.fullCalendar.formatDate($.fullCalendar.parseDate(todo.realEnd), "yyyyMMdd'T'HHmmss"));
+					$('#recurrenceIDTODO').val(luxon.DateTime.fromJSDate(Date(todo.realEnd)).toFormat( "yyyyMMdd'T'HHmmss"));
 			}
 		}
 		else
@@ -513,13 +513,13 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 		//	(todo.completedOn.getHours())<10 ? (hour='0'+(todo.completedOn.getHours())) : (hour=todo.completedOn.getHours());
 		//	(todo.completedOn.getMinutes())<10 ? (minute='0'+(todo.completedOn.getMinutes())) : (minute=todo.completedOn.getMinutes());
 			if(typeof todo.completedOn=='string')
-				date = $.fullCalendar.parseDate(todo.completedOn);
+				date = new Date(todo.completedOn);
 			else if(typeof todo.completedOn=='object')
 				date=new Date(todo.completedOn.getTime());
 
 			var formattedDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 			$('#completedOnDate').val(formattedDate);
-			$('#completedOnTime').val($.fullCalendar.formatDate(date, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('#completedOnTime').val(luxon.DateTime.fromJSDate(date).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('.completedOnTr').show();
 		}
 
@@ -579,7 +579,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 			}
 			else
 			{
-				alarmDate=$.fullCalendar.parseDate(todo.alertTime[alarmIterator]);
+				alarmDate= new Date(todo.alertTime[alarmIterator]);
 				(alarmDate.getHours())<10 ? (hour='0'+(alarmDate.getHours())) : (hour=alarmDate.getHours());
 				(alarmDate.getMinutes())<10 ? (minute='0'+(alarmDate.getMinutes())) : (minute=alarmDate.getMinutes());
 
@@ -587,7 +587,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				var formattedAlarmDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, alarmDate);
 
 				$(".message_date_inputTODO[data-id="+(alarmIterator+1)+"]").val(formattedAlarmDate);
-				$(".message_time_inputTODO[data-id="+(alarmIterator+1)+"]").val($.fullCalendar.formatDate(alarmDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+				$(".message_time_inputTODO[data-id="+(alarmIterator+1)+"]").val(luxon.DateTime.fromJSDate(alarmDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 
 				$('.alert_detailsTODO[data-id="'+(alarmIterator+1)+'"]').show();
 				$('.alert_message_dateTODO[data-id="'+(alarmIterator+1)+'"]').show();
@@ -777,7 +777,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				}
 				else if(todo.untilDate!='')
 				{
-					date=$.fullCalendar.parseDate(todo.untilDate);
+					date= new Date(todo.untilDate);
 					$("#repeat_end_details_TODO option[value='on_date']").prop('selected', true);
 					var formattedRepeatDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 					$('#repeat_end_date_TODO').val(formattedRepeatDate);
@@ -849,7 +849,7 @@ function showTodoForm(todo, mod, repeatOne, confirmRepeat)
 				}
 				else if(todo.untilDate!='')
 				{
-					date=$.fullCalendar.parseDate(todo.untilDate);
+					date= new Date(todo.untilDate);
 					$("#repeat_end_details_TODO option[value='on_date']").prop('selected', true);
 					var formattedRepeatDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 					$('#repeat_end_date_TODO').val(formattedRepeatDate);
@@ -1070,20 +1070,20 @@ function bindTodoForm()
 
 			if($('.dateTrToTODO').is(':visible') && $('.dateTrToTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_toTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_toTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('.dateTrFromTODO').is(':visible') && $('.dateTrFromTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_fromTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_fromTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 
 			$('.message_date_inputTODO[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
 			$('.message_date_inputTODO[data-id="'+data_id+'"]').show();
-			$('.message_time_inputTODO[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_inputTODO[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('.message_time_inputTODO[data-id="'+data_id+'"]').show();
 			$('.before_after_inputTODO[data-id="'+data_id+'"]').hide();
 		}
@@ -1127,19 +1127,19 @@ function bindTodoForm()
 
 			if($('.dateTrToTODO').is(':visible') && $('.dateTrToTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_toTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_toTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('.dateTrFromTODO').is(':visible') && $('.dateTrFromTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_fromTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_fromTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 
 			$('.message_date_inputTODO[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
-			$('.message_time_inputTODO[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_inputTODO[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			todo_alert_add(data_id);
 		}
 		else
@@ -1264,7 +1264,7 @@ function bindTodoForm()
 
 		if(typeof globalCalTodo!= 'undefined' && globalCalTodo!=null && globalVisibleCalDAVTODOCollections.indexOf(globalCalTodo.res_id)!=-1)
 		{
-			$('#todoList').fullCalendar('selectEvent');
+			window.todoCalendar.selectEvent();
 		}
 		else
 			$('#CATodo').attr('style','display:none');
@@ -1440,7 +1440,7 @@ function bindTodoForm()
 		{
 			var myDate=new Date();
 			$('#date_fromTODO').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
-			$('#time_fromTODO').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('#time_fromTODO').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('#repeat_row_TODO').show();
 			$('#date_toTODO, #time_toTODO').parent().find('img').css('display','none');
 			$('.dateTrToTODO').hide();
@@ -1455,11 +1455,11 @@ function bindTodoForm()
 		}
 		else if($(this).val()=='due')
 		{
-			var myDate=new Date($('#todoList').fullCalendar('getView').start.getTime());
+			var myDate=new Date(window.todoCalendar.getView().start.getTime());
 			myDate.setHours(globalSettings.calendarendofbusiness.value);
 			myDate.setMinutes((globalSettings.calendarendofbusiness.value%1)*60);
 			$('#date_toTODO').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
-			$('#time_toTODO').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('#time_toTODO').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('#repeat_row_TODO').show();
 			$('#date_fromTODO, #time_fromTODO').parent().find('img').css('display','none');
 			$('.dateTrFromTODO').hide();
@@ -1479,21 +1479,21 @@ function bindTodoForm()
 			if($('#date_toTODO').val()!='')
 			{
 				var dateFrom=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_toTODO').val());
-				var datetime_to=$.fullCalendar.formatDate(dateFrom, 'yyyy-MM-dd');
+				var datetime_to=luxon.DateTime.fromJSDate(dateFrom).toFormat( 'yyyy-MM-dd');
 				var aDate=new Date(Date.parse("01/02/1990, "+$('#time_toTODO').val()));
-				var time_from=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
-				var myDate=$.fullCalendar.parseDate(datetime_to+'T'+time_from);
+				var time_from=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
+				var myDate= new Date(datetime_to+'T'+time_from);
 			}
 			else
 			{
-				myDate=new Date($('#todoList').fullCalendar('getView').start.getTime());
+				myDate=new Date(window.todoCalendar.getView().start.getTime());
 				$('#repeat_row_TODO').show();
 				myDate.setHours(globalSettings.calendarendofbusiness.value);
 				myDate.setMinutes((globalSettings.calendarendofbusiness.value%1)*60);
 				if($('#date_toTODO').val()=='')
 					$('#date_toTODO').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
 				if($('#time_toTODO').val()=='')
-					$('#time_toTODO').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+					$('#time_toTODO').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			}
 
 			if(myDateStart>myDate)
@@ -1503,7 +1503,7 @@ function bindTodoForm()
 				$('#date_fromTODO').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDateStart));
 
 			if($('#time_fromTODO').val()=='')
-				$('#time_fromTODO').val($.fullCalendar.formatDate(myDateStart, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+				$('#time_fromTODO').val(luxon.DateTime.fromJSDate(myDateStart).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 
 			$('.dateTrFromTODO, .dateTrToTODO').show();
 			if(globalSettings.timezonesupport.value)
@@ -1697,7 +1697,8 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		}
 
 		var beforeScroll = $('#main').width()-$('#calendar').width();
-		$('#calendar').fullCalendar('renderEvent', $.extend(new items('',date,date_to,localization[globalInterfaceLanguage].pholderNewEvent, allDay, 'fooUID', '', '', '', '', '', '', '', '', '', '', '', '', '','', '', '', '', '', '', '', '', '','', '', '', '', '', '', '', ''),{backgroundColor:hexToRgba(color,0.9),borderColor:color,textColor:checkFontColor(color)}));
+    // may be unnecessary anymore?
+		//$('#calendar').fullCalendar('renderEvent', $.extend(new items('',date,date_to,localization[globalInterfaceLanguage].pholderNewEvent, allDay, 'fooUID', '', '', '', '', '', '', '', '', '', '', '', '', '','', '', '', '', '', '', '', '', '','', '', '', '', '', '', '', ''),{backgroundColor:hexToRgba(color,0.9),borderColor:color,textColor:checkFontColor(color)}));
 		var afterScroll = $('#main').width()-$('#calendar').width();
 		rerenderCalendar(beforeScroll!=afterScroll);
 
@@ -1842,7 +1843,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			}
 			else
 			{
-				alarmDate=$.fullCalendar.parseDate(calEvent.extendedProps.alertTime[alarmIterator]);
+				alarmDate= new Date(calEvent.extendedProps.alertTime[alarmIterator]);
 				(alarmDate.getHours())<10 ? (hour='0'+(alarmDate.getHours())) : (hour=alarmDate.getHours());
 				(alarmDate.getMinutes())<10 ? (minute='0'+(alarmDate.getMinutes())) : (minute=alarmDate.getMinutes());
 
@@ -1850,7 +1851,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 				var formattedAlarmDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, alarmDate);
 
 				$(".message_date_input[data-id="+(alarmIterator+1)+"]").val(formattedAlarmDate);
-				$(".message_time_input[data-id="+(alarmIterator+1)+"]").val($.fullCalendar.formatDate(alarmDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+				$(".message_time_input[data-id="+(alarmIterator+1)+"]").val(luxon.DateTime.fromJSDate(alarmDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 
 				$('.alert_details[data-id="'+(alarmIterator+1)+'"]').show();
 				$('.alert_message_date[data-id="'+(alarmIterator+1)+'"]').show();
@@ -2041,7 +2042,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 				}
 				else if(calEvent.extendedProps.untilDate!='')
 				{
-					date=$.fullCalendar.parseDate(calEvent.extendedProps.untilDate);
+					date= new Date(calEvent.extendedProps.untilDate);
 					$("#repeat_end_details option[value='on_date']").prop('selected', true);
 					var formattedRepeatDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 					$('#repeat_end_date').val(formattedRepeatDate);
@@ -2115,7 +2116,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 				}
 				else if(calEvent.extendedProps.untilDate!='')
 				{
-					date=$.fullCalendar.parseDate(calEvent.extendedProps.untilDate);
+					date= new Date(calEvent.extendedProps.untilDate);
 					$("#repeat_end_details option[value='on_date']").prop('selected', true);
 					var formattedRepeatDate=$.datepicker.formatDate(globalSettings.datepickerformat.value, date);
 					$('#repeat_end_date').val(formattedRepeatDate);
@@ -2183,16 +2184,16 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 			if((mod=='drop' && globalPrevDragEventAllDay) || (mod!='drop' && calEvent.allDay))
 			{
 				if(calEvent.extendedProps.realStart)
-					$('#recurrenceID').val($.fullCalendar.formatDate($.fullCalendar.parseDate(calEvent.extendedProps.realStart), "yyyyMMdd"));
+					$('#recurrenceID').val(luxon.DateTime.fromJSDate(Date(calEvent.extendedProps.realStart)).toFormat( "yyyyMMdd"));
 				else
-					$('#recurrenceID').val($.fullCalendar.formatDate(date, "yyyyMMdd"));
+					$('#recurrenceID').val(luxon.DateTime.fromJSDate(date).toFormat( "yyyyMMdd"));
 			}
 			else
 			{
 				if(calEvent.extendedProps.realStart)
-					$('#recurrenceID').val($.fullCalendar.formatDate(calEvent.extendedProps.realStart, "yyyyMMdd'T'HHmmss"));
+					$('#recurrenceID').val(luxon.DateTime.fromJSDate(calEvent.extendedProps.realStart).toFormat( "yyyyMMdd'T'HHmmss"));
 				else
-					$('#recurrenceID').val($.fullCalendar.formatDate(date, "yyyyMMdd'T'HHmmss"));
+					$('#recurrenceID').val(luxon.DateTime.fromJSDate(date).toFormat( "yyyyMMdd'T'HHmmss"));
 			}
 		}
 		else
@@ -2239,7 +2240,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 	}
 
 	$('#date_from').val($.datepicker.formatDate(globalSettings.datepickerformat.value, date));
-	$('#time_from').val($.fullCalendar.formatDate(date, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+	$('#time_from').val(luxon.DateTime.fromJSDate(date).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 	globalPrevDate=new Date(date.getTime());
 
 	if(typeof date_to==='undefined' || date_to===null)
@@ -2261,7 +2262,7 @@ function showEventForm(date, allDay, calEvent, jsEvent, mod, repeatOne, confirmR
 		date_to.setDate(date_to.getDate()+1);
 
 	$('#date_to').val($.datepicker.formatDate(globalSettings.datepickerformat.value, date_to));
-	$('#time_to').val($.fullCalendar.formatDate(date_to, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+	$('#time_to').val(luxon.DateTime.fromJSDate(date_to).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 
 	if($('#repeat option:selected').attr('data-type')!="repeat_no-repeat" && $('#repeat option:selected').attr('data-type')!="custom_repeat")
 		$('#repeat_details').show();
@@ -2361,19 +2362,19 @@ function bindEventForm()
 
 			if($('#date_from').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_from").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_from").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('#date_to').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_to").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_to").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			$('.message_date_input[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
 			$('.message_date_input[data-id="'+data_id+'"]').show();
-			$('.message_time_input[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_input[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('.message_time_input[data-id="'+data_id+'"]').show();
 			$('.before_after_input[data-id="'+data_id+'"]').hide();
 		}
@@ -2415,18 +2416,18 @@ function bindEventForm()
 
 			if($('#date_from').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_from").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_from").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('#date_to').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_to").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_to").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			$('.message_date_input[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
-			$('.message_time_input[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_input[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			event_alert_add(data_id);
 		}
 		else
@@ -2858,20 +2859,20 @@ function todo_alert_add(data_id)
 
 			if($('.dateTrToTODO').is(':visible') && $('.dateTrToTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_toTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_toTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('.dateTrFromTODO').is(':visible') && $('.dateTrFromTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_fromTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_fromTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 
 			$('.message_date_inputTODO[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
 			$('.message_date_inputTODO[data-id="'+data_id+'"]').show();
-			$('.message_time_inputTODO[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_inputTODO[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('.message_time_inputTODO[data-id="'+data_id+'"]').show();
 			$('.before_after_inputTODO[data-id="'+data_id+'"]').hide();
 		}
@@ -2913,19 +2914,19 @@ function todo_alert_add(data_id)
 
 			if($('.dateTrToTODO').is(':visible') && $('.dateTrToTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_toTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_toTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('.dateTrFromTODO').is(':visible') && $('.dateTrFromTODO img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_fromTODO").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to +$("#time_fromTODO").val()));
 				myDate.setHours(myDate.getHours()-1);
 			}
 
 			$('.message_date_inputTODO[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
-			$('.message_time_inputTODO[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_inputTODO[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			todo_alert_add(data_id);
 		}
 		else
@@ -3021,18 +3022,18 @@ function event_alert_add(data_id)
 
 			if($('#date_from').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_from").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_from").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('#date_to').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_to").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_to").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			$('.message_date_input[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
-			$('.message_time_input[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_input[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			event_alert_add(data_id);
 		}
 		else
@@ -3055,19 +3056,19 @@ function event_alert_add(data_id)
 
 			if($('#date_from').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_from").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_from").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			else if($('#date_to').parent().parent().find('img:visible').length==0) {
 				var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$("#date_to").val());
-				var datetime_to=$.fullCalendar.formatDate(dateTo, 'MM/dd/yyyy, ');
+				var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'MM/dd/yyyy, ');
 				myDate=new Date(Date.parse(datetime_to + (!$("#allday").prop('checked')?$("#time_to").val():'')));
 				myDate.setHours(myDate.getHours()-1);
 			}
 			$('.message_date_input[data-id="'+data_id+'"]').val($.datepicker.formatDate(globalSettings.datepickerformat.value, myDate));
 			$('.message_date_input[data-id="'+data_id+'"]').show();
-			$('.message_time_input[data-id="'+data_id+'"]').val($.fullCalendar.formatDate(myDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('.message_time_input[data-id="'+data_id+'"]').val(luxon.DateTime.fromJSDate(myDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 			$('.message_time_input[data-id="'+data_id+'"]').show();
 			$('.before_after_input[data-id="'+data_id+'"]').hide();
 		}

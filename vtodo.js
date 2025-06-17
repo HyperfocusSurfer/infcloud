@@ -90,18 +90,18 @@ function saveTodo(deleteMode)
 			{
 				var a=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_fromTODO').val());
 				var a2=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_toTODO').val());
-				var datetime_from=$.fullCalendar.formatDate(a, 'yyyy-MM-dd');
-				var datetime_to=$.fullCalendar.formatDate(a2, 'yyyy-MM-dd');
+				var datetime_from=luxon.DateTime.fromJSDate(a).toFormat( 'yyyy-MM-dd');
+				var datetime_to=luxon.DateTime.fromJSDate(a2).toFormat( 'yyyy-MM-dd');
 				var time_from='00:00';
 				var time_to='00:00';
 				if($('#time_fromTODO').val()!='' && $('#time_toTODO').val()!='')
 				{
 					time_from=new Date(Date.parse("01/02/1990, "+$('#time_fromTODO').val()));
-					time_from=$.fullCalendar.formatDate(time_from, 'HH:mm' );
+					time_from=luxon.DateTime.fromJSDate(time_from).toFormat( 'HH:mm' );
 					time_to=new Date(Date.parse("01/02/1990, "+$('#time_toTODO').val()));
-					time_to=$.fullCalendar.formatDate(time_to, 'HH:mm' );
+					time_to=luxon.DateTime.fromJSDate(time_to).toFormat( 'HH:mm' );
 				}
-				if($('#todo_type').val()=='both' && $.fullCalendar.parseDate(datetime_from+'T'+time_from+'Z')>$.fullCalendar.parseDate(datetime_to+'T'+time_to+'Z'))
+				if($('#todo_type').val()=='both' && Date(datetime_from+'T'+time_from+'Z')>Date(datetime_to+'T'+time_to+'Z'))
 				{
 					show_editor_loader_messageCalendar('vtodo', 'message_error', localization[globalInterfaceLanguage].txtErrorDatesTodo);
 					return false;
@@ -255,7 +255,7 @@ function getRepeatTodoObject(inputRepeatObj)
 				else
 					exDate=new Date(exDate.setSeconds(getLocalOffset(exDate)));
 
-				exDate=$.fullCalendar.formatDate(exDate, "yyyyMMdd'T'HHmmss'Z'");
+				exDate=luxon.DateTime.fromJSDate(exDate).toFormat( "yyyyMMdd'T'HHmmss'Z'");
 				process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 				process_elem=process_elem.replace('##:::##TZID##:::##','');
 				process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(exDate));
@@ -302,7 +302,7 @@ function getRepeatTodoObject(inputRepeatObj)
 				intOffset = valOffsetFrom.getSecondsFromOffset() - intOffset;
 
 				newStart.setSeconds(intOffset);
-				var datetime_to=$.fullCalendar.formatDate(newStart, "yyyyMMdd'T'HHmmss");
+				var datetime_to=luxon.DateTime.fromJSDate(newStart).toFormat( "yyyyMMdd'T'HHmmss");
 				inputTodos[j].vcalendar = inputTodos[j].vcalendar.replace(endPart,vcalendarEscapeValue(datetime_to+(isUTC ? 'Z' : '')));
 				inputTodos[j].vcalendar = inputTodos[j].vcalendar.replace(startPart,vcalendarEscapeValue(datetime_to+(isUTC ? 'Z' : '')));
 				if(inputTodos[j].after!='')
@@ -1100,7 +1100,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 					var intOffset=valOffsetFrom.getSecondsFromOffset()*1000*-1;
 					dateUntil.setTime(dateUntil.getTime()+intOffset);
 				}
-				datetime_until=$.fullCalendar.formatDate(dateUntil, "yyyyMMdd'T'HHmmss'Z'");
+				datetime_until=luxon.DateTime.fromJSDate(dateUntil).toFormat( "yyyyMMdd'T'HHmmss'Z'");
 				process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue("FREQ="+frequency)+interval+";UNTIL="+datetime_until+bymonth+monthDay+byDay+wkst);
 			}
 			else if($('#repeat_end_details_TODO').val()=="after")
@@ -1149,7 +1149,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 							var timePart = new Date(Date.parse("01/02/1990, "+$('#time_fromTODO').val() ));
 						else
 							var timePart = new Date(Date.parse("01/02/1990, "+$('#time_toTODO').val() ));
-						var time_from = $.fullCalendar.formatDate(b, 'HHmmss');
+						var time_from = luxon.DateTime.fromJSDate(b).toFormat( 'HHmmss');
 						exVal = (exStr[4] + 'T' + time_from).parseComnpactISO8601();
 						if(sel_option!='local')
 						{
@@ -1178,7 +1178,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 					process_elem=vCalendar.tplC['VTcontentline_EXDATE'];
 					process_elem=process_elem.replace('##:::##group_wd##:::##', '');
 					process_elem=process_elem.replace('##:::##params_wsc##:::##', '');
-					newValue=$.fullCalendar.formatDate(value, "yyyyMMdd'T'HHmmss")+(sel_option!='local' ? 'Z' : '');
+					newValue=luxon.DateTime.fromJSDate(value).toFormat( "yyyyMMdd'T'HHmmss")+(sel_option!='local' ? 'Z' : '');
 					process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 					process_elem=process_elem.replace('##:::##TZID##:::##', vcalendarEscapeValue(''));
 					process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(newValue));
@@ -1269,10 +1269,10 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 						}
 
 						var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$(".message_date_inputTODO[data-id="+(t+1)+"]").val());
-						var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyy-MM-dd');
+						var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyy-MM-dd');
 						var aDate=new Date(Date.parse("01/02/1990, "+$(".message_time_inputTODO[data-id="+(t+1)+"]").val()));
-						var time_to=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
-						var alarmDT=$.fullCalendar.parseDate(datetime_to+'T'+time_to);
+						var time_to=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
+						var alarmDT= new Date(datetime_to+'T'+time_to);
 
 						if(globalSettings.timezonesupport.value)
 							sel_option=$('#timezoneTODO').val();
@@ -1292,7 +1292,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 							alarmDT = new Date(alarmDT.setSeconds(intOffset));
 						}
 
-						var newValue=$.fullCalendar.formatDate(alarmDT, "yyyyMMdd'T'HHmmss")+'Z';
+						var newValue=luxon.DateTime.fromJSDate(alarmDT).toFormat( "yyyyMMdd'T'HHmmss")+'Z';
 						process_elem=process_elem.replace('##:::##VALUE=DATE-TIME##:::##', ';VALUE=DATE-TIME');
 						process_elem=process_elem.replace('##:::##VALUE=DURATION##:::##', '');
 						process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(newValue));
@@ -1429,7 +1429,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 			}
 
 			var dateFrom=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_fromTODO').val());
-			var datetime_from=$.fullCalendar.formatDate(dateFrom, 'yyyyMMdd');
+			var datetime_from=luxon.DateTime.fromJSDate(dateFrom).toFormat( 'yyyyMMdd');
 			var timeFrom=new Date(Date.parse("01/02/1990, "+$('#time_fromTODO').val()));
 			var time_from=((timeFrom.getHours())<10 ? '0'+(timeFrom.getHours()): (timeFrom.getHours()))+''+((timeFrom.getMinutes())<10 ? '0'+(timeFrom.getMinutes()): (timeFrom.getMinutes()))+'00';
 
@@ -1478,7 +1478,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 			}
 
 			var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value,$('#date_toTODO').val());
-			var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyyMMdd');
+			var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyyMMdd');
 			var timeTo=new Date(Date.parse("01/02/1990, "+$('#time_toTODO').val()));
 			var time_to=((timeTo.getHours())<10 ? '0'+(timeTo.getHours()): (timeTo.getHours()))+''+((timeTo.getMinutes())<10 ? '0'+(timeTo.getMinutes()): (timeTo.getMinutes()))+'00';
 
@@ -1590,7 +1590,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 						{
 							value=new Date(value.getTime()+offsetDate)
 
-							var newValue=$.fullCalendar.formatDate(value, "yyyyMMdd'T'HHmmss");
+							var newValue=luxon.DateTime.fromJSDate(value).toFormat( "yyyyMMdd'T'HHmmss");
 							if(isUTC)
 								newValue+='Z';
 
@@ -1625,7 +1625,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 		{
 			var completedDate=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('.completedOnTr .date').val());
 			var timeCompleted=new Date(Date.parse("01/02/1990, "+$('#completedOnTime').val()));
-			var datetime_completed=$.fullCalendar.parseDate($.fullCalendar.formatDate(completedDate, "yyyy'-'MM'-'dd")+'T'+$.fullCalendar.formatDate(timeCompleted, "HH':'mm'-'ss"));
+			var datetime_completed= new Date(luxon.DateTime.fromJSDate(completedDate).toFormat( "yyyy'-'MM'-'dd")+'T'+luxon.DateTime.fromJSDate(timeCompleted).toFormat( "HH':'mm'-'ss"));
 
 			if(globalSettings.timezonesupport.value)
 				sel_option=$('#timezoneTODO').val();
@@ -1639,7 +1639,7 @@ function todoToVcalendar(operation, accountUID, inputUID, inputEtag, delUID, del
 				var intOffset = valOffsetFrom.getSecondsFromOffset()*-1;
 				datetime_completed = new Date(datetime_completed.setSeconds(intOffset));
 			}
-			var newValue=$.fullCalendar.formatDate(datetime_completed, "yyyyMMdd'T'HHmmss")+'Z';
+			var newValue=luxon.DateTime.fromJSDate(datetime_completed).toFormat( "yyyyMMdd'T'HHmmss")+'Z';
 
 			process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(newValue));
 			vCalendarText+=process_elem;
@@ -2861,7 +2861,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 				all=false;
 			}
 
-			var t=$.fullCalendar.parseDate(help1);
+			var t= new Date(help1);
 			start=help1;
 			if(t==null)
 				return false;
@@ -2878,7 +2878,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 					else
 					{
 						if(start.indexOf('T')!=-1)
-							exString += 'T' + $.fullCalendar.formatDate(t,'HHmmss');
+							exString += 'T' + luxon.DateTime.fromJSDate(t).toFormat('HHmmss');
 
 						var utcTime=exString.parseComnpactISO8601();
 					}
@@ -2924,9 +2924,9 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 				if(intOffset!='')
 					t.setTime(t.getTime()+intOffset);
 
-				start=$.fullCalendar.formatDate(t,'u');
+				start=luxon.DateTime.fromJSDate(t).toFormat('u');
 			}
-			inputEvent.start=$.fullCalendar.parseDate(start);
+			inputEvent.start= new Date(start);
 		}
 
 		vcalendar_element=vcalendar.match(vCalendar.pre['contentline_DUE']);
@@ -2942,11 +2942,11 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 
 				help=help.substring(0, 4)+'-'+help.substring(4, 6)+'-'+help.substring(6, 8);
 
-				var d=$.fullCalendar.parseDate(help);
+				var d= new Date(help);
 				var da=new Date(d.getTime());
 				if(help1.indexOf("T")==-1)
 					da.setDate(da.getDate()-1);
-				help=$.fullCalendar.formatDate(da, "yyyy-MM-dd");
+				help=luxon.DateTime.fromJSDate(da).toFormat( "yyyy-MM-dd");
 				all=true;
 				oldEnd = help;
 				if(help1.indexOf("T")!=-1)
@@ -2965,7 +2965,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 			}
 
 			end=help;
-			var t1=$.fullCalendar.parseDate(end);
+			var t1= new Date(end);
 			if(t1==null)
 				return false;
 
@@ -2983,7 +2983,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 					else
 					{
 						if(end.indexOf('T')!=-1)
-							exString += 'T' + $.fullCalendar.formatDate(t1,'HHmmss');
+							exString += 'T' + luxon.DateTime.fromJSDate(t1).toFormat('HHmmss');
 
 						var utcTime=exString.parseComnpactISO8601();
 					}
@@ -3017,7 +3017,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 			{
 				if(intOffset!='')
 					t1.setTime(t1.getTime()+intOffset);
-				end=$.fullCalendar.formatDate(t1,'u');
+				end=luxon.DateTime.fromJSDate(t1).toFormat('u');
 			}
 			inputEvent.end=end;
 			if(globalSettings.appleremindersmode.value)
@@ -3079,7 +3079,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 							{
 								if(parsed[3])
 									var dtStartTimezoneA=parsed[3].split('=');
-								var alarmTimeA=$.fullCalendar.parseDate(value.substring(0, 4)+'-'+value.substring(4, 6)+'-'+value.substring(6, 8)+'T'+value.substring(9, 11)+':'+value.substring(11, 13)+':'+value.substring(13, 15));
+								var alarmTimeA= new Date(value.substring(0, 4)+'-'+value.substring(4, 6)+'-'+value.substring(6, 8)+'T'+value.substring(9, 11)+':'+value.substring(11, 13)+':'+value.substring(13, 15));
 								if(value.charAt(value.length-1)=='Z')
 									tzNameA='UTC';
 								if(dtStartTimezoneA.length>1 || tzNameA=='UTC')
@@ -3113,7 +3113,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 									}
 								if(intOffsetA!='')
 									alarmTimeA.setTime(alarmTimeA.getTime()+intOffsetA);
-								alertTime[j]=$.fullCalendar.formatDate(alarmTimeA,"yyyy-MM-dd'T'HH:mm:ss");
+								alertTime[j]=luxon.DateTime.fromJSDate(alarmTimeA).toFormat("yyyy-MM-dd'T'HH:mm:ss");
 							}
 							else
 							{
@@ -3189,7 +3189,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 			/*if(rec.indexOf("T")==-1)
 			{
 				rec=rec.substring(0, 4)+'/'+rec.substring(4, 6)+'/'+rec.substring(6, 8);
-				var d=$.fullCalendar.parseDate(rec);
+				var d= new Date(rec);
 				var da=new Date(d.getTime()-1*24*60*60*1000);
 				var day=da.getDate();
 
@@ -3205,7 +3205,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 			}
 			else
 				rec=rec.substring(0, 4)+'-'+rec.substring(4, 6)+'-'+rec.substring(6, 8)+'T'+rec.substring(9, 11)+':'+rec.substring(11, 13)+':'+rec.substring(13, 15);
-			rec_id=$.fullCalendar.parseDate(rec);*/
+			rec_id= new Date(rec);*/
 			//if(!rec_id || rec_id=='Invalid Date')
 			//	rec_id='';
 			rec_id=rec;
@@ -3260,7 +3260,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 			if(tmpDate.indexOf("T")!=-1)
 				tmpDate=tmpDate.substring(0, 4)+'-'+tmpDate.substring(4, 6)+'-'+tmpDate.substring(6, 8)+'T'+tmpDate.substring(9, 11)+':'+tmpDate.substring(11, 13)+':'+tmpDate.substring(13, 15);
 
-			var t1=$.fullCalendar.parseDate(tmpDate);
+			var t1= new Date(tmpDate);
 			if(t1==null || ((t1.toString())=='Invalid Date'))
 				completedOn='';
 			else
@@ -3377,7 +3377,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 							{
 								isChange=true;
 								repeatHashEquals=true;
-								$('#todoList').fullCalendar('selectEvent');
+								window.todoCalendar.selectEvent();
 							}
 						}
 						else
@@ -3410,12 +3410,12 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 			inputEvent.isRepeat=true;
 
 			if(realStart)
-				var varDate=new Date($.fullCalendar.parseDate(realStart).getTime());
+				var varDate=new Date(Date(realStart).getTime());
 			else if(realEnd)
-				var varDate=new Date($.fullCalendar.parseDate(realEnd).getTime());
+				var varDate=new Date(Date(realEnd).getTime());
 
 			if(realEnd)
-				var varEndDate=new Date($.fullCalendar.parseDate(realEnd).getTime());
+				var varEndDate=new Date(Date(realEnd).getTime());
 
 			var lastGenDate='';
 			var repeatStart='', repeatEnd='';
@@ -3433,7 +3433,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 					if(until.indexOf('T')!=-1)
 					{
 						var uString = until.substring(0, 4)+'-'+until.substring(4, 6)+'-'+until.substring(6, 8)+'T'+until.substring(9, 11)+':'+until.substring(11, 13)+':'+until.substring(13, 15);
-						var ut=$.fullCalendar.parseDate(uString);
+						var ut= new Date(uString);
 						if(ut==null)
 							return false;
 						if(ut.toString()=='Invalid Date')
@@ -3450,18 +3450,18 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 					}
 					else
 					{
-						untilDate=$.fullCalendar.parseDate(until.substring(0, 4)+'-'+until.substring(4, 6)+'-'+until.substring(6, 8));
+						untilDate= new Date(until.substring(0, 4)+'-'+until.substring(4, 6)+'-'+until.substring(6, 8));
 						if(realStart!='')
 						{
-							untilDate.setHours($.fullCalendar.parseDate(realStart).getHours());
-							untilDate.setMinutes($.fullCalendar.parseDate(realStart).getMinutes());
-							untilDate.setSeconds($.fullCalendar.parseDate(realStart).getSeconds());
+							untilDate.setHours(Date(realStart).getHours());
+							untilDate.setMinutes(Date(realStart).getMinutes());
+							untilDate.setSeconds(Date(realStart).getSeconds());
 						}
 						else if(realEnd!='')
 						{
-							untilDate.setHours($.fullCalendar.parseDate(realEnd).getHours());
-							untilDate.setMinutes($.fullCalendar.parseDate(realEnd).getMinutes());
-							untilDate.setSeconds($.fullCalendar.parseDate(realEnd).getSeconds());
+							untilDate.setHours(Date(realEnd).getHours());
+							untilDate.setMinutes(Date(realEnd).getMinutes());
+							untilDate.setSeconds(Date(realEnd).getSeconds());
 						}
 					}
 
@@ -3514,7 +3514,7 @@ function vcalendarTodoData(inputCollection, inputEvent, isNew)
 		{
 			if(end!='' && typeof end == 'string')
 			{
-				var ttt = $.fullCalendar.parseDate(end);
+				var ttt = new Date(end);
 				end=new Date(ttt.getTime());
 			}
 			if(!inputCollection.ignoreAlarms)

@@ -135,7 +135,7 @@ function setAlertTimeouts(isTodo, alertTime, dateStart, dateEnd, params, firstIn
 				if((dateStart!='' || dateEnd!='') && alertTime[v].charAt(0)=='-')
 				{
 					if(typeof dateStart=='string')
-						startTime = $.fullCalendar.parseDate(dateStart);
+						startTime = new Date(dateStart);
 					else
 						startTime=new Date(dateStart.getTime());
 					aTime=startTime.getTime() - parseInt(alertTime[v].substring(1, alertTime[v].length-1));
@@ -143,14 +143,14 @@ function setAlertTimeouts(isTodo, alertTime, dateStart, dateEnd, params, firstIn
 				else if((dateStart!='' || dateEnd!='') && alertTime[v].charAt(0)=='+')
 				{
 					if(typeof dateEnd=='string')
-						startTime = $.fullCalendar.parseDate(dateEnd);
+						startTime = new Date(dateEnd);
 					else
 						startTime=new Date(dateEnd.getTime());
 					aTime=startTime.getTime() + parseInt(alertTime[v].substring(1, alertTime[v].length-1));
 				}
 				else if(firstInstance)
 				{
-					aTime=$.fullCalendar.parseDate(alertTime[v]);
+					aTime= new Date(alertTime[v]);
 					if(isTodo)
 						var displayDate=(dateEnd=='' ? dateStart : dateEnd);
 					else
@@ -188,7 +188,7 @@ function isInRecurrenceArray(varDate,stringUID,recurrence_id_array, tzName)
 	var checkRec=false;
 	var checkDate='';
 	if(typeof varDate=='string')
-		checkDate=$.fullCalendar.parseDate(varDate);
+		checkDate= new Date(varDate);
 	else
 		checkDate=new Date(varDate.getTime());
 
@@ -276,37 +276,37 @@ function applyTimezone(previousTimezone,isEventLocal)
 
 					var calEvent=eventsArray[collections[i].uid][j];
 					if(j==0 || j>0 && eventsArray[collections[i].uid][j].id!=eventsArray[collections[i].uid][j-1].id)
-						if(calEvent.alertTime.length>0)
+						if(calEvent.extendedProps.alertTime.length>0)
 						{
-							for(var k=0; k<calEvent.alertTimeOut.length; k++)
-								clearTimeout(calEvent.alertTimeOut[k]);
+							for(var k=0; k<calEvent.extendedProps.alertTimeOut.length; k++)
+								clearTimeout(calEvent.extendedProps.alertTimeOut[k]);
 
 							var aTime='', now=new Date();
-							for(var alarmIterator=0;alarmIterator<calEvent.alertTime.length;alarmIterator++)
+							for(var alarmIterator=0;alarmIterator<calEvent.extendedProps.alertTime.length;alarmIterator++)
 								{
-									if(eventsArray[collections[i].uid][j].start!=null && calEvent.alertTime[alarmIterator].charAt(0)=='-')
-										aTime=eventsArray[collections[i].uid][j].start.getTime() - parseInt(calEvent.alertTime[alarmIterator].substring(1, calEvent.alertTime[alarmIterator].length-1));
-									else if(eventsArray[collections[i].uid][j].end!=null && calEvent.alertTime[alarmIterator].charAt(0)=='+')
-										aTime=eventsArray[collections[i].uid][j].end.getTime() + parseInt(calEvent.alertTime[alarmIterator].substring(1, calEvent.alertTime[alarmIterator].length-1));
+									if(eventsArray[collections[i].uid][j].start!=null && calEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='-')
+										aTime=eventsArray[collections[i].uid][j].start.getTime() - parseInt(calEvent.extendedProps.alertTime[alarmIterator].substring(1, calEvent.extendedProps.alertTime[alarmIterator].length-1));
+									else if(eventsArray[collections[i].uid][j].end!=null && calEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='+')
+										aTime=eventsArray[collections[i].uid][j].end.getTime() + parseInt(calEvent.extendedProps.alertTime[alarmIterator].substring(1, calEvent.extendedProps.alertTime[alarmIterator].length-1));
 									else
 									{
-										var previousOffset=getOffsetByTZ(previousTimezone, $.fullCalendar.parseDate(calEvent.alertTime[alarmIterator])).getSecondsFromOffset();
+										var previousOffset=getOffsetByTZ(previousTimezone, Date(calEvent.extendedProps.alertTime[alarmIterator])).getSecondsFromOffset();
 										var actualOffset='';
 										if(typeof globalSessionTimeZone!='undefined' && globalSessionTimeZone!=null && globalSessionTimeZone!='')
-											actualOffset=getOffsetByTZ(globalSessionTimeZone, $.fullCalendar.parseDate(calEvent.alertTime[alarmIterator])).getSecondsFromOffset();
+											actualOffset=getOffsetByTZ(globalSessionTimeZone, Date(calEvent.extendedProps.alertTime[alarmIterator])).getSecondsFromOffset();
 										else
-											actualOffset=$.fullCalendar.parseDate(calEvent.alertTime[alarmIterator]).getTimezoneOffset()*60*-1;
+											actualOffset= new Date(calEvent.extendedProps.alertTime[alarmIterator]).getTimezoneOffset()*60*-1;
 
 										if(typeof isEventLocal!='undefined')
-											actualOffset=getOffsetByTZ(eventsArray[collections[i].uid][j].timeZone, $.fullCalendar.parseDate(calEvent.alertTime[alarmIterator])).getSecondsFromOffset();
+											actualOffset=getOffsetByTZ(eventsArray[collections[i].uid][j].timeZone, Date(calEvent.extendedProps.alertTime[alarmIterator])).getSecondsFromOffset();
 
 										if(typeof isEventLocal!='undefined' && !isEventLocal)
 											var intOffset=(previousOffset-actualOffset)*1000;
 										else
 											var intOffset=(actualOffset-previousOffset)*1000;
 
-										aTime=new Date($.fullCalendar.parseDate(calEvent.alertTime[alarmIterator]).getTime()+intOffset);
-										eventsArray[collections[i].uid][j].alertTime[alarmIterator]=$.fullCalendar.formatDate(aTime, "yyyy-MM-dd HH:mm:ss");
+										aTime=new Date(Date(calEvent.extendedProps.alertTime[alarmIterator]).getTime()+intOffset);
+										eventsArray[collections[i].uid][j].alertTime[alarmIterator]=luxon.DateTime.fromJSDate(aTime).toFormat( "yyyy-MM-dd HH:mm:ss");
 									}
 
 									if(aTime>now)
@@ -341,7 +341,7 @@ function applyTimezone(previousTimezone,isEventLocal)
 					if(todosArray[todoCollections[i].uid][j].start)
 					{
 						if(typeof todosArray[todoCollections[i].uid][j].start =='string')
-							todosArray[todoCollections[i].uid][j].start = $.fullCalendar.parseDate(todosArray[todoCollections[i].uid][j].start);
+							todosArray[todoCollections[i].uid][j].start = new Date(todosArray[todoCollections[i].uid][j].start);
 						var dateStart = todosArray[todoCollections[i].uid][j].start;
 						var previousOffset=getOffsetByTZ(previousTimezone, dateStart).getSecondsFromOffset();
 						var actualOffset='';
@@ -355,7 +355,7 @@ function applyTimezone(previousTimezone,isEventLocal)
 					if(todosArray[todoCollections[i].uid][j].end)
 					{
 						if(typeof todosArray[todoCollections[i].uid][j].end =='string')
-							todosArray[todoCollections[i].uid][j].end=$.fullCalendar.parseDate(todosArray[todoCollections[i].uid][j].end);
+							todosArray[todoCollections[i].uid][j].end= new Date(todosArray[todoCollections[i].uid][j].end);
 						var dateEnd = todosArray[todoCollections[i].uid][j].end;
 						var previousOffset=getOffsetByTZ(previousTimezone, dateEnd).getSecondsFromOffset();
 						var actualOffset='';
@@ -376,7 +376,7 @@ function applyTimezone(previousTimezone,isEventLocal)
 
 					var todoEvent=todosArray[todoCollections[i].uid][j];
 					if(j==0 || j>0 && todosArray[todoCollections[i].uid][j].id!=todosArray[todoCollections[i].uid][j-1].id)
-						if(todoEvent.alertTime.length>0)
+						if(todoEvent.extendedProps.alertTime.length>0)
 						{
 							if(todoEvent.end)
 								var showDate= new Date(todoEvent.end.getTime());
@@ -384,18 +384,18 @@ function applyTimezone(previousTimezone,isEventLocal)
 								var showDate= new Date(todoEvent.start.getTime());
 							else
 								var showDate=new Date();
-							for(var k=0; k<todoEvent.alertTimeOut.length; k++)
-								clearTimeout(todoEvent.alertTimeOut[k]);
+							for(var k=0; k<todoEvent.extendedProps.alertTimeOut.length; k++)
+								clearTimeout(todoEvent.extendedProps.alertTimeOut[k]);
 
 							var aTime='', now='';
-							for(var alarmIterator=0;alarmIterator<todoEvent.alertTime.length;alarmIterator++)
+							for(var alarmIterator=0;alarmIterator<todoEvent.extendedProps.alertTime.length;alarmIterator++)
 								{
-									if(todoEvent.alertTime[alarmIterator].charAt(0)=='-' || todoEvent.alertTime[alarmIterator].charAt(0)=='+')
+									if(todoEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='-' || todoEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='+')
 									{
 										aTime=showDate.getTime();
-										var dur=parseInt(todoEvent.alertTime[alarmIterator].substring(1, todoEvent.alertTime[alarmIterator].length-1));
+										var dur=parseInt(todoEvent.extendedProps.alertTime[alarmIterator].substring(1, todoEvent.extendedProps.alertTime[alarmIterator].length-1));
 
-										if(todoEvent.alertTime[alarmIterator].charAt(0)=='-')
+										if(todoEvent.extendedProps.alertTime[alarmIterator].charAt(0)=='-')
 											aTime=aTime-dur;
 										else
 											aTime=aTime+dur;
@@ -404,23 +404,23 @@ function applyTimezone(previousTimezone,isEventLocal)
 									}
 									else
 									{
-										var previousOffset=getOffsetByTZ(previousTimezone, $.fullCalendar.parseDate(todoEvent.alertTime[alarmIterator])).getSecondsFromOffset();
+										var previousOffset=getOffsetByTZ(previousTimezone, Date(todoEvent.extendedProps.alertTime[alarmIterator])).getSecondsFromOffset();
 										var actualOffset='';
 										if(typeof globalSessionTimeZone!='undefined' && globalSessionTimeZone!=null && globalSessionTimeZone!='')
-											actualOffset=getOffsetByTZ(globalSessionTimeZone, $.fullCalendar.parseDate(todoEvent.alertTime[alarmIterator])).getSecondsFromOffset();
+											actualOffset=getOffsetByTZ(globalSessionTimeZone, Date(todoEvent.extendedProps.alertTime[alarmIterator])).getSecondsFromOffset();
 										else
-											actualOffset=$.fullCalendar.parseDate(todoEvent.alertTime[alarmIterator]).getTimezoneOffset()*60*-1;
+											actualOffset= new Date(todoEvent.extendedProps.alertTime[alarmIterator]).getTimezoneOffset()*60*-1;
 
 										if(typeof isEventLocal!='undefined')
-											actualOffset=getOffsetByTZ(todosArray[todoCollections[i].uid][j].timeZone, $.fullCalendar.parseDate(todoEvent.alertTime[alarmIterator])).getSecondsFromOffset();
+											actualOffset=getOffsetByTZ(todosArray[todoCollections[i].uid][j].timeZone, Date(todoEvent.extendedProps.alertTime[alarmIterator])).getSecondsFromOffset();
 
 										if(typeof isEventLocal!='undefined' && !isEventLocal)
 											var intOffset=(previousOffset-actualOffset)*1000;
 										else
 											var intOffset=(actualOffset-previousOffset)*1000;
 
-										aTime=new Date($.fullCalendar.parseDate(todoEvent.alertTime[alarmIterator]).getTime()+intOffset);
-										todosArray[todoCollections[i].uid][j].alertTime[alarmIterator]=$.fullCalendar.formatDate(aTime, "yyyy-MM-dd HH:mm:ss");
+										aTime=new Date(Date(todoEvent.extendedProps.alertTime[alarmIterator]).getTime()+intOffset);
+										todosArray[todoCollections[i].uid][j].alertTime[alarmIterator]=luxon.DateTime.fromJSDate(aTime).toFormat( "yyyy-MM-dd HH:mm:ss");
 										now=new Date();
 									}
 
@@ -841,7 +841,7 @@ function getvCalendarstart(inputEvent)
 
 		if(start!='')
 		{
-			var t=$.fullCalendar.parseDate(help1);
+			var t= new Date(help1);
 
 			if((t.toString())=='Invalid Date')
 				return false;
@@ -853,7 +853,7 @@ function getvCalendarstart(inputEvent)
 }
 function giveMeUntilDate(start, count, frequency, interval, allDay)
 {
-	var varDate=$.fullCalendar.parseDate(start);
+	var varDate= new Date(start);
 	var monthPlus=0,
 	dayPlus=0;
 	if(frequency=="DAILY")
@@ -1219,7 +1219,7 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 					else
 						exDate=new Date(exDate.setSeconds(getLocalOffset(exDate)));
 
-					exDate=$.fullCalendar.formatDate(exDate, "yyyyMMdd'T'HHmmss'Z'");
+					exDate=luxon.DateTime.fromJSDate(exDate).toFormat( "yyyyMMdd'T'HHmmss'Z'");
 					process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 					process_elem=process_elem.replace('##:::##TZID##:::##','');
 					process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(exDate));
@@ -1813,10 +1813,10 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 							var intOffset=valOffsetFrom.getSecondsFromOffset()*1000*-1;
 							dateUntil.setTime(dateUntil.getTime()+intOffset);
 						}
-						datetime_until=$.fullCalendar.formatDate(dateUntil, "yyyyMMdd'T'HHmmss'Z'");
+						datetime_until=luxon.DateTime.fromJSDate(dateUntil).toFormat( "yyyyMMdd'T'HHmmss'Z'");
 					}
 					else
-						datetime_until=$.fullCalendar.formatDate(dateUntil, 'yyyyMMdd')+'T000000Z';
+						datetime_until=luxon.DateTime.fromJSDate(dateUntil).toFormat( 'yyyyMMdd')+'T000000Z';
 
 					process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue("FREQ="+frequency)+interval+";UNTIL="+datetime_until+bymonth+monthDay+byDay+wkst);
 				}
@@ -1857,7 +1857,7 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 						{
 							//HERE
 							var timePart = new Date(Date.parse("01/02/1990, "+$('#time_from').val() ));
-							var time_from = $.fullCalendar.formatDate(b, 'HHmmss');
+							var time_from = luxon.DateTime.fromJSDate(b).toFormat( 'HHmmss');
 							exVal = (exStr[4] + 'T' + time_from).parseComnpactISO8601();
 							if(sel_option!='local')
 							{
@@ -1892,14 +1892,14 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 							//if(exStr[4].indexOf('T')==-1)
 							//	var newValue=new Date(value.setMinutes(new Date().getTimezoneOffset()));
 
-							newValue=$.fullCalendar.formatDate(value, "yyyyMMdd'T'HHmmss")+(sel_option!='local' ? 'Z' : '');
+							newValue=luxon.DateTime.fromJSDate(value).toFormat("yyyyMMdd'T'HHmmss")+(sel_option!='local' ? 'Z' : '');
 							process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 							process_elem=process_elem.replace('##:::##TZID##:::##', vcalendarEscapeValue(''));
 							process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(newValue));
 						}
 						else
 						{
-							var newValue=$.fullCalendar.formatDate(value, "yyyyMMdd");
+							var newValue=luxon.DateTime.fromJSDate(value).toFormat( "yyyyMMdd");
 							process_elem=process_elem.replace('##:::##AllDay##:::##', ';'+vcalendarEscapeValue('VALUE=DATE'));
 							process_elem=process_elem.replace('##:::##TZID##:::##', vcalendarEscapeValue(''));
 							process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(newValue));
@@ -1954,11 +1954,11 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 							}
 
 							var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value, $(".message_date_input[data-id="+(t+1)+"]").val());
-							var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyy-MM-dd');
+							var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyy-MM-dd');
 							var aDate=new Date(Date.parse("01/02/1990, "+$(".message_time_input[data-id="+(t+1)+"]").val() ));
-							var time_to=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
+							var time_to=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
 
-							var alarmDT=$.fullCalendar.parseDate(datetime_to+'T'+time_to);
+							var alarmDT= new Date(datetime_to+'T'+time_to);
 
 							if(globalSettings.timezonesupport.value)
 								sel_option=$('#timezone').val();
@@ -1973,7 +1973,7 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 								alarmDT = new Date(alarmDT.setSeconds(origIntOffset));
 							}
 
-							var newValue=$.fullCalendar.formatDate(alarmDT, "yyyyMMdd'T'HHmmss")+(sel_option!='local' ? 'Z' : '');
+							var newValue=luxon.DateTime.fromJSDate(alarmDT).toFormat("yyyyMMdd'T'HHmmss")+(sel_option!='local' ? 'Z' : '');
 
 							process_elem=process_elem.replace('##:::##VALUE=DATE-TIME##:::##', ';VALUE=DATE-TIME');
 							process_elem=process_elem.replace('##:::##VALUE=DURATION##:::##', '');
@@ -2266,10 +2266,10 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 	var a2=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_to').val());
 	var b=new Date(1970, 1, 1, 0, 0, 0);
 	if(datetime_from=='')
-		datetime_from=$.fullCalendar.formatDate(a, 'yyyyMMdd');
+		datetime_from=luxon.DateTime.fromJSDate(a).toFormat( 'yyyyMMdd');
 
 	if(datetime_to=='')
-		datetime_to=$.fullCalendar.formatDate(a2, 'yyyyMMdd');
+		datetime_to=luxon.DateTime.fromJSDate(a2).toFormat( 'yyyyMMdd');
 
 	var dateTo=$.datepicker.parseDate('yymmdd',datetime_to);
 
@@ -2282,7 +2282,7 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 	else
 	{
 		b=new Date(Date.parse("01/02/1990, "+$('#time_from').val() ));
-		var time_from=$.fullCalendar.formatDate(b, 'HHmmss');
+		var time_from=luxon.DateTime.fromJSDate(b).toFormat( 'HHmmss');
 		process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 
 		/*if((typeof vCalendar.tplM['unprocessed']!='undefined') && (vCalendar.tplM['unprocessed']!='') && (vCalendar.tplM['unprocessed']!=null))
@@ -2363,13 +2363,13 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 						{
 							value=new Date(value.getTime()+offsetDate)
 
-							var newValue=$.fullCalendar.formatDate(value, "yyyyMMdd'T'HHmmss");
+							var newValue=luxon.DateTime.fromJSDate(value).toFormat( "yyyyMMdd'T'HHmmss");
 							if(isUTC)
 								newValue+='Z';
 
 							if($('#allday').prop('checked'))
 							{
-								newValue=$.fullCalendar.formatDate(value, "yyyyMMdd");
+								newValue=luxon.DateTime.fromJSDate(value).toFormat( "yyyyMMdd");
 								process_elem=process_elem.replace('##:::##AllDay##:::##', ';'+vcalendarEscapeValue('VALUE=DATE'));
 								process_elem=process_elem.replace('##:::##TZID##:::##', vcalendarEscapeValue(''));
 								process_elem=process_elem.replace('##:::##value##:::##', vcalendarEscapeValue(newValue));
@@ -2427,7 +2427,7 @@ function dataToVcalendar(operation, accountUID, inputUID, inputEtag, delUID,isFo
 	else
 	{
 		var b2=new Date(Date.parse("01/02/1990, "+$('#time_to').val() ));
-		var time_to=$.fullCalendar.formatDate(b2, 'HHmmss');
+		var time_to=luxon.DateTime.fromJSDate(b2).toFormat( 'HHmmss');
 		process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 
 		/*if((typeof vCalendar.tplM['unprocessed']!='undefined') && (vCalendar.tplM['unprocessed']!='') && (vCalendar.tplM['unprocessed']!=null))
@@ -3710,7 +3710,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 					all=false;
 				}
 
-				var t=$.fullCalendar.parseDate(help1);
+				var t = new Date(help1);
 				if(t==null)
 					return false;
 				if(t.toString()=='Invalid Date')
@@ -3755,9 +3755,9 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 				}
 				else
 					tzName = globalSessionTimeZone;
-				realStart=$.fullCalendar.parseDate(help1);
-				inputEvent.start=$.fullCalendar.parseDate(help1);
-				start=$.fullCalendar.parseDate(help1);
+				realStart= new Date(help1);
+				inputEvent.start= new Date(help1);
+				start= new Date(help1);
 				if(intOffset)
 				{
 					inputEvent.start.setTime(inputEvent.start.getTime()+intOffset);
@@ -3774,7 +3774,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 						else
 						{
 							if(help1.indexOf('T')!=-1)
-								exString += 'T' + $.fullCalendar.formatDate(start,'HHmmss');
+								exString += 'T' + luxon.DateTime.fromJSDate(start).toFormat('HHmmss');
 
 							var utcTime=exString.parseComnpactISO8601();
 						}
@@ -3821,7 +3821,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 									{
 										if(parsed[3])
 											var dtStartTimezoneA=parsed[3].split('=');
-										var alarmTimeA=$.fullCalendar.parseDate(value.substring(0, 4)+'-'+value.substring(4, 6)+'-'+value.substring(6, 8)+'T'+value.substring(9, 11)+':'+value.substring(11, 13)+':'+value.substring(13, 15));
+										var alarmTimeA= new Date(value.substring(0, 4)+'-'+value.substring(4, 6)+'-'+value.substring(6, 8)+'T'+value.substring(9, 11)+':'+value.substring(11, 13)+':'+value.substring(13, 15));
 										if(value.charAt(value.length-1)=='Z')
 											tzNameA='UTC';
 										if(dtStartTimezoneA.length>1 || tzNameA=='UTC')
@@ -3852,7 +3852,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 											}
 										if(intOffsetA!='')
 											alarmTimeA.setTime(alarmTimeA.getTime()+intOffsetA);
-										alertTime[j]=$.fullCalendar.formatDate(alarmTimeA,"yyyy-MM-dd'T'HH:mm:ss");
+										alertTime[j]=luxon.DateTime.fromJSDate(alarmTimeA).toFormat("yyyy-MM-dd'T'HH:mm:ss");
 									}
 									else
 									{
@@ -3961,7 +3961,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 					/*if(rec.indexOf("T")==-1)
 					{
 						rec=rec.substring(0, 4)+'/'+rec.substring(4, 6)+'/'+rec.substring(6, 8);
-						var d=$.fullCalendar.parseDate(rec);
+						var d= new Date(rec);
 						var da=new Date(d.getTime()-1*24*60*60*1000);
 						var day=da.getDate();
 
@@ -3977,7 +3977,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 					}
 					else
 						rec=rec.substring(0, 4)+'-'+rec.substring(4, 6)+'-'+rec.substring(6, 8)+'T'+rec.substring(9, 11)+':'+rec.substring(11, 13)+':'+rec.substring(13, 15);
-					rec_id=$.fullCalendar.parseDate(rec);*/
+					rec_id= new Date(rec);*/
 					//if(!rec_id || rec_id=='Invalid Date')
 					//	rec_id='';
 					rec_id=rec;
@@ -3994,11 +3994,11 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 					if(help.indexOf("T")==-1)
 					{
 						help=help.substring(0, 4)+'-'+help.substring(4, 6)+'-'+help.substring(6, 8);
-						var d=$.fullCalendar.parseDate(help);
+						var d=new Date(help);
 						var da=new Date(d.getTime());
 						if(help1.indexOf("T")==-1)
 							da.setDate(da.getDate()-1);
-						help=$.fullCalendar.formatDate(da, "yyyy-MM-dd");
+						help=luxon.DateTime.fromJSDate(da).toFormat( "yyyy-MM-dd");
 						all=true;
 						if(help1.indexOf("T")!=-1)
 						{
@@ -4044,20 +4044,20 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 				{
 					var st='';
 					if(!all)
-						st = $.fullCalendar.parseDate(help1);
+						st = new Date(help1);
 					else
 					{
-						st = $.fullCalendar.parseDate(help1+'T00:00:00');
+						st = new Date(help1+'T00:00:00');
 						//date object mindfuck problem
 						st.setMilliseconds(-1);
 					}
 					var durDate = new Date(st.getTime() + dur);
-					help = $.fullCalendar.formatDate(durDate,"yyyy-MM-dd'T'HH:mm:ss");
+					help = luxon.DateTime.fromJSDate(durDate).toFormat("yyyy-MM-dd'T'HH:mm:ss");
 				}
 
 				if(typeof help=='undefined' || help=='' || help==null)
 					help=help1;
-				var t1=$.fullCalendar.parseDate(help);
+				var t1= new Date(help);
 				if(t1==null)
 					return false;
 				else if(t1.toString()=='Invalid Date')
@@ -4086,7 +4086,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 						timeZonesEnabled.push('local');
 						processedTimezones.push('local');
 					}
-					//realEnd=$.fullCalendar.parseDate(help);
+					//realEnd= new Date(help);
 					//help1+=valOffsetFrom;
 
 					if(tzName!='' && tzName != 'local')
@@ -4100,9 +4100,9 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 				else
 					tzName = globalSessionTimeZone;
 
-				realEnd=$.fullCalendar.parseDate(help);
-				inputEvent.end=$.fullCalendar.parseDate(help);
-				end=$.fullCalendar.parseDate(help);
+				realEnd= new Date(help);
+				inputEvent.end= new Date(help);
+				end= new Date(help);
 				if(intOffset)
 				{
 					inputEvent.end.setTime(inputEvent.end.getTime()+intOffset);
@@ -4142,7 +4142,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 							if(until.indexOf('T')!=-1)
 							{
 								var uString = until.substring(0, 4)+'-'+until.substring(4, 6)+'-'+until.substring(6, 8)+'T'+until.substring(9, 11)+':'+until.substring(11, 13)+':'+until.substring(13, 15);
-								var ut=$.fullCalendar.parseDate(uString);
+								var ut= new Date(uString);
 								if(ut==null)
 									return false;
 								if(ut.toString()=='Invalid Date')
@@ -4161,7 +4161,7 @@ function getDateFromDay(objComponent, t, disableRecursion,uid)
 							}
 							else
 							{
-								untilDate=$.fullCalendar.parseDate(until.substring(0, 4)+'-'+until.substring(4, 6)+'-'+until.substring(6, 8));
+								untilDate= new Date(until.substring(0, 4)+'-'+until.substring(4, 6)+'-'+until.substring(6, 8));
 								untilDate.setHours(realStart.getHours());
 								untilDate.setMinutes(realStart.getMinutes());
 								untilDate.setSeconds(realStart.getSeconds());

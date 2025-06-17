@@ -171,7 +171,7 @@ function EventList()
 			if(inputEvent.counter!=undefined)
 				checkEventLoader(globalResourceCalDAVList.counterList[inputCollection.uid+' '+inputCollection.listType], true);
 			if(forceCall && !isEvent)
-				$('#todoList').fullCalendar('selectEvent',$('[data-id="'+inputEvent.uid+'"]'));
+				window.todoCalendar.selectEvent($('[data-id="'+inputEvent.uid+'"]'));
 //		}, 100);
 	}
 
@@ -255,9 +255,9 @@ function EventList()
 						prevIndex=$('.fc-view-todo .fc-list-day').find('.fc-event:visible').index($('[data-repeat-hash="'+globalCalTodo.repeatHash+'"]'));
 					refetchTodoEvents();
 					if(prevIndex!=-1 && $('.fc-view-todo .fc-list-day').find('.fc-event:visible').length > 0 && prevIndex>($('.fc-view-todo .fc-list-day').find('.fc-event:visible').length-1))
-						$('#todoList').fullCalendar('selectEvent',$($('.fc-view-todo .fc-list-day').find('.fc-event:visible').get($('.fc-view-todo .fc-list-day').find('.fc-event:visible').length-1)));
+						window.todoCalendar.selectEvent($($('.fc-view-todo .fc-list-day').find('.fc-event:visible').get($('.fc-view-todo .fc-list-day').find('.fc-event:visible').length-1)));
 					else if(prevIndex!=-1 && $('.fc-view-todo .fc-list-day').find('.fc-event:visible').length > 0 && prevIndex<=($('.fc-view-todo .fc-list-day').find('.fc-event:visible').length-1))
-						$('#todoList').fullCalendar('selectEvent',$($('.fc-view-todo .fc-list-day').find('.fc-event:visible').get(prevIndex)));
+						window.todoCalendar.selectEvent($($('.fc-view-todo .fc-list-day').find('.fc-event:visible').get(prevIndex)));
 					else
 						$('#CATodo').attr('style','display:none');
 				}
@@ -305,9 +305,9 @@ function EventList()
 						vcalendarTodoData(globalResourceCalDAVList.getCollectionByUID(rid), globalEventList.todos[rid][inputUID], false);
 						if(globalVisibleCalDAVTODOCollections.indexOf(rid)!=-1 || globalSettings.displayhiddenevents.value)
 						{
-							$('#todoList').fullCalendar('allowSelectEvent',false);
+							window.todoCalendar.allowSelectEvent(false);
 							refetchTodoEvents();
-							$('#todoList').fullCalendar('allowSelectEvent',true);
+							window.todoCalendar.allowSelectEvent(true);
 							if($('#showTODO').val()==inputUID)
 							{
 								var newTodo = findEventInArray(globalEventList.todos[rid][inputUID].uid,false,globalCalTodo!=null ? globalCalTodo.repeatHash : null);
@@ -328,12 +328,12 @@ function EventList()
 												$('#repeatConfirmBoxQuestionTODO').html(localization[globalInterfaceLanguage].repeatTodoChangeTxtClose);
 											}
 											else
-												$('#todoList').fullCalendar('selectEvent');
+												window.todoCalendar.selectEvent();
 										}
 										else
 										{
-											if($($('.fc-view-todo .fc-list-day').find('.fc-event[data-repeat-hash="'+$('#todoList').fullCalendar('getView').selectedElement+'"]')).length>0)
-												$('#todoList').fullCalendar('selectEvent',$($('.fc-view-todo .fc-list-day').find('.fc-event[data-repeat-hash="'+$('#todoList').fullCalendar('getView').selectedElement+'"]')));
+											if($($('.fc-view-todo .fc-list-day').find('.fc-event[data-repeat-hash="'+window.todoCalendar.getView().selectedElement+'"]')).length>0)
+												window.todoCalendar.selectEvent($($('.fc-view-todo .fc-list-day').find('.fc-event[data-repeat-hash="'+window.todoCalendar.getView().selectedElement+'"]')));
 											else
 												showTodoForm(globalCalTodo, 'show');
 										}
@@ -343,7 +343,7 @@ function EventList()
 									$('#CATodo').attr('style','display:none');
 							}
 							else
-								$('#todoList').fullCalendar('selectEvent',null,true);
+								window.todoCalendar.selectEvent(null,true);
 						}
 					}
 				}

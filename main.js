@@ -312,15 +312,15 @@ function reloadResources(dontSaveSettings, loadArray)
       // seems to be removed
 			//$('#calendar').fullCalendar('updateToday');
 			window.calendar.gotoDate(currentToday);
-			//$('#todoList').fullCalendar('gotoDate', currentToday);
+			//window.todoCalendar.gotoDate( currentToday);
 			if(currentToday.getTime()>globalToday.getTime())
 			{
-				getNextMonths($('#calendar').fullCalendar('getView').end);
+				getNextMonths(window.calendar.getView().end);
 				getNextMonthsTodo();
 			}
 			else //support for timezone with backward time flow
 			{
-				getPrevMonths($('#calendar').fullCalendar('getView').start);
+				getPrevMonths(window.calendar.getView().start);
 				getPrevMonthsTodo();
 			}
 			globalToday=currentToday;
@@ -1049,7 +1049,7 @@ function saveSettings(isFormSave)
 		}
 		if(globalSettings.islastactiveview.value)
 		{
-			var view= $('#calendar').fullCalendar('getView');
+			var view= window.calendar.getView();
 			globalSettings.activeview.value=view.name;
 		}
 
@@ -1382,8 +1382,7 @@ function loadSettings(strobj, fromServer, syncMode)
 		}
 		if(globalSettings.enablekbnavigation.value!==false)
 			initKbTodoNavigation();
-		//initFullCalendar();
-    initNewFC();
+		initFullCalendar();
 		initTodoList();
 
 		$('#SystemCalDavZAP .fc-header-title').css('width', $('#main_h_placeholder').width()-$('#SystemCalDavZAP .fc-header-left').outerWidth()-$('#SystemCalDavZAP .fc-header-right').outerWidth());
@@ -1673,7 +1672,7 @@ function logoutCalDAV()
 		$('#searchForm, #searchFormTODO').hide();
 		$('#searchInput, #searchInputTODO').val('').trigger('keyup').trigger('blur');
 		window.calendar.destroy();
-		$('#todoList').fullCalendar('destroy');
+		window.todoCalendar.destroy();
 		$('#timezonePicker, #timezonePickerTODO').prop('disabled', false).empty();
 		$('#eventColor, #todoColor').css('background-color','');
 		if($('#ResourceCalDAVList').width()<1)
@@ -1743,10 +1742,10 @@ function globalMainCalDAV()
 //		$('#ResourceCalDAVList, #ResourceCalDAVTODOList').css('bottom',(globalSettings.timezonesupport.value ? 20 : 0));
 //		$('#alertBox').css('left', ($(window).width()/2)-($('#alertBox').width()/2));
 //		//$('#calendar').fullCalendar('option', 'contentHeight', $('#main').height() - 14);
-//		//$('#todoList').fullCalendar('allowSelectEvent',false);
-//		//$('#todoList').fullCalendar('option', 'contentHeight', $('#mainTODO').height() - 14);
-//		//$('#todoList').fullCalendar('allowSelectEvent',true);
-//		//$('#todoList').fullCalendar('selectEvent', null, true);
+//		//window.todoCalendar.allowSelectEvent(false);
+//		//window.todoCalendar.option( 'contentHeight', $('#mainTODO').height() - 14);
+//		//window.todoCalendar.allowSelectEvent(true);
+//		//window.todoCalendar.selectEvent() null, true);
 //
 //		if($('#CATodo').is(':visible')) {
 //			checkTodoFormScrollBar();
@@ -1809,10 +1808,10 @@ function globalMainCalDAV()
 		$('#CalendarLoaderTODO').animate({left: col3}, transSpeedResource);
 		$('#main_h_TODO, #searchFormTODO').animate({left: col2}, transSpeedResource);
 		$('#mainTODO').animate({left: col2}, transSpeedResource, function(){
-			$('#todoList').fullCalendar('allowSelectEvent',false);
+			window.todoCalendar.allowSelectEvent(false);
 			//$(window).resize();
-			$('#todoList').fullCalendar('allowSelectEvent',true);
-			$('#todoList').fullCalendar('selectEvent', null, true);
+			window.todoCalendar.allowSelectEvent(true);
+			window.todoCalendar.selectEvent( null, true);
 		});
 	});
 

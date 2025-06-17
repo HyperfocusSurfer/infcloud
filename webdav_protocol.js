@@ -470,7 +470,7 @@ function netSaveProperty(inputCollection, hrefProperty, inputProperty, inputValu
 				if(inputCollection.listType=='vevent' || secondColl!=null)
 					window.calendar.refetchEvents()
 				if(inputCollection.listType=='vtodo' || secondColl!=null)
-					$('#todoList').fullCalendar('refetchEvents');
+					window.todoCalendar.refetchEvents();
 			}
 			else if(inputProperty=='addressbook-color')
 			{
@@ -1018,12 +1018,12 @@ function netFindResource(inputResource, inputResourceIndex, forceLoad, indexR, l
 			if($('#ResourceCalDAVList .resourceCalDAV_item:visible').not('.resourceCalDAV_item_ro').length==0)
 			{
 				$('#eventFormShower').css('display','none');
-				$('#calendar').fullCalendar('setOptions',{'selectable':false});
+				window.calendar.setOptions({'selectable':false});
 			}
 			else
 			{
 				$('#eventFormShower').css('display','block');
-				$('#calendar').fullCalendar('setOptions',{'selectable':true});
+				window.calendar.setOptions({'selectable':true});
 			}
 
 			if($('#ResourceCalDAVTODOList .resourceCalDAVTODO_item:visible').not('.resourceCalDAV_item_ro').length==0)
@@ -2417,7 +2417,7 @@ function putVcalendarToCollection(accountUID, inputUID, inputEtag, inputVcalenda
 			{
 				globalTodoLoaderHide='';
 				if(isFormHidden)
-					$('#todoList').fullCalendar('allowSelectEvent',true);
+					window.todoCalendar.allowSelectEvent(true);
 			}
 
 			return false;
@@ -2523,9 +2523,9 @@ function putVcalendarToCollection(accountUID, inputUID, inputEtag, inputVcalenda
 								$('#showTODO').val(inputUID);
 							globalEventList.insertEvent(true, resources[j], {isRepeat: false, isTODO: false, untilDate: '', sortStart: '', start: '', end: '', sortkey: '', timestamp: resultTimestamp, accountUID: resources[j].accountUID, uid: inputUID, displayValue: resources[j].displayvalue, etag: newEtag, vcalendar: vcalendar_clean}, true, false,false);
 							if(isFormHidden)
-								$('#todoList').fullCalendar('allowSelectEvent',true);
+								window.todoCalendar.allowSelectEvent(true);
 							if(inputEtag=='' || isFormHidden)
-								$('#todoList').fullCalendar('selectEvent',$('[data-id="'+inputUID+'"]'));
+								window.todoCalendar.selectEvent($('[data-id="'+inputUID+'"]'));
 							break;
 						}
 					}
@@ -2538,7 +2538,7 @@ function putVcalendarToCollection(accountUID, inputUID, inputEtag, inputVcalenda
 				else
 				{
 					if(isFormHidden)
-						$('#todoList').fullCalendar('allowSelectEvent',true);
+						window.todoCalendar.allowSelectEvent(true);
 					if(inputForm=='vtodo'&&isFormHidden!=true)
 						$('#showTODO').val(inputUID);
 					netLoadCalendar(globalResourceCalDAVList.getTodoCollectionByUID(collection_uid), [{etag: '', href: put_href_part}], (collection.forceSyncPROPFIND==undefined || collection.forceSyncPROPFIND==false ? true : false), false, true,false, true, null, null);
@@ -2725,9 +2725,9 @@ function CalDAVnetLoadCollection(inputCollection, forceLoad, allSyncMode, recurs
 						var pastDate = new Date(globalLoadedLimit.getTime());
 						pastDate.setDate(pastDate.getDate()-7);
 						if(allSyncMode)
-							pastInterval = ' start="'+$.fullCalendar.formatDate(pastDate ,"yyyyMMdd'T'HHmmss")+'Z"';
+							pastInterval = ' start="'+luxon.DateTime.fromJSDate(pastDate ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 						else
-							pastInterval = ' start="'+$.fullCalendar.formatDate(pastDate ,"yyyyMMdd'T'HHmmss")+'Z" end="'+$.fullCalendar.formatDate(globalBeginPast,"yyyyMMdd'T'HHmmss")+'Z"';
+							pastInterval = ' start="'+luxon.DateTime.fromJSDate(pastDate ).toFormat("yyyyMMdd'T'HHmmss")+'Z" end="'+luxon.DateTime.fromJSDate(globalBeginPast).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 						if(recursiveIterator==(collections.length-1))
 							globalBeginPast = new Date(pastDate.getTime());
 					}
@@ -2736,9 +2736,9 @@ function CalDAVnetLoadCollection(inputCollection, forceLoad, allSyncMode, recurs
 						var futureDate = new Date(globalToLoadedLimit.getTime());
 						futureDate.setDate(futureDate.getDate()+14);
 						if(allSyncMode)
-							futureInterval = ' end="'+$.fullCalendar.formatDate(futureDate ,"yyyyMMdd'T'HHmmss")+'Z"';
+							futureInterval = ' end="'+luxon.DateTime.fromJSDate(futureDate ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 						else
-							futureInterval = ' start="'+$.fullCalendar.formatDate(globalBeginFuture ,"yyyyMMdd'T'HHmmss")+'Z" end="'+$.fullCalendar.formatDate(futureDate,"yyyyMMdd'T'HHmmss")+'Z"';
+							futureInterval = ' start="'+luxon.DateTime.fromJSDate(globalBeginFuture ).toFormat("yyyyMMdd'T'HHmmss")+'Z" end="'+luxon.DateTime.fromJSDate(futureDate).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 						if(recursiveIterator==(collections.length-1))
 							globalBeginFuture = new Date(futureDate.getTime());
 					}
@@ -2747,8 +2747,8 @@ function CalDAVnetLoadCollection(inputCollection, forceLoad, allSyncMode, recurs
 				{
 					var pastDate = new Date(globalLoadedLimit.getTime());
 					var futureDate = new Date(globalToLoadedLimit.getTime());
-					pastInterval = ' start="'+$.fullCalendar.formatDate(pastDate ,"yyyyMMdd'T'HHmmss")+'Z"';
-					futureInterval = ' end="'+$.fullCalendar.formatDate(futureDate ,"yyyyMMdd'T'HHmmss")+'Z"';
+					pastInterval = ' start="'+luxon.DateTime.fromJSDate(pastDate ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
+					futureInterval = ' end="'+luxon.DateTime.fromJSDate(futureDate ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 				}
 				if(!allSyncMode)
 					requestText='<?xml version="1.0" encoding="UTF-8"?><L:calendar-query xmlns:L="urn:ietf:params:xml:ns:caldav"><D:prop xmlns:D="DAV:"><D:getcontenttype/><D:getetag/><L:calendar-data/></D:prop><L:filter><L:comp-filter name="VCALENDAR"><L:comp-filter name="VEVENT"><L:time-range'+(globalLimitLoading=='past' ? pastInterval : futureInterval)+'/></L:comp-filter></L:comp-filter></L:filter></L:calendar-query>';
@@ -2786,19 +2786,19 @@ function CalDAVnetLoadCollection(inputCollection, forceLoad, allSyncMode, recurs
 					if(globalSettings.todopastlimit.value!=null && (allSyncMode || globalLimitTodoLoading=='pastTodo'))
 					{
 						if(allSyncMode)
-							pastInterval = ' start="'+$.fullCalendar.formatDate(globalLoadedLimitTodo ,"yyyyMMdd'T'HHmmss")+'Z"';
+							pastInterval = ' start="'+luxon.DateTime.fromJSDate(globalLoadedLimitTodo ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 						else
-							pastInterval = ' start="'+$.fullCalendar.formatDate(globalLoadedLimitTodo ,"yyyyMMdd'T'HHmmss")+'Z" end="'+$.fullCalendar.formatDate(new Date(new Date(globalLoadedLimitTodo.getTime()).setMonth(globalLoadedLimitTodo.getMonth()+globalSettings.todopastlimit.value+1)),"yyyyMMdd'T'HHmmss")+'Z"';
+							pastInterval = ' start="'+luxon.DateTime.fromJSDate(globalLoadedLimitTodo ).toFormat("yyyyMMdd'T'HHmmss")+'Z" end="'+luxon.DateTime.fromJSDate(new Date(new Date(globalLoadedLimitTodo.getTime()).setMonth(globalLoadedLimitTodo.getMonth()+globalSettings.todopastlimit.value+1))).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 					}
 				}
 				else
-					pastInterval = ' start="'+$.fullCalendar.formatDate(globalLoadedLimitTodo ,"yyyyMMdd'T'HHmmss")+'Z"';
+					pastInterval = ' start="'+luxon.DateTime.fromJSDate(globalLoadedLimitTodo ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 				/*if(!globalSettings.appleremindersmode.value && globalSettings.eventstartfuturelimit.value!=null && (allSyncMode || globalLimitLoading=='futureTodo'))
 				{
 					if(allSyncMode)
-						futureInterval = ' end="'+$.fullCalendar.formatDate(globalToLoadedLimitTodo ,"yyyyMMdd'T'HHmmss")+'Z"';
+						futureInterval = ' end="'+luxon.DateTime.fromJSDate(globalToLoadedLimitTodo ).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 					else
-						futureInterval = ' start="'+$.fullCalendar.formatDate(new Date(new Date(globalToLoadedLimitTodo.getTime()).setMonth(globalToLoadedLimitTodo.getMonth()-globalSettings.eventstartfuturelimit.value-1)) ,"yyyyMMdd'T'HHmmss")+'Z" end="'+$.fullCalendar.formatDate(globalToLoadedLimitTodo,"yyyyMMdd'T'HHmmss")+'Z"';
+						futureInterval = ' start="'+luxon.DateTime.fromJSDate(new Date(new Date(globalToLoadedLimitTodo.getTime()).setMonth(globalToLoadedLimitTodo.getMonth()-globalSettings.eventstartfuturelimit.value-1)) ).toFormat("yyyyMMdd'T'HHmmss")+'Z" end="'+luxon.DateTime.fromJSDate(globalToLoadedLimitTodo).toFormat("yyyyMMdd'T'HHmmss")+'Z"';
 				}*/
 				if(!allSyncMode)
 					requestText='<?xml version="1.0" encoding="utf-8"?><L:calendar-query xmlns:L="urn:ietf:params:xml:ns:caldav"><D:prop xmlns:D="DAV:"><D:getcontenttype/><D:getetag/><L:calendar-data/></D:prop><L:filter><L:comp-filter name="VCALENDAR"><L:comp-filter name="VTODO"><L:time-range'+(globalLimitTodoLoading=='pastTodo' ? pastInterval : futureInterval)+'/></L:comp-filter></L:comp-filter></L:filter></L:calendar-query>';

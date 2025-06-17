@@ -250,7 +250,10 @@ function initSearchEngine() {
 		delay: 500,
 		onAfter: function () {
 			if(!$('#TodoDisabler').is(':visible'))
-				$('#todoList').fullCalendar('selectEvent');
+        // renamed to select, still unsure what am I supposed to select here
+				// window.todoCalendar.selectEvent();
+      return
+
 		},
 		hide: function() {
 			this.hidden=true;
@@ -403,7 +406,6 @@ function updateMainLoader(needRefresh,type,collUID)
 						}
 						if(collection.makeLoaded)
 							collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
-							//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 					}
 					counter--;
 					if(counter == 0)
@@ -416,8 +418,8 @@ function updateMainLoader(needRefresh,type,collUID)
 						globalCalDAVTODOQs.cache();
 						//$('#calendar').fullCalendar('findToday');
 						globalCalDAVInitLoad=false;
-						$('#todoList').fullCalendar('allowSelectEvent',true);
-						$('#todoList').fullCalendar('selectEvent', $('.fc-view-todo .fc-list-day').find('.fc-event:visible:first'));
+						//window.todoCalendar.allowSelectEvent(true);
+						//window.todoCalendar.selectEvent( $('.fc-view-todo .fc-list-day').find('.fc-event:visible:first'));
 						globalCalWidth=$('#main').width();
 						$('#SystemCalDavZAP .fc-header-center ').removeClass('r_operate_all');
 						showTimezones(globalSessionTimeZone, 'Picker');
@@ -432,7 +434,7 @@ function updateMainLoader(needRefresh,type,collUID)
 					{
 						var collection = globalResourceCalDAVList.getTodoCollectionByUID(calendarUID);
 						if(collection.makeLoaded)
-							collection.fcSource = $('#todoList').fullCalendar('addEventSource', {events:globalEventList.displayTodosArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
+							collection.fcSource = window.todoCalendar.addEventSource( {events:globalEventList.displayTodosArray[calendarUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
 					}
 					counter--;
 					if(counter == 0)
@@ -445,8 +447,9 @@ function updateMainLoader(needRefresh,type,collUID)
 						globalCalDAVTODOQs.cache();
 						//$('#calendar').fullCalendar('findToday');
 						globalCalDAVInitLoad=false;
-						$('#todoList').fullCalendar('allowSelectEvent',true);
-						$('#todoList').fullCalendar('selectEvent', $('.fc-view-todo .fc-list-day').find('.fc-event:visible:first'));
+            // renamed to $('#calendar').fullCalendar('getView');
+						//window.todoCalendar.allowSelectEvent(true);
+						//window.todoCalendar.selectEvent( $('.fc-view-todo .fc-list-day').find('.fc-event:visible:first'));
 						globalCalWidth=$('#main').width();
 						$('#SystemCalDavZAP .fc-header-center ').removeClass('r_operate_all');
 						showTimezones(globalSessionTimeZone, 'Picker');
@@ -491,7 +494,6 @@ function updateMainLoader(needRefresh,type,collUID)
 					}
 
 					collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
-					//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 				}
 				if(needRefresh)
 					refetchCalendarEvents();
@@ -510,7 +512,7 @@ function updateMainLoader(needRefresh,type,collUID)
 				var collection = globalResourceCalDAVList.getTodoCollectionByUID(collUID);
 				if((globalSettings.displayhiddenevents.value || globalVisibleCalDAVTODOCollections.indexOf(collUID)!=-1) && globalLimitTodoLoading=='' && needRefresh && typeof collUID!= 'undefined' && collection!=null && collection.fcSource==null)
 				{
-					collection.fcSource = $('#todoList').fullCalendar('addEventSource', {events:globalEventList.displayTodosArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
+					collection.fcSource = window.todoCalendar.addEventSource( {events:globalEventList.displayTodosArray[collUID],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
 				}
 				if(needRefresh)
 					refetchTodoEvents();
@@ -612,7 +614,7 @@ function binarySearch(array, first, last, value)
 	while(first<=last)
 	{
 		mid=div((first+last), 2);
-		var date3=$.fullCalendar.parseDate(array[mid].sortStart);
+		var date3= new Date(array[mid].sortStart);
 		date3=date3.getTime();
 
 		if(date3<value)
@@ -683,7 +685,7 @@ function getValidRepeatDay(inputDate, RepeatDay)
 {
 	var newDate='';
 	if(typeof RepeatDay=='string')
-		newDate=$.fullCalendar.parseDate(RepeatDay);
+		newDate= new Date(RepeatDay);
 	else
 		newDate = new Date(RepeatDay.getTime());
 
@@ -756,14 +758,14 @@ function generateRepeatInstances(inputObj)
 			if(inputObj.exDates.length>0)
 				if(inputObj.exDates.indexOf(realStart.toString())!=-1)
 					checkRec=true;
-			dateStart=$.fullCalendar.formatDate(realStart,"yyyy-MM-dd'T'HH:mm:ss");
+			dateStart=luxon.DateTime.fromJSDate(realStart).toFormat("yyyy-MM-dd'T'HH:mm:ss");
 			realEnd=new Date(varEndDate.getTime());
-			dateEnd =$.fullCalendar.formatDate(realEnd,"yyyy-MM-dd'T'HH:mm:ss");
+			dateEnd =luxon.DateTime.fromJSDate(realEnd).toFormat("yyyy-MM-dd'T'HH:mm:ss");
 		}
 
 		var checkDateTime = new Date(inputObj.repeatStart.getTime());
 		if(typeof dateStart=='string')
-			checkDateTime=$.fullCalendar.formatDate(inputObj.repeatStart,"yyyy-MM-dd'T'HH:mm:ss");
+			checkDateTime=luxon.DateTime.fromJSDate(inputObj.repeatStart).toFormat("yyyy-MM-dd'T'HH:mm:ss");
 		if((inputObj.items.after!=='' && inputObj.items.realRepeatCount>(parseInt(inputObj.items.after,10))) || (typeof dateStart=='object' && (checkDateTime-dateStart)==0) || (typeof dateStart=='string' && checkDateTime==dateStart))
 		{
 			checkRec=true;
@@ -812,9 +814,9 @@ function generateTodoRepeatInstances(inputObj)
 	var alertTimeOut=new Array();
 	var firstDateSaved=false;
 	if(inputObj.repeatStart)
-		var resStart=new Date($.fullCalendar.parseDate(inputObj.items.realStart).getTime());
+		var resStart=new Date(Date(inputObj.items.realStart).getTime());
 	else if(inputObj.repeatEnd)
-		var resStart=new Date($.fullCalendar.parseDate(inputObj.items.realEnd).getTime());
+		var resStart=new Date(Date(inputObj.items.realEnd).getTime());
 
 	if(typeof inputObj.lastGenDate!='undefined')
 		var resStart=new Date(inputObj.lastGenDate.getTime());
@@ -1107,7 +1109,7 @@ function getPrevMonthsTodo(fromCalendar)
 {
 	if(globalLimitTodoLoading=='futureTODO' && globalLimitTodoLoading=='pastTODO')
 		return false;
-	var actualTodoMonth = new Date($('#todoList').fullCalendar('getView').start.getTime());
+	var actualTodoMonth = new Date(window.todoCalendar.getView().start.getTime());
 	actualTodoMonth.setDate(1);
 
 	if(globalSettings.todopastlimit.value!=null && actualTodoMonth < globalLoadedLimitTodo)
@@ -1131,7 +1133,7 @@ function getNextMonthsTodo(fromCalendar)
 	//var limitSet = (!globalSettings.appleremindersmode.value && globalSettings.eventstartfuturelimit.value!=null)
 	var limitSet=false;
 	var futureLimit = limitSet ? globalSettings.eventstartfuturelimit.value : 2;
-	var actualTodoMonth = new Date($('#todoList').fullCalendar('getView').end.getTime());
+	var actualTodoMonth = new Date(window.todoCalendar.getView().end.getTime());
 	actualTodoMonth.setMonth(actualTodoMonth.getMonth()+1);
 	actualTodoMonth.setDate(1);
 
@@ -1189,7 +1191,7 @@ function showAlertEvents(inputUID, realDelay, alarmObject)
 		$('#alertBox').css('visibility', 'visible');
 		$('#AlertDisabler').fadeIn(globalEditorFadeAnimation)
 
-		var date=$.fullCalendar.parseDate(alarmObject.start);
+		var date= new Date(alarmObject.start);
 		var dateString='';
 		var formattedDate = $.datepicker.formatDate(globalSettings.datepickerformat.value,date);
 		if(formattedDate!='')
@@ -1198,7 +1200,7 @@ function showAlertEvents(inputUID, realDelay, alarmObject)
 		var timeString='';
 		if(!alarmObject.allDay)
 		{
-			var timeS = $.fullCalendar.formatDate(date, globalSettings.ampmformat.value?'h:mm TT{ - h:mm TT}':'H:mm{ - H:mm}')
+			var timeS = luxon.DateTime.fromJSDate(date).toFormat( globalSettings.ampmformat.value?'h:mm TT{ - h:mm TT}':'H:mm{ - H:mm}')
 			if(timeS!='')
 				timeString=' - '+timeS;
 		}
@@ -1237,13 +1239,13 @@ function showAlertTODO(inputUID, realDelay, alarmObject)
 		$('#AlertDisabler').fadeIn(globalEditorFadeAnimation);
 
 		var dateString='';
-		var date=$.fullCalendar.parseDate(alarmObject.start);
+		var date= new Date(alarmObject.start);
 		var formattedDate=$.datepicker.formatDate(globalSettings.datepickerformat.value,date);
 		if(formattedDate!='')
 			dateString=' : '+formattedDate;
 
 		var timeString=''
-		var timeS = $.fullCalendar.formatDate(date,globalSettings.ampmformat.value?'h:mm TT{ - h:mm TT}':'H:mm{ - H:mm}');
+		var timeS = luxon.DateTime.fromJSDate(date).toFormat(globalSettings.ampmformat.value?'h:mm TT{ - h:mm TT}':'H:mm{ - H:mm}');
 		if(timeS!='')
 			timeString=' - '+timeS;
 		$('#alertBoxContent').append("<div class='alert_item'><img src='images/todoB.svg' alt='Todo'/><label>"+alarmObject.title+dateString+timeString+"</label></div>");
@@ -1309,8 +1311,8 @@ function save(isFormHidden, deleteMode)
 		var a=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_from').val());
 		var a2=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_to').val());
 
-		var datetime_from=$.fullCalendar.formatDate(a, 'yyyy-MM-dd');
-		var datetime_to=$.fullCalendar.formatDate(a2, 'yyyy-MM-dd');
+		var datetime_from=luxon.DateTime.fromJSDate(a).toFormat( 'yyyy-MM-dd');
+		var datetime_to=luxon.DateTime.fromJSDate(a2).toFormat( 'yyyy-MM-dd');
 		var time_from='00:00';
 		var time_to='00:00';
 		if(!$('#allday').prop('checked'))
@@ -1318,12 +1320,12 @@ function save(isFormHidden, deleteMode)
 			if($('#time_from').val()!='' && $('#time_to').val()!='')
 			{
 				time_from=new Date(Date.parse("01/02/1990, "+$('#time_from').val()));
-				time_from=$.fullCalendar.formatDate(time_from, 'HH:mm');
+				time_from=luxon.DateTime.fromJSDate(time_from).toFormat( 'HH:mm');
 				time_to=new Date(Date.parse("01/02/1990, "+$('#time_to').val()));
-				time_to=$.fullCalendar.formatDate(time_to, 'HH:mm');
+				time_to=luxon.DateTime.fromJSDate(time_to).toFormat( 'HH:mm');
 			}
 		}
-		if($.fullCalendar.parseDate(datetime_from+'T'+time_from+'Z')>$.fullCalendar.parseDate(datetime_to+'T'+time_to+'Z'))
+		if(Date(datetime_from+'T'+time_from+'Z')>Date(datetime_to+'T'+time_to+'Z'))
 		{
 			show_editor_loader_messageCalendar('vevent', 'message_error', localization[globalInterfaceLanguage].txtErrorDates);
 			return false;
@@ -1607,12 +1609,12 @@ function hideUnloadCollectionCallback(collectionType)
 		if($('#ResourceCalDAVList .resourceCalDAV_item:visible').not('.resourceCalDAV_item_ro').length==0)
 		{
 			$('#eventFormShower').css('display','none');
-			$('#calendar').fullCalendar('setOptions',{'selectable':false});
+			window.calendar.setOptions({'selectable':false});
 		}
 		else
 		{
 			$('#eventFormShower').css('display','block');
-			$('#calendar').fullCalendar('setOptions',{'selectable':true});
+			window.calendar.setOptions({'selectable':true});
 		}
 	}
 	else if(collectionType=='todo')
@@ -1743,7 +1745,6 @@ function enableAll()
 						}
 						var collection = globalResourceCalDAVList.collections[j];
 						collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
-						//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 					}
 				}
 			}
@@ -1784,8 +1785,8 @@ function disableAllTodo()
 	// 	globalResourceRefreshNumberTodo++;
 	// 	$('#CalendarLoaderTODO').children('.loaderInfo').text(localization[globalInterfaceLanguage].calendarLoader).parent().css('display','block');
 	// 	var beforeScroll = $('#mainTODO').width()-$('#todoList').width();
-	// 	$('#todoList').fullCalendar( 'removeEvents');
-	// 	$('#todoList').fullCalendar( 'removeEventSources');
+	// 	window.todoCalendar.removeEvents();
+	// 	window.todoCalendar.removeEventSources();
 	// 	var afterScroll = $('#mainTODO').width()-$('#todoList').width();
 	// 	rerenderTodo(beforeScroll!=afterScroll);
 	// }
@@ -1887,7 +1888,7 @@ function enableAllTodo()
 	// 						}
 	// 					}
 	// 					var collection = globalResourceCalDAVList.TodoCollections[j];
-	// 					collection.fcSource = $('#todoList').fullCalendar('addEventSource', {events:globalEventList.displayTodosArray[collection.uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
+	// 					collection.fcSource = window.todoCalendar.addEventSource( {events:globalEventList.displayTodosArray[collection.uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
 	// 				}
 	// 			}
 	// 		}
@@ -1990,7 +1991,6 @@ function enableResource(header)
 				}
 				var collection = globalResourceCalDAVList.getCollectionByUID(uid)
 				collection.fcSource = window.calendar.addEventSource({events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
-				//collection.fcSource = $('#calendar').fullCalendar('addEventSource', {events:globalEventList.displayEventsArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor,textColor:checkFontColor(collection.ecolor),background:bg});
 			}
 		}
 	});
@@ -2023,7 +2023,7 @@ function disableResourceTodo(header)
 			if(globalSettings.displayhiddenevents.value)
 				hideCalendarTodos(uid);
 			else
-				$('#todoList').fullCalendar('removeEventSource', globalResourceCalDAVList.getTodoCollectionByUID(uid).fcSource);
+				window.todoCalendar.removeEventSource( globalResourceCalDAVList.getTodoCollectionByUID(uid).fcSource);
 		}
 	});
 
@@ -2036,7 +2036,8 @@ function disableResourceTodo(header)
 			$('#CalendarLoaderTODO').css('display','none');
 	}
 	else
-		$('#todoList').fullCalendar('selectEvent');
+		//window.todoCalendar.selectEvent();
+  return;
 }
 
 function enableResourceTodo(header)
@@ -2085,7 +2086,7 @@ function enableResourceTodo(header)
 					}
 				}
 				var collection = globalResourceCalDAVList.getTodoCollectionByUID(uid);
-				collection.fcSource = $('#todoList').fullCalendar('addEventSource', {events:globalEventList.displayTodosArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
+				collection.fcSource = window.todoCalendar.addEventSource( {events:globalEventList.displayTodosArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
 			}
 		}
 	});
@@ -2099,7 +2100,8 @@ function enableResourceTodo(header)
 			$('#CalendarLoaderTODO').css('display','none');
 	}
 	else
-		$('#todoList').fullCalendar('selectEvent');
+		//window.todoCalendar.selectEvent();
+  return;
 }
 
 function disableCalendar(uid)
@@ -2189,14 +2191,14 @@ function disableCalendarTodo(uid)
 		globalVisibleCalDAVTODOCollections.splice(pos, 1);
 		if(globalSettings.displayhiddenevents.value) {
 			hideCalendarTodos(uid);
-			$('#todoList').fullCalendar('selectEvent');
+			//window.todoCalendar.selectEvent();
 		}
 		else
 		{
 			var beforeScroll = $('#mainTODO').width()-$('#todoList').width();
 			globalResourceRefreshNumberTodo++;
 			$('#CalendarLoaderTODO').children('.loaderInfo').text(localization[globalInterfaceLanguage].calendarLoader).parent().css('display','block');
-			$('#todoList').fullCalendar( 'removeEventSource', globalResourceCalDAVList.getTodoCollectionByUID(uid).fcSource);
+			window.todoCalendar.removeEventSource( globalResourceCalDAVList.getTodoCollectionByUID(uid).fcSource);
 			globalResourceRefreshNumberTodo--;
 
 			if(!globalResourceRefreshNumberTodo)
@@ -2217,7 +2219,7 @@ function enableCalendarTodo(uid)
 		globalVisibleCalDAVTODOCollections[globalVisibleCalDAVTODOCollections.length]=uid;
 		if(globalSettings.displayhiddenevents.value) {
 			showCalendarTodos(uid);
-			$('#todoList').fullCalendar('selectEvent');
+			//window.todoCalendar.selectEvent();
 		}
 		else
 		{
@@ -2251,7 +2253,7 @@ function enableCalendarTodo(uid)
 				}
 			}
 			var collection = globalResourceCalDAVList.getTodoCollectionByUID(uid);
-			collection.fcSource = $('#todoList').fullCalendar('addEventSource', {events:globalEventList.displayTodosArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
+			collection.fcSource = window.todoCalendar.addEventSource( {events:globalEventList.displayTodosArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
 			globalResourceRefreshNumberTodo--;
 
 			if(!globalResourceRefreshNumberTodo)
@@ -2374,15 +2376,15 @@ function enableOneTodo(uid)
 	if(globalSettings.displayhiddenevents.value)
 	{
 		showCalendarTodos(uid);
-		$('#todoList').fullCalendar('selectEvent');
+		//window.todoCalendar.selectEvent();
 	}
 	else
 	{
 		globalResourceRefreshNumberTodo++;
 		$('#CalendarLoaderTODO').children('.loaderInfo').text(localization[globalInterfaceLanguage].calendarLoader).parent().css('display','block');
 		var beforeScroll = $('#mainTODO').width()-$('#todoList').width();
-		$('#todoList').fullCalendar( 'removeEvents');
-		$('#todoList').fullCalendar( 'removeEventSources');
+		window.todoCalendar.removeEvents();
+		window.todoCalendar.removeEventSources();
 
 		var bg = false;
 		var tmpUID = uid.match(vCalendar.pre['accountUidParts']);
@@ -2411,7 +2413,7 @@ function enableOneTodo(uid)
 			}
 		}
 		var collection = globalResourceCalDAVList.getTodoCollectionByUID(uid);
-		collection.fcSource = $('#todoList').fullCalendar('addEventSource', {events:globalEventList.displayTodosArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
+		collection.fcSource = window.todoCalendar.addEventSource( {events:globalEventList.displayTodosArray[uid],backgroundColor:hexToRgba(collection.ecolor,0.9),borderColor:collection.ecolor});
 
 		globalResourceRefreshNumberTodo--;
 		if(!globalResourceRefreshNumberTodo)
@@ -2465,7 +2467,7 @@ function todoCheckClick(status, percent, calTodo)
 	globalTodolistStatusArray[id].timeout = setTimeout(function(){
 		if(typeof globalTodolistStatusArray[id]!='undefined')
 		{
-			$('#todoList').fullCalendar('allowSelectEvent',false);
+			//window.todoCalendar.allowSelectEvent(false);
 			fullVcalendarToTodoData(calTodo,false);
 			if(percent=='50' && typeof globalTodolistStatusArray[id].percent!='undefined')
 				percent=globalTodolistStatusArray[id].percent;
@@ -2522,16 +2524,16 @@ function todoCheckClick(status, percent, calTodo)
 				if(calTodo.repeatStart!='' && calTodo.start)
 				{
 					if(typeof calTodo.realStart=='object')
-						rec_id=$.fullCalendar.formatDate(calTodo.realStart, "yyyyMMdd'T'HHmmss");
+						rec_id=luxon.DateTime.fromJSDate(calTodo.realStart).toFormat( "yyyyMMdd'T'HHmmss");
 					else if(typeof calTodo.realStart =='string')
-						rec_id=$.fullCalendar.formatDate($.fullCalendar.parseDate(calTodo.realStart), "yyyyMMdd'T'HHmmss");
+						rec_id=luxon.DateTime.fromJSDate(Date(calTodo.realStart)).toFormat( "yyyyMMdd'T'HHmmss");
 				}
 				else if(calTodo.repeatEnd!='' && calTodo.end)
 				{
 					if(typeof calTodo.realEnd =='object')
-						rec_id=$.fullCalendar.formatDate(calTodo.realEnd, "yyyyMMdd'T'HHmmss");
+						rec_id=luxon.DateTime.fromJSDate(calTodo.realEnd).toFormat( "yyyyMMdd'T'HHmmss");
 					else if(typeof calTodo.realEnd =='string')
-						rec_id=$.fullCalendar.formatDate($.fullCalendar.parseDate(calTodo.realEnd), "yyyyMMdd'T'HHmmss");
+						rec_id=luxon.DateTime.fromJSDate(Date(calTodo.realEnd)).toFormat( "yyyyMMdd'T'HHmmss");
 				}
 			}
 			else
@@ -2727,9 +2729,9 @@ function todoCheckClick(status, percent, calTodo)
 					process_elem=process_elem.replace('##:::##params_wsc##:::##', '');
 
 					if(typeof realTodo.realStart=='object')
-						var datetime_from=$.fullCalendar.formatDate(realTodo.realStart, "yyyyMMdd'T'HHmmss");
+						var datetime_from=luxon.DateTime.fromJSDate(realTodo.realStart).toFormat( "yyyyMMdd'T'HHmmss");
 					else if(typeof realTodo.realStart =='string')
-						var datetime_from=$.fullCalendar.formatDate($.fullCalendar.parseDate(realTodo.realStart), "yyyyMMdd'T'HHmmss");
+						var datetime_from=luxon.DateTime.fromJSDate(Date(realTodo.realStart)).toFormat( "yyyyMMdd'T'HHmmss");
 
 					process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 					process_elem=process_elem.replace('##:::##TZID##:::##', timeZoneAttr);
@@ -2765,9 +2767,9 @@ function todoCheckClick(status, percent, calTodo)
 					process_elem=process_elem.replace('##:::##params_wsc##:::##', '');
 
 					if(typeof realTodo.realEnd=='object')
-						var datetime_to=$.fullCalendar.formatDate(realTodo.realEnd, "yyyyMMdd'T'HHmmss");
+						var datetime_to=luxon.DateTime.fromJSDate(realTodo.realEnd).toFormat( "yyyyMMdd'T'HHmmss");
 					else if(typeof realTodo.realEnd =='string')
-						var datetime_to=$.fullCalendar.formatDate($.fullCalendar.parseDate(realTodo.realEnd), "yyyyMMdd'T'HHmmss");
+						var datetime_to=luxon.DateTime.fromJSDate(Date(realTodo.realEnd)).toFormat( "yyyyMMdd'T'HHmmss");
 
 					process_elem=process_elem.replace('##:::##AllDay##:::##', vcalendarEscapeValue(''));
 					process_elem=process_elem.replace('##:::##TZID##:::##',timeZoneAttr);
@@ -2811,7 +2813,7 @@ function todoCheckClick(status, percent, calTodo)
 					var intOffset = valOffsetFrom.getSecondsFromOffset()*-1;
 					datetime_completed = new Date(datetime_completed.setSeconds(intOffset));
 				}
-				var newValue=$.fullCalendar.formatDate(datetime_completed, "yyyyMMdd'T'HHmmss")+'Z';
+				var newValue=luxon.DateTime.fromJSDate(datetime_completed).toFormat( "yyyyMMdd'T'HHmmss")+'Z';
 
 				process_elem=vCalendar.tplC['VTcontentline_COMPLETED'];
 				process_elem=process_elem.replace('##:::##group_wd##:::##', '');
@@ -2918,195 +2920,6 @@ function todoCheckClick(status, percent, calTodo)
 			return putVcalendarToCollection(accountUID, calTodo.id, calTodo.etag, inputS, '','vtodo',true,false,fixedArr);
 		}
 	},globalTodoCheckTimeoutDelay);
-}
-
-function initTodoList()
-{
-	$('#todoList').fullCalendar({
-		eventMode: false,
-		showUnstartedEvents: globalSettings.appleremindersmode.value,
-		simpleFilters: globalSettings.appleremindersmode.value,
-		contentHeight: $('#mainTODO').height() - 14, //-14px for 7px padding on top and bottom
-		windowResize: function(view){
-			if(globalSettings.displayhiddenevents.value)
-				hideTodoCalendars();
-		},
-		showDatepicker: true,
-		titleFormat: {
-			todo: globalSettings.titleformattable.value
-		},
-		columnFormat: {
-			todo: globalSettings.columnformatagenda.value
-		},
-		timeFormat: {
-			list: dateFormatJqToFc(globalSettings.datepickerformat.value) + (globalSettings.ampmformat.value ? ' hh:mm TT' : ' HH:mm')
-		},
-		axisFormat: globalSettings.ampmformat.value ? 'h:mm TT' : 'H:mm',
-		buttonText: {
-			today: localization[globalInterfaceLanguage].fullCalendarTodayButton,
-			filtersHeader: localization[globalInterfaceLanguage].txtStatusFiltersHeaderTODO,
-			filtersFooter: localization[globalInterfaceLanguage].txtStatusFiltersFooterTODO,
-			filterAction: localization[globalInterfaceLanguage].txtStatusNeedsActionTODO,
-			filterProgress: localization[globalInterfaceLanguage].txtStatusInProcessTODO,
-			filterCompleted: localization[globalInterfaceLanguage].txtStatusCompletedTODO,
-			filterCanceled: localization[globalInterfaceLanguage].txtStatusCancelledTODO,
-		},
-		allDayText: localization[globalInterfaceLanguage].fullCalendarAllDay,
-		monthNames: localization[globalInterfaceLanguage].monthNames,
-		monthNamesShort: localization[globalInterfaceLanguage].monthNamesShort,
-		dayNames: localization[globalInterfaceLanguage].dayNames,
-		dayNamesShort: localization[globalInterfaceLanguage].dayNamesShort,
-		defaultFilters: globalSettings.todolistfilterselected.value,
-		viewDisplay: function(view){
-			if(globalSettings.displayhiddenevents.value)
-				hideTodoCalendars();
-			$('.fc-view-todo').removeClass('fc-view-trans');
-		},
-		firstDay: globalSettings.datepickerfirstdayofweek.value,
-		weekendDays: globalSettings.weekenddays.value,
-		header: {
-			left: 'prev,next today',
-			center: '',
-			right: ''
-		},
-		listSections: 'day',
-		headerContainer: $('#mainTODO_h_placeholder'),
-		defaultView: 'todo',
-		editable: true,
-		todoColThresholds: [
-			{'col':'priority', 'width':552},
-			{'col':'location', 'width':702}
-		],
-		todoOptionalCols: [
-			{'col':'time', 'width':142},
-			{'col':'priority', 'width':18},
-			{'col':'location', 'width':150}
-		],
-		selectEmpty: function(){
-			if($('#todoInEdit').val()!=='true') {
-				$('#CATodo').attr('style','display:none');
-				$('#todoColor').css('background-color','');
-			}
-		},
-		eventClick: function(calTodo, jsEvent, view){
-			if($('#todoInEdit').val()=='true')
-				return false;
-
-			globalCalTodo=calTodo;
-			if(calTodo.type=='')
-				showTodoForm(calTodo, 'show', '');
-			else
-			{
-				if(globalSettings.appleremindersmode.value && (calTodo.status=='COMPLETED' || calTodo.status== 'CANCELLED'))
-					showTodoForm(calTodo, 'show', '');
-				else if(!globalSettings.appleremindersmode.value || typeof globalAppleSupport.nextDates[calTodo.id] != 'undefined')
-					showTodoForm(calTodo, 'show', 'editOnly');
-				else
-					showTodoForm(calTodo, 'show', '');
-			}
-		},
-		eventCheckDefault: function(event, checkbox, view) {
-			var percent = parseInt(event.percent, 10);
-			if(globalSettings.appleremindersmode.value)
-				checkbox.prop('checked', percent>99);
-			else {
-				checkbox.prop({'checked':percent>0, 'indeterminate':percent>0 && percent<100});
-				checkbox.attr('data-ind', percent>0 && percent<100 ? 'true' : 'false');
-			}
-
-			checkbox.prop('disabled', globalResourceCalDAVList.getTodoCollectionByUID(event.res_id).permissions.read_only);
-		},
-		eventCheckClicked: function(checkbox, calTodo, jsEvent, view) {
-			// [] -> [-]	--->	false, false -> true, false  -> true, true
-			// [-] -> [x]	--->	true, true   -> false, false -> true, false
-			// [x] -> [-x-] --->	true, false  -> false, false -> true, false
-			// [-x-] -> []	--->	true, false  -> false, false -> false, false
-
-			jsEvent.stopPropagation();
-
-			var eventElement = checkbox.parent().parent();
-			var checked = checkbox.prop('checked');
-			var ind = checkbox.attr('data-ind')==='true';
-			var cancelled = eventElement.hasClass('fc-event-cancelled');
-
-			if(!globalSettings.appleremindersmode.value) {
-				checkbox.prop({'checked':ind || !checked && !cancelled ? !checked : checked, 'indeterminate':checked});
-				checkbox.attr('data-ind', checked ? 'true' : 'false');
-				eventElement.toggleClass('fc-event-cancelled', !ind && !checked && !cancelled);
-			}
-
-			var percent = '';
-			var status = '';
-
-			if(!checkbox.prop('checked')) {
-				percent = '0';
-				status = 'NEEDS-ACTION';
-			}
-			else if(checkbox.prop('indeterminate')) {
-				percent = '50';
-				status = 'IN-PROCESS';
-			}
-			else if(eventElement.hasClass('fc-event-cancelled')) {
-				percent = '100';
-				status = 'CANCELLED';
-			}
-			else {
-				percent = '100';
-				status = 'COMPLETED';
-			}
-
-			todoCheckClick(status, percent, calTodo);
-		},
-		eventAfterRender: function(event, element, view){
-			element.attr("data-res-id",event.res_id);
-			element.attr("data-repeat-hash",event.repeatHash);
-			if(event.start)
-				element.attr("data-start", $.fullCalendar.formatDate(event.start, "yyyyMMdd'T'HHmmss'Z'"));
-			else
-				element.attr("data-start", '');
-			element.attr("data-id",event.id);
-			element.addClass("event_item");
-			var title = event.title.replace(vCalendar.pre['compressNewLineRex']," ");
-			if(event.status == 'CANCELLED')
-				$(element).addClass('fc-event-cancelled');
-			switch(event.filterStatus)
-			{
-				case 'filterAction':
-					title+=' ('+localization[globalInterfaceLanguage].txtStatusNeedsActionTODO+')';
-					break;
-				case 'filterProgress':
-					title+=' ('+localization[globalInterfaceLanguage].txtStatusInProcessTODO+')';
-					break;
-				case 'filterCompleted':
-					if(event.completedOn)
-						title+=' ('+localization[globalInterfaceLanguage].txtCompletedOn+' '+$.fullCalendar.formatDate(event.completedOn, dateFormatJqToFc(globalSettings.datepickerformat.value)+' '+(globalSettings.ampmformat.value ? 'h:mm TT' : 'H:mm'))+')';
-					else
-						title+=' ('+localization[globalInterfaceLanguage].txtStatusCompletedTODO+')';
-					break;
-				case 'filterCanceled':
-					title+=' ('+localization[globalInterfaceLanguage].txtStatusCancelledTODO+')';
-					break;
-				default:
-					break;
-			}
-			element.attr("title",title);
-			if(typeof event.hidden!='undefined' && event.hidden)
-				element.addClass('searchCalDAV_hide');
-		},
-		prevClick: function() {
-			getPrevMonthsTodo();
-		},
-		nextClick: function() {
-			getNextMonthsTodo();
-		},
-		datepickerClick: function(date) {
-			if(date>globalToLoadedLimitTodo)
-				getNextMonthsTodo(true);
-			else if(date<globalLoadedLimitTodo)
-				getPrevMonthsTodo(true);
-		}
-	});
-	$('#todoList').fullCalendar('allowSelectEvent',false);
 }
 
 function setFirstDayEvent(setDay)
@@ -3344,7 +3157,7 @@ function todoStatusChanged(status)
 		if($('#completedOnDate').val()=='')
 			$('#completedOnDate').val($.datepicker.formatDate(globalSettings.datepickerformat.value, today));
 		if($('#completedOnTime').val()=='')
-			$('#completedOnTime').val($.fullCalendar.formatDate(today, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+			$('#completedOnTime').val(luxon.DateTime.fromJSDate(today).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 		$('#completedOnDate, #completedOnTime').trigger("change");
 	}
 	else {
@@ -3367,7 +3180,8 @@ function initKbTodoNavigation()
 			if((selected_todo=$('#SystemCalDavTODO').find('.fc-event-selected').parent()).length==1)
 			{
 				if(event.keyCode == 38 && (next_todo=selected_todo.prevAll('.fc-list-section').find('.fc-event').filter(':visible').last()).length || event.keyCode == 40 && (next_todo=selected_todo.nextAll('.fc-list-section').find('.fc-event').filter(':visible').first()).length)
-					$('#todoList').fullCalendar('selectEvent', next_todo);
+					//window.todoCalendar.selectEvent( next_todo);
+        return;
 			}
 		}
 	});
@@ -3889,7 +3703,7 @@ function rerenderCalendar(scrollChanged)
 function rerenderTodo(scrollChanged)
 {
 	if(scrollChanged)
-		$('#todoList').fullCalendar('render');
+		window.todoCalendar.render();
 	if(globalSettings.displayhiddenevents.value)
 		hideTodoCalendars();
 }
@@ -3906,7 +3720,7 @@ function refetchCalendarEvents()
 function refetchTodoEvents()
 {
 	var beforeScroll = $('#mainTODO').width()-$('#todoList').width();
-	$('#todoList').fullCalendar('refetchEvents');
+	window.todoCalendar.refetchEvents();
 	var afterScroll = $('#mainTODO').width()-$('#todoList').width();
 	rerenderTodo(beforeScroll!=afterScroll);
 	globalCalDAVTODOQs.cache();
@@ -4040,11 +3854,11 @@ function initCalDavDatepicker(element)
 					if($('#date_from').val()!='' && tmptime.match(globalTimePre)!=null && validD)
 					{
 						var dateFrom=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_from').val());
-						var datetime_to=$.fullCalendar.formatDate(dateFrom, 'yyyy-MM-dd');
+						var datetime_to=luxon.DateTime.fromJSDate(dateFrom).toFormat( 'yyyy-MM-dd');
 						var aDate=new Date(Date.parse("01/02/1990, "+$('#time_from').val()));
-						var time_from=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
+						var time_from=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
 
-						var checkD=$.fullCalendar.parseDate(datetime_to+'T'+time_from);
+						var checkD= new Date(datetime_to+'T'+time_from);
 						globalPrevDate = new Date(checkD.getTime());
 					}
 					else
@@ -4062,14 +3876,14 @@ function initCalDavDatepicker(element)
 						if($('#date_to').val()!='' && $('#time_to').val().match(globalTimePre)!=null && validD)
 						{
 							var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_to').val());
-							var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyy-MM-dd');
+							var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyy-MM-dd');
 							var aDateT=new Date(Date.parse("01/02/1990, "+$('#time_to').val()));
-							var time_to=$.fullCalendar.formatDate(aDateT, 'HH:mm:ss');
-							var checkDT=$.fullCalendar.parseDate(datetime_to+'T'+time_to);
+							var time_to=luxon.DateTime.fromJSDate(aDateT).toFormat( 'HH:mm:ss');
+							var checkDT= new Date(datetime_to+'T'+time_to);
 							var toDate = new Date(checkDT.getTime() + diffDate);
 							var formattedDate_to=$.datepicker.formatDate(globalSettings.datepickerformat.value, toDate);
 							$('#date_to').val(formattedDate_to);
-							$('#time_to').val($.fullCalendar.formatDate(toDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+							$('#time_to').val(luxon.DateTime.fromJSDate(toDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 						}
 					}
 				}
@@ -4084,11 +3898,11 @@ function initCalDavDatepicker(element)
 					if($('#date_fromTODO').val()!='' && tmptime.match(globalTimePre)!=null && validD)
 					{
 						var dateFrom=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_fromTODO').val());
-						var datetime_to=$.fullCalendar.formatDate(dateFrom, 'yyyy-MM-dd');
+						var datetime_to=luxon.DateTime.fromJSDate(dateFrom).toFormat( 'yyyy-MM-dd');
 						var aDate=new Date(Date.parse("01/02/1990, "+$('#time_fromTODO').val()));
-						var time_from=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
+						var time_from=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
 
-						var checkD=$.fullCalendar.parseDate(datetime_to+'T'+time_from);
+						var checkD= new Date(datetime_to+'T'+time_from);
 						globalPrevDate = new Date(checkD.getTime());
 					}
 					else
@@ -4107,14 +3921,14 @@ function initCalDavDatepicker(element)
 						if($('#date_toTODO').val()!='' && $('#time_toTODO').val().match(globalTimePre)!=null && validD)
 						{
 							var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_toTODO').val());
-							var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyy-MM-dd');
+							var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyy-MM-dd');
 							var aDateT=new Date(Date.parse("01/02/1990, "+$('#time_toTODO').val()));
-							var time_to=$.fullCalendar.formatDate(aDateT, 'HH:mm:ss');
-							var checkDT=$.fullCalendar.parseDate(datetime_to+'T'+time_to);
+							var time_to=luxon.DateTime.fromJSDate(aDateT).toFormat( 'HH:mm:ss');
+							var checkDT= new Date(datetime_to+'T'+time_to);
 							var toDate = new Date(checkDT.getTime() + diffDate);
 							var formattedDate_to=$.datepicker.formatDate(globalSettings.datepickerformat.value, toDate);
 							$('#date_toTODO').val(formattedDate_to);
-							$('#time_toTODO').val($.fullCalendar.formatDate(toDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+							$('#time_toTODO').val(luxon.DateTime.fromJSDate(toDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 						}
 					}
 				}
@@ -4296,11 +4110,11 @@ function initCalDavTimepicker(element)
 			if(tmptime.match(globalTimePre)!=null && validD)
 			{
 				var dateFrom=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_from').val());
-				var datetime_to=$.fullCalendar.formatDate(dateFrom, 'yyyy-MM-dd');
+				var datetime_to=luxon.DateTime.fromJSDate(dateFrom).toFormat( 'yyyy-MM-dd');
 				var aDate=new Date(Date.parse("01/02/1990, "+$('#time_from').val()));
-				var time_from=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
+				var time_from=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
 
-				var checkD=$.fullCalendar.parseDate(datetime_to+'T'+time_from);
+				var checkD= new Date(datetime_to+'T'+time_from);
 				globalPrevDate = new Date(checkD.getTime());
 			}
 			else
@@ -4318,14 +4132,14 @@ function initCalDavTimepicker(element)
 				if($('#date_to').val()!='' && $('#time_to').val().match(globalTimePre)!=null && validD)
 				{
 					var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_to').val());
-					var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyy-MM-dd');
+					var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyy-MM-dd');
 					var aDateT=new Date(Date.parse("01/02/1990, "+$('#time_to').val()));
-					var time_to=$.fullCalendar.formatDate(aDateT, 'HH:mm:ss');
-					var checkDT=$.fullCalendar.parseDate(datetime_to+'T'+time_to);
+					var time_to=luxon.DateTime.fromJSDate(aDateT).toFormat( 'HH:mm:ss');
+					var checkDT= new Date(datetime_to+'T'+time_to);
 					var toDate = new Date(checkDT.getTime() + diffDate);
 					var formattedDate_to=$.datepicker.formatDate(globalSettings.datepickerformat.value, toDate);
 					$('#date_to').val(formattedDate_to);
-					$('#time_to').val($.fullCalendar.formatDate(toDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+					$('#time_to').val(luxon.DateTime.fromJSDate(toDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 				}
 			}
 		}
@@ -4339,11 +4153,11 @@ function initCalDavTimepicker(element)
 			if(tmptime.match(globalTimePre)!=null && validD)
 			{
 				var dateFrom=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_fromTODO').val());
-				var datetime_to=$.fullCalendar.formatDate(dateFrom, 'yyyy-MM-dd');
+				var datetime_to=luxon.DateTime.fromJSDate(dateFrom).toFormat( 'yyyy-MM-dd');
 				var aDate=new Date(Date.parse("01/02/1990, "+$('#time_fromTODO').val()));
-				var time_from=$.fullCalendar.formatDate(aDate, 'HH:mm:ss');
+				var time_from=luxon.DateTime.fromJSDate(aDate).toFormat( 'HH:mm:ss');
 
-				var checkD=$.fullCalendar.parseDate(datetime_to+'T'+time_from);
+				var checkD= new Date(datetime_to+'T'+time_from);
 				globalPrevDate = new Date(checkD.getTime());
 			}
 			else
@@ -4361,14 +4175,14 @@ function initCalDavTimepicker(element)
 				if($('#date_toTODO').val()!='' && $('#time_toTODO').val().match(globalTimePre)!=null && validD)
 				{
 					var dateTo=$.datepicker.parseDate(globalSettings.datepickerformat.value, $('#date_toTODO').val());
-					var datetime_to=$.fullCalendar.formatDate(dateTo, 'yyyy-MM-dd');
+					var datetime_to=luxon.DateTime.fromJSDate(dateTo).toFormat( 'yyyy-MM-dd');
 					var aDateT=new Date(Date.parse("01/02/1990, "+$('#time_toTODO').val()));
-					var time_to=$.fullCalendar.formatDate(aDateT, 'HH:mm:ss');
-					var checkDT=$.fullCalendar.parseDate(datetime_to+'T'+time_to);
+					var time_to=luxon.DateTime.fromJSDate(aDateT).toFormat( 'HH:mm:ss');
+					var checkDT= new Date(datetime_to+'T'+time_to);
 					var toDate = new Date(checkDT.getTime() + diffDate);
 					var formattedDate_to=$.datepicker.formatDate(globalSettings.datepickerformat.value, toDate);
 					$('#date_toTODO').val(formattedDate_to);
-					$('#time_toTODO').val($.fullCalendar.formatDate(toDate, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+					$('#time_toTODO').val(luxon.DateTime.fromJSDate(toDate).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 				}
 			}
 		}
@@ -4449,7 +4263,7 @@ function initCalDavTimepicker(element)
 				if(formatString==formatString2)
 				{
 					now.setHours(now.getHours()+1);
-					var newTestValue = new Date(Date.parse(formatString2+", "+$.fullCalendar.formatDate(now, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm'))));
+					var newTestValue = new Date(Date.parse(formatString2+", "+luxon.DateTime.fromJSDate(now).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm'))));
 					if(newTestValue < timeDateFrom)
 					{
 						newTestValue.setHours(23);
@@ -4467,7 +4281,7 @@ function initCalDavTimepicker(element)
 				globalPrevDate.setMinutes(now.getMinutes());
 			}
 		}
-		$(this).val($.fullCalendar.formatDate(now, (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
+		$(this).val(luxon.DateTime.fromJSDate(now).toFormat( (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm')));
 		$(this).trigger("keyup");
 	});
 }
@@ -4541,13 +4355,13 @@ function showEventPopup(e, event)
 
 	if(event.allDay)
 	{
-		from = $.fullCalendar.formatDate(event.realStart, dateFormatJqToFc(globalSettings.datepickerformat.value));
-		to = $.fullCalendar.formatDate(event.realEnd, dateFormatJqToFc(globalSettings.datepickerformat.value));
+		from = luxon.DateTime.fromJSDate(event.realStart).toFormat( dateFormatJqToFc(globalSettings.datepickerformat.value));
+		to = luxon.DateTime.fromJSDate(event.realEnd).toFormat( dateFormatJqToFc(globalSettings.datepickerformat.value));
 	}
 	else
 	{
-		from = $.fullCalendar.formatDate(event.realStart, dateFormatJqToFc(globalSettings.datepickerformat.value) + '\'&emsp;\'' + (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm'));
-		to = $.fullCalendar.formatDate(event.realEnd, dateFormatJqToFc(globalSettings.datepickerformat.value) + '\'&emsp;\'' + (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm'));
+		from = luxon.DateTime.fromJSDate(event.realStart).toFormat( dateFormatJqToFc(globalSettings.datepickerformat.value) + '\'&emsp;\'' + (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm'));
+		to = luxon.DateTime.fromJSDate(event.realEnd).toFormat( dateFormatJqToFc(globalSettings.datepickerformat.value) + '\'&emsp;\'' + (globalSettings.ampmformat.value ? 'hh:mm TT' : 'HH:mm'));
 	}
 
 	switch(event.status){

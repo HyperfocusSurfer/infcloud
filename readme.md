@@ -9,3 +9,7 @@ Progress so far:
 * New jquery with only a few deprecation warnings left
 * Some more hacky workarounds from 2015 removed
 * Transitioning to a new version of full-calendar
+
+Bugs:
+* todo tab not working
+* events can be created but won't render until reload
